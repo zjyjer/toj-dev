@@ -1,0 +1,58 @@
+<script src="/javascripts/editors.js"></script>
+<script src="/javascripts/contest_probsubmit.js"></script>
+
+<style type="text/css" media="screen">
+	#embedded_ace_code {
+		height: 455px;
+		width: 650px;
+		border: 1px solid #DDD;
+		border-radius: 4px;
+		border-bottom-right-radius: 0px;
+		margin-top: 85px;
+	}
+
+</style>
+
+<div class="col-md-2" id="langselect">
+	<select class="form-control" name="lang" id="lang" onchange="SelectLang(this)">
+		<% if(fprob.oj == "HDU" || fprob.oj == "POJ") { %>
+			<option value="1">G++</option>
+			<option value="2">GCC</option>
+			<option value="3">Java</option>
+			<option value="4">Pascal</option>
+			<option value="12" selected>C++</option>
+			<option value="13">C</option>
+		<% } %>
+
+	</select>
+</div>
+<div id="embedded_ace_code" style="opacity:1" >
+</div>
+<button type="submit" class="btn btn-primary" onclick="Submit()"> Submit </button>
+
+<script src="/javascripts/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/mode-java.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	function Submit() {
+		var edtime = <%- JSON.stringify(fedtime)%>;
+		if(!CheckTime(edtime)) return;
+		var editor = ace.edit("embedded_ace_code");
+		var code = editor.getValue();
+		var aform = document.createElement('form');
+		aform.method='post';
+		aform.action='/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>';
+		var a=document.createElement('input');
+		a.type='hidden';
+		a.name='code';
+		a.value=code;
+		var b=document.createElement('input');
+		b.type='hidden';
+		b.name='lang';
+		b.value=document.getElementById('lang').value;
+		aform.appendChild(a);
+		aform.appendChild(b);
+		document.body.appendChild(aform);
+		aform.submit();
+	}
+</script>

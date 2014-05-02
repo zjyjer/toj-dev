@@ -1,0 +1,58 @@
+<link href="/stylesheets/ranklist.css" rel="stylesheet">
+
+	<h2 class="text-center" style="color:#428BCA;">Rank List</h2>
+<div id="problemListRow" class="row">
+	<table id="userList" class="table table-hover table-striped table-centered table-condensed">
+		<thead>
+			<tr>
+				<th class="header-rank">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">Rank</a></div>
+				</th>
+				<th class="header-username">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">Username</a></div>
+				</th>
+				<th class="header-nickname">
+					<div id="titleBtn" class="" order='asc'><a href="#">Nickname</a></div>
+				</th>
+				<th class="header-AC">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">Accepted</a></div>
+				</th>
+				<th class="header-ALL">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">Submitted</a></div>
+				</th>
+				<th class="header-ratio">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">AC-Ratio</a></div>
+				</th>
+				<th class="header-Rating">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">Rating</a></div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% fusers.forEach(function(user, index) { %>
+			<tr>
+					<td><%= (fpage-1)*50 + index + 1 %></td>
+					<td><a href=/profile/<%- user.username %>><%= user.username %></a></td>
+					<td><a href=/profile/<%- user.username %>><%= user.nickname %></a></td>
+					<td><a href=/Status?username=<%= user.username%>&result=0><%= user.total_ac %></a></td>
+					<td><a href=/Status?username=<%= user.username%>&result=><%= user.total_submit %></a></td>
+					<td>
+						<% if(user.total_submit) { %>
+						<%= Math.round(user.total_ac/user.total_submit*10000)/100 %>&#37;
+						<% } else {%>
+						0&#37;
+						<% } %>
+					</td>
+					<td>
+						<% if(user.total_submit) { %>
+						<%= Math.round(user.total_ac/user.total_submit*10000)/100 %>&#37;
+						<% } else {%>
+						0&#37;
+						<% } %>
+					</td>
+			</tr>
+			<% }); %>
+
+		</tbody>
+	</table>
+</div>

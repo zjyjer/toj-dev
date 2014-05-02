@@ -1,0 +1,53 @@
+<script type="text/javascript" src="/javascripts/showcode.js"></script>
+<script type="text/javascript" src="/javascripts/sh_highlight/sh_main.min.js"></script>
+<!--<script type="text/javascript" src="/javascripts/ZeroClipboard.min.js"></script>-->
+<link type="text/css" rel="stylesheet" href="/stylesheets/sh_highlight/sh_emacs.min.css">
+<% if(fcorrlang[fstat.lang] == "C++" || fcorrlang[fstat.lang] == "G++") {%>
+<script type="text/javascript" src="/javascripts/sh_highlight/sh_cpp.min.js"></script>
+<% } else if(fcorrlang[fstat.lang] == "Java") { %>
+<script type="text/javascript" src="/javascripts/sh_highlight/sh_java.min.js"></script>
+<% } %>
+
+<style>
+.code-info { 
+	background-color: rgb(244, 248, 250);
+	border-color: rgb(188, 232, 241);
+	margin: 10px 0px;
+	padding: 20px;
+	border-left: 3px solid rgb(238, 238, 238);
+	text-align:center;
+}
+#change-vim {
+	margin-left: 770px;
+}
+</style>
+
+<div id="title">
+	<h2 style="text-align:center"><font color="#428BCA">View Code</font></h2>
+</div>
+
+
+<div class="code-info">
+Problem:<a href=/ShowProblems?pid=<%- fstat.pid %>><%- fstat.pid %></a>&nbsp;&nbsp;&nbsp;&nbsp;
+Result:
+<% if(fstat.result == "Accepted") { %>
+<font color="red">Accepted</font>
+<% } else if(fstat.result == "Compilation Error") { %>
+<font color="#6633FF">Compilation Error</font>
+<% } else if(fstat.result == "Presentation Error") { %>
+<font color="orange">Presentation Error</font>
+<% } else {%>
+<font color="green"><%- fstat.result %></font>
+<% } %>
+<br>
+RunID:<%- fstat.run_ID %>&nbsp;&nbsp;&nbsp;
+Lanuage:<%- fcorrlang[fstat.lang] %>&nbsp;&nbsp;&nbsp;
+Author:<a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
+</div>
+
+<div>
+<button id="clip-btn" class="btn btn-primary btn-xs">Click to Copy</button>
+</div>
+
+
+<pre id="src-code" class="sh_cpp"><%= fcode.code %></pre>

@@ -1,0 +1,14 @@
+<script src="/javascripts/reg.js"></script>
+<link href="/stylesheets/reg.css" rel="stylesheet">
+<form id="reg-form" class="form-reg" role="form" method="post">
+	<fieldset>
+		<h2 class="form-reg-heading">Please sign up</h2>
+		<input id="username" type="text" class="form-control" name="username" placeholder="Username" required autofocus onchange="CheckUsername();">
+		<span id="username_msg"></span>
+		<input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
+		<span id="passwd_msg"></span>
+		<input id="password-repeat" type="password" class="form-control" name="password-repeat" placeholder="Repeat password" required onchange="CheckSame();">
+		<span id="passwd-repeat_msg"></span>
+		<button class="btn btn-lg btn-primary btn-block" type="button" onclick="Reg();">Sign up</button>
+	</fieldset>
+</form>

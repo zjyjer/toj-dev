@@ -1,0 +1,68 @@
+<script src="/javascripts/ace/editors.js"></script>
+<script src="/javascripts/probsubmit.js"></script>
+
+<style type="text/css" media="screen">
+	#embedded_ace_code {
+		height: 435px;
+		width: 650px;
+		border: 1px solid #DDD;
+		border-radius: 4px;
+		border-bottom-right-radius: 0px;
+		margin-top: 65px;
+		margin-left: 150px;
+	}
+	#langselect {
+		margin-top: 15px;
+		margin-left: 135px;
+	}
+	#submit-btn {
+		margin-left: 450px;
+		margin-top: 20px;
+	}
+
+</style>
+
+<div id="title">
+	<h2 style="text-align:center"><font color="#428BCA">Submit Your Solution</font></h2>
+	<h6 id="code-err_msg" style="text-align:center; font-weight:normal;"></h6>
+</div>
+<div class="col-md-2" id="langselect">
+	<select class="form-control" name="lang" id="lang" onchange="SelectLang(this)">
+		<%- flang %>
+	</select>
+</div>
+<div id="embedded_ace_code" style="opacity:1" >
+</div>
+<div id="submit-btn">
+<button type="submit" class="btn btn-primary" onclick="Submit()"> Submit </button>
+</div>
+
+<script src="/javascripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/ace/mode-java.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/ace/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	function Submit() {
+		var editor = ace.edit("embedded_ace_code");
+		var code = editor.getValue();
+		if(code.length < 20) {
+			$('#code-err_msg').css({'color':'red'});
+			$('#code-err_msg').html('Code length should not less than 20.');
+			return;	
+		}
+		var aform = document.createElement('form');
+		aform.method='post';
+		aform.action='/ProbSubmit?pid=<%= fprob.pid %>';
+		var a=document.createElement('input');
+		a.type='hidden';
+		a.name='code';
+		a.value=code;
+		var b=document.createElement('input');
+		b.type='hidden';
+		b.name='lang';
+		b.value=document.getElementById('lang').value;
+		aform.appendChild(a);
+		aform.appendChild(b);
+		document.body.appendChild(aform);
+		aform.submit();
+	}
+</script>

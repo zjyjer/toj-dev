@@ -1,0 +1,25 @@
+<script src="/javascripts/changepasswd.js"></script>
+<link href="/stylesheets/changepasswd.css" rel="stylesheet">
+<form id="change-form" class="form-change" role="form" method="post">
+	<fieldset>
+		<h2 class="form-change-heading">Change Password</h2>
+		<input id="original" type="password" class="form-control" name="username" placeholder="Original Password" required autofocus onchange="CheckPasswd();">
+		<span id="original_msg"></span>
+		<input id="password" type="password" class="form-control" name="password" placeholder="New Password" required>
+		<span id="passwd_msg"></span>
+		<input id="password-repeat" type="password" class="form-control" name="password-repeat" placeholder="Repeat password" required onchange="CheckSame();">
+		<span id="passwd-repeat_msg"></span>
+		<button class="btn btn-lg btn-primary btn-block" type="button" onclick="Change();">Sign up</button>
+	</fieldset>
+</form>
+<script>
+	function CheckPasswd() {
+		var u = <%- JSON.stringify(fusername) %>;
+		CheckMatch(u);
+	}
+	function Change() {
+		var u = <%- JSON.stringify(fusername) %>;
+		if(CheckMatch(u) && CheckSame()) DoChange();
+	}
+
+</script>

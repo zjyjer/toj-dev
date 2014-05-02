@@ -1,0 +1,33 @@
+<div class="col-lg-6"style="width:35%; padding-top:40px;"> 
+	<div class="input-group">
+		<span class="input-group-addon">Password</span>
+		<input id = "passwd" type="password" class="form-control" placeholder="Contest passwd" onkeydown="if(event.keyCode==13 && (document.getElementById('passwd').value)) document.getElementById('enter').click()">
+		<span class="input-group-btn">
+			<button id="enter" class="btn btn-primary" type="button" onclick="enter()">Enter</button>
+		</span>
+	</div><!-- /input-group -->
+	<span id="errmsg" class="form-control" style="background-color:transparent;border:0;box-shadow:0 0 0;">
+	</span>
+</div><!-- /.col-lg-6 -->
+<script>
+	function enter() {
+		var p = $("#passwd").val();
+		$.ajax({
+			url: '/Contest/Enter?cid=<%- fcid %>',
+			type:'POST',
+			data:{cid:<%= fcid%>, passwd:p},
+			async: false,
+			success: function(json) {
+				if(json.error == "1") {
+					$("#errmsg").css({'color':'red'});
+					$("#errmsg")[0].innerHTML= 'Wrong password';
+				} else {
+					$("#errmsg").css({'color':'green'});
+					$("#errmsg")[0].innerHTML= 'Success';
+					window.location.replace('/Contest/ShowContests?cid=<%- fcid %>');
+				}
+			}
+		});
+
+	}
+</script>

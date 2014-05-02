@@ -1,0 +1,151 @@
+.form-horizontal {
+	margin: 0 auto !important;
+	float: none !important;
+	max-width: 820px;
+	width: auto;
+	margin: 0 auto;
+}
+.table-centered {
+	margin: 0 auto !important;
+	float: none !important;
+	max-width: 820px;
+	width: auto;
+	margin: 0 auto;
+}
+.form-group {
+	margin-bottom: 0px;
+	max-width: 820px;
+	width: auto;
+	margin: 0 auto;
+}
+.search-bar {
+	width: 25%;
+	float: left;
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.search-btn {
+	width: 5%;
+	float: left;
+	position: relative;
+	right: -220px;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+/*
+.ojn {
+	width: 2%;
+	float: right;
+	position: relative;
+	right: 220px;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.oj-select {
+	width: 12%;
+	float: right;
+	position: relative;
+	right: 60px;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+*/
+.ac {
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	background-image: url('/static/images/correct.png');
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	background-image: url('/static/images/question.png');
+	background-repeat: no-repeat;
+}
+.header-status {
+	width: 5%;
+}
+.header-id {
+	width: 5%;
+}
+.header-title {
+	width: 50%;
+}
+.header-oj {
+	width: 7%;
+}
+.header-vid {
+	width: 5%;
+}
+.header-ac {
+	width: 23%;
+	min-width: 100px;
+}
+.header-hard {
+	width: 3%;
+}
+.oj-form {
+	display: block;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857;
+	color: rgb(85, 85, 85);
+	vertical-align: middle;
+	background-color: rgb(255, 255, 255);
+	background-image: none;
+	border: 1px solid rgb(204, 204, 204);
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) 
+}
+
+#back-top {
+	position: fixed;
+	bottom: 30px;
+	margin-right: -150px;
+}
+
+#back-top a {
+	width: 68px;
+	display: block;
+	text-align: center;
+	font: 11px/100% Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #bbb;
+
+	/* transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
+}
+#back-top a:hover {
+	color: #000;
+}
+
+/* arrow icon (span tag) */
+#back-top span {
+	width: 68px;
+	height: 68px;
+	display: block;
+	margin-bottom: 7px;
+	background: #ddd url(/icon/up-arrow.png) no-repeat center center;
+
+	/* rounded corners */
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+
+	/* transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
+}
+#back-top a:hover span {
+	background-color: #777;
+}

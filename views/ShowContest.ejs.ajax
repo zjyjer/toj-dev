@@ -1,0 +1,114 @@
+<link href="/stylesheets/contest_problem.css" rel="stylesheet">
+<!--
+<ul class="nav nav-tabs" id="ctab">
+	<li class="active"><a href="#" >Info</a></li>
+	<li><a href="/Contest/Problems?cid=<%= fcont.cid %>">Problem</a></li>
+	<li><a href="#Status">Status</a></li>
+	<li><a href="#Standing">Standing</a></li>
+</ul>
+-->
+<ul class="nav nav-tabs" id="ctab">
+	<li id="infobar" onclick="showinfo()" class="active"><a href="#cinfo" >Info</a></li>
+	<li id="plistbar" onclick="showlist()"><a href="#cplist">Problem</a></li>
+	<li><a href="#Status">Status</a></li>
+	<li><a href="#Standing">Standing</a></li>
+</ul>
+
+<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
+<% var st = new Date(fcont.start_time); st.setHours(st.getHours()+8); %>
+<% var ed = new Date(fcont.end_time); ed.setHours(ed.getHours()+8); %>
+
+
+<div id="cinfo" class="text-center tcenter well">
+	Start Time: <%= st.toISOString().replace(/T/,' ').replace( /\..+/,'') %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	End Time: <%= ed.toISOString().replace(/T/,' ').replace( /\..+/,'') %><br/><br/>
+	Status: 
+	<% if(new Date() > fcont.end_time) { %>
+		<a>Passed</a>	
+	<% } else if(new Date() > fcont.start_time && new Date() < fcont.end_time) { %>
+		<a style="color:red;">Running</a>
+	<% } else {%>
+		<a style="color:EE7600;">Pending</a>
+	<% } %>
+	<br/><br/>
+	Count Down: <span id="curTime"></span><br/><br/>
+	<p><%= fcont.desc %></p>
+</div>
+<div id="cplist" class="hide form-group">
+	<table id="problemList" class="table table-striped table-centered">
+		<thead>
+			<th class="header-status">
+			</th>
+			<th class="header-id">
+				<div id="searchTitleBtn" class="" order='asc'><a href="#">ID</a></div>
+			</th>
+			<th class="header-title">
+				<div id="searchTitleBtn" class="" order='asc'><a href="#">Title</a></div>
+			</th>
+			<th class="header-ac">
+				<div id="searchAcrateBtn" class="" order='asc'><a href="#">AC Ratio</a></div>
+			</th>
+		</thead>
+		<tbody>
+			<% fcont.problem.forEach(function(prob, index) { %>
+			<tr id="<%- index %>">
+				<!--<span class="ac"> </span>-->
+				<td class="status"></td>
+				<td class="index"><%= index+1001 %></td>
+				<td class="title"></td>
+				<td class="ac-ratio"></td>
+			</tr>
+			<% }); %>
+
+		</tbody>
+	</table>
+</div>
+<script>
+function DisplayTime(){
+	if (!document.all && !document.getElementById)
+		return
+	timeElement=document.getElementById? document.getElementById("curTime"): document.all.tick2;
+	var CurrentDate=new Date();
+	var hours=CurrentDate.getHours();
+	var minutes=CurrentDate.getMinutes();
+	var seconds=CurrentDate.getSeconds();
+	if (hours==0) hours=0;
+	if (minutes<=9) minutes="0"+minutes;
+	if (seconds<=9) seconds="0"+seconds;
+	var currentTime=hours+":"+minutes+":"+seconds;
+	timeElement.innerHTML="<font style='font-family:verdana, arial,tahoma;font-size:12px;color:red; font-weight:bold;'>"+currentTime+"</b>";
+	setTimeout("DisplayTime()",1000);
+}
+
+window.onload=DisplayTime;
+
+
+function showinfo() {
+	$("#cinfo").removeClass('hide');
+	$("#cplist").addClass('hide');
+	$("#infobar").addClass('active');
+	$("#plistbar").removeClass('active');
+}
+
+function showlist() {
+	$("#cinfo").addClass('hide');
+	$("#cplist").removeClass('hide');
+	$("#infobar").removeClass('active');
+	$("#plistbar").addClass('active');
+	var fcont = <%- JSON.stringify(fcont) %>;
+	var cid = fcont.cid;
+	var cnt = fcont.problem.length;
+	for(var i = 0;i < cnt; ++i) {
+		$.ajax ({
+			url: '/Contest/GetProblems',
+			type: 'POST',
+			data: {cid:cid, index:i},
+			async: false,
+			success: function(json) {
+				$("#"+i + " .title").html('<a href=/Contest/ShowProblems?cid='+cid+'&pid='+(i+1001)+'>'+json.title+'</a>');
+			}
+		});
+	}
+}
+</script>
+

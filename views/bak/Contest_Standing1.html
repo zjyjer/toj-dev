@@ -1,0 +1,54 @@
+<script src="/javascripts/animator.js"></script>
+<script src="/javascripts/rankingTableUpdate.js"></script>
+<script src="/javascripts/contest_standing.js"></script>
+<link href="/stylesheets/contest_standing.css" rel="stylesheet">
+<ul class="nav nav-tabs" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Info</a></li>
+	<li id="prob"><a href="/Contest/Problems?cid=<%= fcont.cid %>">Problem</a></li>
+	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
+	<li class="active"><a href="#">Standing</a></li>
+</ul>
+<div id="loader" class="text-center hide">
+	<img src="/icon/ajax-loader.gif"/>
+</div>
+
+<!-- Title -->
+<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
+
+<!-- Standing -->
+
+<table id="standing" class="table table-bordered table-hover table-condensed table-striped table-centered">
+	<thead id="ranking_head">
+		<tr>
+			<th class="header-rank anim:position">
+				<div id="searchTitleBtn" class="" order='asc'><a href="#">#</a></div>
+			</th>
+			<th class="header-username anim:id">
+				<div id="searchTitleBtn" class="" order='asc'><a href="#">User</a></div>
+			</th>
+			<th class="header-AC anim:update">
+				<div id="titleBtn" class="" order='asc'><a href="#">AC</a></div>
+			</th>
+			<% for(var i = 0;i < fcont.problem.length; ++i) {%>
+			<th class="header-<%= 1001+i %> anim:update" style="width:<%= 70.0/fcont.problem.length %>%;">
+				<div id="titleBtn" class="" order='asc'><a href=/Contest/ShowProblems?cid=<%- fcont.cid %>&pid=<%= i+1001 %>><%= i+1001 %></a></div>
+			</th>
+			<% } %>
+			<th class="header-Penalty anim:update">
+				<div id="searchAcrateBtn" class="" order='asc'><a href="#">Penalty</a></div>
+			</th>
+		</tr>
+	</thead>
+	<tbody id="ranking_body"></tbody>
+</table>
+<script>
+	$(function() {
+		var stats = <%- JSON.stringify(fstats)%>;
+		var cont = <%- JSON.stringify(fcont)%>;
+		get_result(stats, cont);
+		//currentTable.rankingTableUpdate(nextTable);
+		$("#prob").click(function() {
+			$("#loader").addClass('show');
+		});
+	});
+</script>

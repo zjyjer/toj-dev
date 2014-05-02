@@ -1,0 +1,119 @@
+<link href="/stylesheets/arrange.css" rel="stylesheet">
+<script src="/javascripts/arrange.js"></script>
+<script src="/javascripts/jquery.validate.js"></script>
+<script>
+$().ready(function() {
+	$("#carrange").validate({
+		rules: {
+			csttime: {
+				required: true,
+				dateISO: true
+			},
+			cedtime: {
+				required: true,
+				dateISO: true
+			},
+			ctitle: {
+				required: true,
+				minlength: 5,
+				maxlength: 50
+			},
+			cdesc: {
+				required: false,
+				maxlength: 500
+			}
+		},
+		messages: {
+			ctitle: {
+				required: "Please enter a title.",
+				minlength: "Title must consist of at least 5 characters."
+			},
+			csttime: {
+				required: "Start time is required."
+			},
+			cedtime: {
+				required: "End time is required."
+			}
+		},
+		submitHandler: function(form) {  
+				form.submit();
+		}
+	});
+});
+</script>
+<style type="text/css">
+#carrange label.error {
+	font-weight: normal;
+	color: red;
+}
+</style>
+
+<div class="modal-header">
+	<h3 style="text-align:center"><font color="#428BCA">Arrange Contest</font></h3>
+</div>
+<div class="modal-body">
+	<form id="carrange" method="post" action="/Contest/ArrangeContest?type=<%= ftype %>">
+		<div class="info">
+			<div id="arrange" class="form-horizontal">
+				<div class="form-group">
+					<label for="ctitle" class="col-sm-3 control-label">Title:</label>
+					<div class="col-sm-7"><input id="ctitle" name="ctitle" type="text" class="form-control" placeholder="Contest Title" ></div>
+					<div class="col-sm-1" style="color:red; padding-left:3px; padding-top:7px;">*</div>
+				</div>
+
+				<div class="form-group">
+					<label for="cdesc" class="col-sm-3 control-label">Desc:</label>
+					<div class="col-sm-7"><textarea id="cdesc" name="cdesc" class="form-control" rows="6" placeholder="This is a ICPC format Contest, the contest will last 5 hours."></textarea></div>
+				</div>
+
+
+				<div class="form-group">
+					<label for="csttime" class="col-sm-3 control-label">Start Time:</label>
+					<div class='input-group date' id='datetimepicker1' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
+						<input type='text' name="csttime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label for="cedtime" class="col-sm-3 control-label">End Time:</label>
+					<div class='input-group date' id='datetimepicker2' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
+						<input type='text' name="cedtime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="cpasswd" class="col-sm-3 control-label">Password:</label>
+					<div class="col-sm-7"><input id="cpasswd" name="cpasswd" class="form-control" placeholder="Leave it blank if no need."></div>
+				</div><br>
+			</div>
+		</div>
+		<div class="prob">
+			<div class="form-horizontal">
+				<%for(var i=1001;i<=1011;++i){%>
+				<div class="form-group">
+					<label for="Prob1" class="col-sm-2 control-label"><%= i %>:</label>
+					<div class="col-sm-3"><select name="oj<%- i %>" id="oj<%- i %>" class="form-control">
+							<option value="HDU">HDU</option>
+							<option value="POJ">POJ</option>
+					</select></div>
+					<div class="col-sm-3"><input class="form-control" type="text" name="pid<%- i %>" id="pid<%- i %>" placeholder="Prob ID" onchange="CheckPID('<%- i %>')"></div>
+					<span id="title<%- i %>"></span>
+				</div>
+				<%}%>
+			</div>
+		</div>
+	</form>
+</div>
+<div ><center>
+		<button type="button" id="submit" name="submit" class="btn btn-primary" onclick="Submit()">Submit</button>
+</center></div>
+
+
+

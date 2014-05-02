@@ -1,0 +1,126 @@
+<style>
+	.ac {
+		display: inline-block;
+		height: 16px;
+		width: 16px;
+		background-image: url('/static/images/correct.png');
+		background-repeat: no-repeat;
+	}
+	.notac {
+		display: inline-block;
+		height: 16px;
+		width: 16px;
+		background-image: url('/static/images/question.png');
+		background-repeat: no-repeat;
+	}
+	.table-centered {
+		margin: 0 auto !important;
+		float: none !important;
+		width: 700px;
+	}
+	.header-status {
+		width: 5%;
+	}
+	.header-title {
+		width: 60%;
+	}
+	.header-oj {
+		width: 8%;
+	}
+	.header-ac {
+		width: 27%;
+		min-width: 100px;
+	}
+</style>
+<div id="searchResultRow" class="row" style="display:none">
+	<table id="searchResult" class="table table-striped table-centered">
+		<thead>
+			<tr>
+				<th class="header-status">
+				</th>
+				<th class="header-id">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">ID</a></div>
+				</th>
+				<th class="header-title">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">Title</a></div>
+				</th>
+				<th class="header-oj">
+					<div id="titleBtn" class="" order='asc'><a href="#">OJ</a></div>
+				</th>
+				<th class="header-ac">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">AC Ratio</a></div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<div id="problemListRow" class="row">
+	<center>
+		<ul class="pagination">
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+			<li><a href="/Problem/vol2">2</a></li>
+			<li><a href="/Problem/vol3">3</a></li>
+			<li><a href="/Problem/vol4">4</a></li>
+			<li><a href="/Problem/vol5">5</a></li>
+			<li><a href="/Problem/vol5">6</a></li>
+			<li><a href="/Problem/vol5">7</a></li>
+			<li><a href="#">...</a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol-2%>"><%= ftotal_vol-2 %></a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol-1%>"><%= ftotal_vol-1 %></a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol%>"><%= ftotal_vol %></a></li>
+			<li><a href="/Problem/vol8">&raquo;</a></li>
+	</ul></center>
+	<table id="problemList" class="table table-striped table-centered">
+		<thead>
+			<tr>
+				<th class="header-status">
+				</th>
+				<th class="header-id">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">ID</a></div>
+				</th>
+				<th class="header-title">
+					<div id="searchTitleBtn" class="" order='asc'><a href="#">Title</a></div>
+				</th>
+				<th class="header-oj">
+					<div id="titleBtn" class="" order='asc'><a href="#">OJ</a></div>
+				</th>
+				<th class="header-ac">
+					<div id="searchAcrateBtn" class="" order='asc'><a href="#">AC Ratio</a></div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% fprobs.forEach(function(prob, index) { %>
+			<tr>
+				<span class="ac"> </span>
+				<td>
+					<td><%= prob.pid %></td>
+					<td><a href="/ShowProblems/<%= prob.pid %>"><%= prob.title %></a></td>
+					<td><%= prob.oj %></td>
+					<td><%= Math.round(prob.vtotal_ac/prob.vtotal_submit*10000)/100 %>&#37;(<%= prob.vtotal_ac+prob.total_ac %>/<%= prob.vtotal_submit+prob.total_submit %>)</td>
+				</td>	
+			</tr>
+			<% }); %>
+
+		</tbody>
+	</table>
+	<center>
+		<ul class="pagination">
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+			<li><a href="/Problem/vol2">2</a></li>
+			<li><a href="/Problem/vol3">3</a></li>
+			<li><a href="/Problem/vol4">4</a></li>
+			<li><a href="/Problem/vol5">5</a></li>
+			<li><a href="/Problem/vol5">6</a></li>
+			<li><a href="/Problem/vol5">7</a></li>
+			<li><a href="#">...</a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol-2%>"><%= ftotal_vol-2 %></a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol-1%>"><%= ftotal_vol-1 %></a></li>
+			<li><a href="/Problem/vol<%= ftotal_vol%>"><%= ftotal_vol %></a></li>
+			<li><a href="/Problem/vol8">&raquo;</a></li>
+	</ul></center>
+</div>

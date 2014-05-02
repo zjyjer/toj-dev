@@ -1,0 +1,79 @@
+#leftbar {
+	width: 50%;
+	font-size: 14px;
+	float: left;
+	margin-bottom: 20px;
+	padding-left:60px;
+	padding-top: 20px;
+}
+
+.media{
+	margin-top:40px;
+}
+
+#declaration{
+	width:65%;
+}
+
+.panel {
+	margin-bottom: 20px;
+	background-color: transparent;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0);
+}
+
+
+#profile-personal{
+	width:50%;
+	padding-right:80px;
+}
+
+#rightbar{
+	float:right;
+}
+
+
+#profile-social{
+	width:50%;
+	float:right;
+	margin-left:0px;
+	padding-left:80px;
+	padding-right:50px;
+	vertical-align: text-top;
+}
+
+
+h3{
+	margin-top:20px;
+	text-align:center;
+}
+
+#solved-problem{
+	float:right;
+	width:50%;
+	padding-left:80px;
+	padding-right:50px;
+	margin-top:20px;
+}
+
+
+.btn-social-connect {
+	padding-left: 40px;
+	padding-right: 40px;
+}
+.btn-social-disconnect {
+	padding-left: 31px;
+	padding-right: 31px;
+}
+#social-name {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 40px;
+	font-size: 17.5px;
+	font-weight: 300;
+	line-height: 1.25;
+}
+#btn-save-personal-information{
+margin-left:80px;}
+

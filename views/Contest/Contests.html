@@ -1,0 +1,74 @@
+<script src="/javascripts/contests.js"></script>
+<link href="/stylesheets/contests.css" rel="stylesheet">
+<script>
+</script>
+<div id="title">
+	<h2 style="text-align:center"><font color="#428BCA">Contests</font></h2>
+	<form class="form-inline" role="form"></form>
+</div>
+
+<div id="form-horizontal" role="form">
+	<div class="form-group">
+		<div class="search-bar">
+			<input id = "title_source" type="text" class="form-control" placeholder="Title, Source, Author" onkeydown="if(event.keyCode==13 && (document.getElementById('title_source').value)) document.getElementById('searchbtn').click()">
+		</div>
+		<button id = "searchbtn" type="submit" class="btn btn-primary" onclick="SearchContest()">Search</button>
+		<button id = "arrange" type="submit" class="btn btn-success" onclick="window.location.replace('/Contest/ArrangeContest'+location.search);">Arrange</button>
+	</div>
+	<div class="form-group">
+		<table id="problemList" class="table table-condensed table-bordered table-striped table-centered">
+			<thead>
+				<tr>
+					<th class="header-cid">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">CID</a></div>
+					</th>
+					<th class="header-title">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">Title</a></div>
+					</th>
+					<th class="header-st_time">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">Start Time</a></div>
+					</th>
+					<th class="header-ed_time">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">End Time</a></div>
+					</th>
+					<th class="header-status">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">Status</a></div>
+					</th>
+					<th class="header-access">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">Access</a></div>
+					</th>
+					<th class="header-author">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">Author</a></div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% fconts.forEach(function(cont, index) { %>
+				<tr>
+					<!--<span class="ac"> </span>-->
+					<td><%- cont.cid %></td>
+					<td><a href="/Contest/ShowContests?cid=<%= cont.cid %>"><%- cont.title %></a></td>
+					<% var st = new Date(cont.start_time); st.setHours(st.getHours()+8); %>
+					<td><%= st.toISOString().replace(/T/,' ').replace( /\..+/,'') %></td>
+					<% var ed = new Date(cont.end_time);  ed.setHours(ed.getHours()+8); %>
+					<td><%= ed.toISOString().replace(/T/,' ').replace( /\..+/,'') %></td>
+					<% if(cont.start_time > new Date()){ %>
+					<td style="color:#EE7600;">Pending</td>
+					<% } else if(cont.start_time < new Date() && new Date() < cont.end_time) { %>
+					<td style="color:#EE0000;">Running</td>
+					<%} else {%>
+					<td style="color:#008B00;">Passed</td>
+					<% } %>
+					<% if(cont.access) {%>
+					<td style="color:#0000FF;">Public</td>
+					<%} else {%>
+					<td style="color:#EE0000;">Private</td>
+					<%}%>
+					<td><a href="/Profile/<%- cont.author %>"><%= cont.author%></a></td>
+				</tr>
+				<% }); %>
+
+			</tbody>
+		</table>
+	</div>
+</div>

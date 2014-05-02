@@ -1,0 +1,14 @@
+.info {
+	position: relative;
+	float: left;
+	width: 50%;
+}
+
+.prob {
+	position: relative;
+	float: right;
+	width: 50%;
+}
+.form-group {
+	margin-bottom: 5px;
+}

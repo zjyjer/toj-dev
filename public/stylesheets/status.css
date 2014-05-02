@@ -1,0 +1,55 @@
+tr,td,th {
+	font-size: 13.5px;
+	text-align: center;
+}
+.form-horizontal {
+	margin: 0 auto !important;
+	float: none !important;
+	width: 1000px;
+}
+.table-centered {
+	margin: 0 auto !important;
+	float: none !important;
+	width: 1000px;
+}
+.header-runid{
+	width: 10%;
+}
+.header-sub_time{
+	width: 25%;
+}
+.header-result{
+	width: 25%;
+}
+.header-pid {
+	width: 4%;
+	min-width: 100px;
+}
+.header-time{
+	width: 8%;
+	min-width: 100px;
+}
+.header-memory{
+	width: 8%;
+	min-width: 100px;
+}
+.header-codelen{
+	width: 5%;
+	min-width: 100px;
+}
+.header-lang{
+	width: 5%;
+	min-width: 100px;
+}
+.header-user{
+	width: 5%;
+	min-width: 100px;
+}
+tr,td,th {
+	font-size: 13.5px;
+	text-align: center;
+}
+.col-xs-1 {
+	padding-left: 0;
+	padding-right: 0;
+}

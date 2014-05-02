@@ -1,0 +1,54 @@
+<ul class="nav nav-tabs" id="ctab">
+	<li class="active"><a href="#" >Info</a></li>
+	<li id="prob"><a href="/Contest/Problems?cid=<%= fcont.cid %>">Problem</a></li>
+	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
+	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
+</ul>
+<div id="loader" class="text-center hide">
+	<img src="/icon/ajax-loader.gif"/>
+</div>
+
+<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
+<% var st = new Date(fcont.start_time); st.setHours(st.getHours()+8); %>
+<% var ed = new Date(fcont.end_time); ed.setHours(ed.getHours()+8); %>
+
+
+<div id="cinfo" class="text-center tcenter well">
+	Start Time: <%= st.toISOString().replace(/T/,' ').replace( /\..+/,'') %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	End Time: <%= ed.toISOString().replace(/T/,' ').replace( /\..+/,'') %><br/><br/>
+	Status: 
+	<% if(new Date() > fcont.end_time) { %>
+		<span style="color:green;">Passed</span>	
+		<br/><br/>
+	<% } else if(new Date() > fcont.start_time && new Date() < fcont.end_time) { %>
+		<span style="color:red;">Running</span>
+		<br/><br/>
+		Time Remaining:<br/><br/> <span style="color:red;" id="curTime"></span><br/><br/>
+	<% } else { %>
+		<span style="color:#EE7600;">Pending</span><br/>
+		<br/>
+		Before Start:<br/><br/> <span style="color:red;" id="curTime"></span><br/><br/>
+	<% } %>
+	<p><%= fcont.desc %></p>
+</div>
+<script>
+	function cd() {
+		var st = <%- JSON.stringify(fcont.start_time) %>;
+		var ed = <%- JSON.stringify(fcont.end_time) %>;
+		st = new Date(st);
+		ed = new Date(ed);
+		var ss;
+		if(new Date() < st) {
+			ss = countdown(null, st,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
+		} else {
+			ss = countdown(null, ed,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
+		}
+		document.getElementById('curTime').innerHTML = ss.toString();
+		setTimeout("cd()",1000);
+	}
+	window.onload = cd;
+
+	$("#prob").click(function() {
+		$("#loader").addClass('show');
+	});
+</script>

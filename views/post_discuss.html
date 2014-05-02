@@ -1,0 +1,65 @@
+<link href="/stylesheets/postdiscuss.css" rel="stylesheet">
+<link href="/stylesheets/wmd.css" rel="stylesheet">
+<script src="/javascripts/wmd/Markdown.Converter.js" type="text/javascript"></script>
+<script src="/javascripts/wmd/Markdown.Sanitizer.js" type="text/javascript"></script>
+<script src="/javascripts/wmd/Markdown.Editor.js" type="text/javascript"></script>
+
+<div id="main">
+	<div id="sidebar">
+		<div class="panel">
+			<div class="header">
+				<span>Markdown grammar</span>
+			</div>
+			<div class="inner">
+				Here is how you should post.
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span>Please Notice</span>
+			</div>
+			<div class="inner">
+				Here is what you should notice
+			</div>
+		</div>
+
+		<div class="panel" style="padding-top: 230px;">
+			<button class="btn btn-primary btn-lg">Post</button>
+		</div>
+
+	</div>
+	<div id="content">
+		<div class="panel">
+			<div class="header">
+				<span>New post for xxxx</span>
+			</div>
+			<div class="inner post" style="background:none;">
+				<form id="create_topic" action="/discuss/create" method="post">
+					<div class="form-group">
+						<label class="bold" for="title" style="display:block;">Title</label>
+						<input type="text" id="title" class="form-control" placeholder="Please input your title">
+					</div>
+					<div class="form-group">
+						<label class="bold" for="title" style="display:block;">Content</label>
+						<div class="wmd-panel" style="margin-left:0%; height:300px; border-radius:4px; width:100%;">
+							<div id="wmd-button-bar" style="background:#FFFFFF;"></div>
+							<textarea id="wmd-input" class="wmd-input" style="background-color:#FFFFFF; border-radius:4px; "></textarea>
+							<br/>
+							<div id="wmd-preview" class="wmd-preview" style="margin-left:0%;"></div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		var converter = Markdown.getSanitizingConverter();
+		var editor = new Markdown.Editor(converter);
+		editor.run();
+
+	});
+</script>

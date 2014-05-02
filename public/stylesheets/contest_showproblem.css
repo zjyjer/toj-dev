@@ -1,0 +1,24 @@
+#showProblem .page-header{
+  text-align:center;
+}
+
+/*time memory limit靠中*/
+#showProblem .row{
+  margin-left:250px;
+  text-align:auto;
+}
+
+.badge-info{
+  background-color:#817B58;
+}
+
+
+/*修改大小标题颜色*/
+h2,h3{
+  color:#428BCA;
+}
+
+/*修改框填充颜色*/
+.well{
+background-image:linear-gradient(to bottom, rgb(245, 245, 245) 0%, rgb(251, 251, 251) 100%);
+}

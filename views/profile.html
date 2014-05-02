@@ -1,0 +1,79 @@
+<script src="/javascripts/mindmup-editabletable.js"></script>
+<script src="/javascripts/profile.js"></script>
+<link href="/stylesheets/profile.css"rel="stylesheet">
+<h2 class="text-center"><%= fuser.username %></h2>
+<div id="show-info">
+	<h3 class="text-center">Information</h3>
+	<table id="info" class="table table-hover table-bordered table-striped">
+		<tr>
+			<th width=20%>Rank</th>
+			<th width=30%>1</th>
+		</tr>
+		<tr>
+			<th>UserName</th>
+			<th><%- fuser.username %></th>
+		</tr>
+		<tr>
+			<th>NickName</th>
+			<td id="nickname" class="editable"><%- fuser.nickname %></td>
+		</tr>
+		<tr>
+			<th>Accepted</th>
+			<th><%= fuser.total_ac %></th>
+		</tr>
+		<tr>
+			<th>Submitted</th>
+			<th><%= fuser.total_submit %></th>
+		</tr>
+		<tr>
+			<th>AC_Ratio</th>
+			<th>
+				<%= Math.round((fuser.total_ac/fuser.total_submit*10000)/100) %>&#37;
+			</th>
+		</tr>
+		<tr>
+			<th>Rating</th>
+			<th></th>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td id="email" class="editable"><%- fuser.email %></td>
+		</tr>
+		<tr>
+			<th>University</th>
+			<td id="univer" class="editable">
+				<%- fuser.school %>
+			</td>
+		</tr>
+		<tr>
+			<th>Country</th>
+			<td id="country" class="editable"><%- fuser.country %></td>
+		</tr>
+		<tr>
+			<th>Declaration</th>
+			<td id="decl" class="editable" height="100" align="left">
+				<%- fuser.decl %>
+			</td>
+		</tr>
+	</table>
+	<% if(fusername == fuser.username) { %>
+	<button id="editbtn" type="button" class="btn btn-primary" onclick="edit_profile()">Edit my profile</button>
+	<% } %>
+</div>
+<!---solved-problem-->
+
+<div id="solved-problem">
+		<div class="phead">
+			<h3 class="text-center">Problem Solved</h3>
+		</div>
+		<div class="pbody">
+			<% fpids.forEach(function(pid, index) {%>
+			<a href=/ShowProblems?pid=<%- pid%>><%= pid %></a>
+			<% }) %>
+		</div>
+</div>
+<script>
+$('.editable').change(function() {
+	$('#editbtn').html('Save');
+});
+</script>

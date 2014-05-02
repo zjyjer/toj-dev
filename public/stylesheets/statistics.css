@@ -1,0 +1,57 @@
+tr,td,th {
+	font-size: 13.5px;
+	text-align: center;
+}
+
+.form-horizontal {
+	/* margin: 0 auto !important; */
+	/* float: none !important; */
+	float: left;
+	width: 700px;
+}
+#statistics {
+	padding-top: 80px;
+	width: 250px;
+	float: right;
+}
+#statistics_table {
+	background: url('/icon/brillant11.png');
+}
+.table-centered {
+	margin: 0 auto !important;
+	float: none !important;
+	width: 700px;
+}
+.header-rank {
+	width: 8%;
+}
+.header-username {
+	width: 10%;
+}
+.header-time_used {
+	width: 10%;
+}
+.header-mem_used {
+	width: 10%;
+	min-width: 100px;
+}
+.header-code_len {
+	width: 10%;
+	min-width: 100px;
+}
+.header-lang {
+	width: 8%;
+	min-width: 100px;
+}
+.header-submit_time{
+	width: 20%;
+	min-width: 100px;
+}
+tr,td,th {
+	font-size: 13.5px;
+	text-align: center;
+}
+.col-xs-1 {
+	padding-left: 0;
+	padding-right: 0;
+}

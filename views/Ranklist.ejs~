@@ -1,0 +1,50 @@
+<link href="/stylesheets/volume.css" rel="stylesheet">
+
+<div id="problemListRow" class="row">
+	<center>
+		<ul class="pagination">
+			<% if(fpage >= 4) { %>
+			<% if(fpage+3<ftotal_page-2) { %>		
+			<% if(fpage == 4) { %>		
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<% } else { %>
+			<li><a href="/Problems?Volume=<%= fpage-4%>">&laquo;</a></li>
+			<% } %>
+			<li><a href="/Problems?Volume=<%= fpage-3 %>"><%= fpage-3 %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage-2 %>"><%= fpage-2 %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage-1 %>"><%= fpage-1 %></a></li>
+			<li class="active"><a href="/Problems?Volume=<%= fpage %>"><%= fpage %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage+1 %>"><%= fpage+1 %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage+2 %>"><%= fpage+2 %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage+3 %>"><%= fpage+3 %></a></li>
+			<li><a href="#">...</a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page-2 %>"><%= ftotal_page-2 %></a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page-1 %>"><%= ftotal_page-1 %></a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page %>"><%= ftotal_page %></a></li>
+			<li><a href="/Problems?Volume=<%= fpage+4%>">&raquo;</a></li>
+			<% } else {%>
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<li><a href="/Problems?Volume=">1</a></li>
+			<li><a href="/Problems?Volume=">2</a></li>
+			<li><a href="/Problems?Volume=">3</a></li>
+			<li><a href="#">...</a></li>
+			<% for(var i=ftotal_page-6;i<=ftotal_page;++i){ %>
+			<%if(i==fpage){%> <li class="active"><%}else { %>
+			<li><%}%>
+			<a href="/Problems?Volume=<%= i %>"><%= i %></a></li>
+			<%}%>
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<% } %>
+			<% } else { %>
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<%for(var i=1;i<=7;++i){%>
+			<%if(i==fpage){%> <li class="active"><%}else{%>
+			<li><%}%>
+			<a href="/Problems?Volume=<%= i %>"><%= i %></a></li>
+			<%}%>
+			<li><a href="#">...</a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page-2 %>"><%= ftotal_page-2 %></a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page-1 %>"><%= ftotal_page-1 %></a></li>
+			<li><a href="/Problems?Volume=<%= ftotal_page %>"><%= ftotal_page %></a></li>
+			<li><a href="/Problems?Volume=8">&raquo;</a></li>
+			<%}%>

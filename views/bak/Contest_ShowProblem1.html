@@ -1,0 +1,57 @@
+<link href="/stylesheets/contest_showproblem.css" rel="stylesheet">
+<ul class="nav nav-tabs" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Info</a></li>
+	<li class="active"><a href="/Contest/Problems?cid=<%- fcont.cid %>">Problem</a></li>
+	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
+	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
+</ul>
+	<div style="margin-top: 15px; margin-bottom: -25px;">
+	<% for(var i = 0;i < fcont.problem.length; ++i) { %>
+		<% if(i == findex ) { %> <%= findex+1001 %><% } else {%>
+		<a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= i+1001 %>"><%= i+1001 %></a>
+		<% } %>
+	<% } %>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span12">
+			<div id="showProblem">
+			<div class="page-header">
+				<h2><%- fprob.title %></h2>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-3"><b>Time Limit:</b><%= fprob.time_limit %>MS</div>
+					<div class="col-md-4"><b>Memory Limit:</b><%= fprob.mem_limit %>K</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3"><b>Total Runs:</b><%= fprob.vtotal_submit+fprob.total_submit %></div>
+					<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
+					<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
+				</div>
+				<h3> Description </h3>
+					<div class="content-wrapper well">
+						 <%- fprob.desc %>
+					 </div>
+					 <h3> Input </h3>
+					 <div class="content-wrapper well">
+						 <%- fprob.input %>
+						 <div style="clear:both"></div>
+					 </div>
+					 <h3> Output </h3>
+					 <div class="content-wrapper well">
+						 <%- fprob.output %>
+						 <div style="clear:both"></div>
+					 </div>
+					 <h3> Sample Input </h3>
+					 <pre class="content-wrapper"><%- fprob.sample_in %></pre>
+					 <h3> Sample Output </h3>
+					 <pre class="content-wrapper"><%- fprob.sample_out %></pre>
+				 </div>
+			 </div>
+		 </div>
+	 <center>
+		 <a href="/Contest/ProbSubmit?cid=<%= fcont.cid %>&pid=<%= findex+1001 %>"><button type="button" class="btn btn-default">Submit</button></a>
+		 <a href="#"><button type="button" class="btn btn-default">Status</button></a>
+		 <a href="#"><button type="button" class="btn btn-default">Statistics</button></a>
+	 </center>

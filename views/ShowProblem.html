@@ -1,0 +1,63 @@
+<link href="/stylesheets/showproblem.css" rel="stylesheet">
+<div class="container" id="page-content">
+	<div class="row-fluid">
+		<div class="span12">
+			<div id="showProblem">
+			<div class="page-header">
+				<h2><%- fprob.title %></h2>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-3"><b>Time Limit: </b><%= fprob.time_limit %>MS</div>
+					<div class="col-md-4"><b>Memory Limit: </b><%= fprob.mem_limit %>K</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3"><b>Total Runs: </b><%= fprob.vtotal_submit+fprob.total_submit %></div>
+					<div class="col-md-4"><b>Accepted Runs: </b><%= fprob.vtotal_ac+fprob.total_ac %></div>
+					<div class="col-md-3"><b>64bit IO: </b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
+				</div>
+				<% if(fprob.desc) { %>
+					<h3> Description </h3>
+					<div class="content-wrapper well">
+						 <%- fprob.desc %>
+					 </div>
+				<% } %>
+				<% if(fprob.input) { %>
+					 <h3> Input </h3>
+					 <div class="content-wrapper well">
+						 <%- fprob.input %>
+						 <div style="clear:both"></div>
+					 </div>
+				<% } %>
+				<% if(fprob.output) { %>
+					 <h3> Output </h3>
+					 <div class="content-wrapper well">
+						 <%- fprob.output %>
+						 <div style="clear:both"></div>
+					 </div>
+				<% } %>
+				<% if(fprob.sample_in) { %>
+					 <h3> Sample Input </h3>
+					 <pre class="content-wrapper"><%- fprob.sample_in %></pre>
+				<% } %>
+				<% if(fprob.sample_out) { %>
+					 <h3> Sample Output </h3>
+					 <pre class="content-wrapper"><%- fprob.sample_out %></pre>
+				<% } %>
+				<% if(fprob.source) { %>
+					 <h4> Source </h4>
+					 <pre class="content-wrapper"><%- fprob.source %></pre>
+				<% } %>
+				<% if(fprob.hint) { %>
+					 <h4> Hint </h4>
+					 <pre class="content-wrapper"><%- fprob.hint %></pre>
+				<% } %>
+			</div>
+		 </div>
+	 </div>
+ </div>
+ <center>
+	 <a href="/ProbSubmit?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Submit</button></a>
+	 <a href="/Status?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Status</button></a>
+	 <a href="/Statistics?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Statistics</button></a>
+ </center>

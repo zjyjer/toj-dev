@@ -1,0 +1,26 @@
+td {
+	max-width: 10px;
+	word-wrap: break-word;
+}
+th {
+	text-align:center;
+}
+#show-info{
+	float:left;
+	width:48%; 
+	text-align:center;
+}
+#solved-problem{
+	float:right;
+	width:45%;
+}
+.pbody{
+	padding:5px 5px 5px 5px;
+	/*border: 1px solid #DDD;*/
+	border-radius: 4px;
+	overflow-y: scroll; 
+	border:1px solid #DDD;
+	/* height: 408px; */
+	height: 410px;
+	
+}

@@ -1,0 +1,92 @@
+<link href="/stylesheets/index.css" rel="stylesheet">
+
+<div id="main">
+	<div id="sidebar">
+		<div class="panel">
+			<div class="header">
+				<span>News</span>
+			</div>
+			<div class="inner">
+				2014-04-25 <br>
+				1423, 2546, 5131, 6172
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:red;">Running Contest</span>
+			</div>
+			<div class="inner">
+				Here is running contest.<br>
+				HDU, POJ added.
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:green;">Scheduled Contest</span>
+			</div>
+			<div class="inner">
+				Here is scheduled contest.<br>
+				HDU, POJ added.
+			</div>
+		</div>
+		<div class="panel">
+			<div class="header">
+				<span>Top Rated</span>
+			</div>
+			<div class="inner">
+				Here is running contest.<br>
+				HDU, POJ added.
+			</div>
+		</div>
+		<div class="panel">
+			<div class="header">
+				<span>Judge Status</span>
+			</div>
+			<div class="inner">
+				Here is running contest.<br>
+				HDU, POJ added.
+			</div>
+		</div>
+	</div>
+	<div id="content">
+		<div class="jumbotron">
+				<h2>Welcome to NewTOJ!</h2>
+				<p style="color:red;">测试阶段，Contest功能暂时不可用，hdu,poj,zoj可以正常提交。</p>
+				<p>NewTOJ is a vjudge supporting TOJ, HDU, POJ, UVA, UVALive, Ural, SGU and SPOJ.</p>
+				<p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+		</div>
+		<div class="panel">
+			<div class="header">
+				<span>Recent Contests on other OJs</span>
+			</div>
+			<div class="inner">
+				<table class="table table-hover table-condensed">
+					<thead>
+					<tr>
+						<td>#</td>
+						<td>OJ</td>
+						<td>Name</td>
+						<td>Start-time</td>
+						<!--<td>Week</td>-->
+						<td>Access</td>
+					</tr>
+					</thead>
+					<tbody>
+					<% fcontests.forEach(function(cont, index) { %>
+					<tr>
+						<td><%= index+1 %></td>
+						<td><%= cont.oj %></td>
+						<td><a id=name_<%= cont.id %> href=<%= cont.link %>><%= cont.name %></a></td>
+						<td><%= cont.start_time %></td>
+						<!--<td><%= cont.week %></td>-->
+						<td><%= cont.access %></td>
+					</tr>	
+					<% }) %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

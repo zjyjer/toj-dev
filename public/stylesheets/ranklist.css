@@ -1,0 +1,39 @@
+.table th, .table td {
+	text-align: center;
+}
+.ac {
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	background-repeat: no-repeat;
+}
+.table-centered {
+	margin: 0 auto !important;
+	float: none !important;
+	width: 900px;
+}
+.header-rank{
+	width: 10%;
+}
+.header-username{
+	width: 15%;
+}
+.header-nickname{
+	width: 30%;
+}
+.header-AC{
+	width: 10%;
+	min-width: 100px;
+}
+.header-ALL{
+	width: 15%;
+	min-width: 100px;
+}
+.header-ratio{
+	width: 10%;
+	min-width: 100px;
+}
+.header-Rating{
+	width: 10%;
+	min-width: 100px;
+}

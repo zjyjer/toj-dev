@@ -1,0 +1,93 @@
+tr,td,th {
+	font-size: 13.5px;
+	text-align: center;
+}
+.form-horizontal {
+	margin: 0 auto !important;
+	float: none !important;
+	max-width: 1000px;
+	width: auto;
+	margin: 0 auto;
+}
+.table-centered {
+	margin: 0 auto !important;
+	float: none !important;
+	max-width: 1000px;
+	width: auto;
+	margin: 0 auto; 
+}
+.form-group {
+	margin-bottom: 0px;
+	max-width: 1000px;
+	width: auto;
+	/* margin: 0 auto; */
+	margin-bottom: 8px;
+}
+.search-bar {
+	width: 25%;
+	float: left;
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+#arrange {
+	position: relative;
+	left: 500px;
+}
+/*
+.ojn {
+	width: 2%;
+	float: right;
+	position: relative;
+	right: 220px;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.oj-select {
+	width: 12%;
+	float: right;
+	position: relative;
+	right: 60px;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+*/
+.header-cid {
+	width: 7%;
+}
+.header-title {
+	width: 35%;
+}
+.header-st_time {
+	width: 16%;
+}
+.header-ed_time {
+	width: 16%;
+}
+.header-status {
+	width: 8%;
+	min-width: 100px;
+}
+.header-access {
+	width: 8%;
+}
+.header-author {
+	width: 12%;
+}
+.oj-form {
+	display: block;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857;
+	color: rgb(85, 85, 85);
+	vertical-align: middle;
+	background-color: rgb(255, 255, 255);
+	background-image: none;
+	border: 1px solid rgb(204, 204, 204);
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) 
+}

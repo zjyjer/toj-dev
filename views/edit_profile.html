@@ -1,0 +1,135 @@
+<link href="/stylesheets/edit_profile.css" rel="stylesheet">
+<div class="container">
+	<div id="leftbar"class="panel">
+		<div id="user-avatar" class="panel">
+			<div class="media" style="display:table;">
+				<a class="pull-left" href="#">
+					<img src="http://www.gravatar.com/avatar/42a5f327efc7d3408a049b2af940b59f?s=75" class="img-rounded"/>
+				</a>
+				<span style="font-weight: bold;display:table-cell;vertical-align:middle;">Username here</span>
+			</div><br/>
+			<button id="upload-img" class="btn btn-primary" style="display:table-cell;vertical-align:middle;">upload</button>
+
+			<table class="profile-table">
+				<tbody>
+					<tr>
+						<td id="profile-personal">
+							<form id="profile-detail" method="post">
+								<input class="input-xxlarge" name="csrfmiddlewaretoken" value="HQ1vWZRb9Ahx2Db1c9herCkO29OgnsSf" type="hidden"> 
+								<div class="form-group">
+									<label>name</label>
+									<div><input class="form-control input-xxlarge" id="id_real_name" maxlength="128" name="real_name" type="text"></div>
+								</div>
+								<div class="form-group">
+									<label>Website</label>
+									<div><input class="form-control input-xxlarge" id="id_website" maxlength="512" name="website" type="text"></div>
+								</div>
+								<div class="form-group">
+									<label>E-mail</label>
+									<div><input class="form-control input-xxlarge" id="id_email" maxlength="128" name="email" type="text"></div>
+								</div>
+
+
+								<div class="form-group">
+									<label>School</label>
+									<div><input class="form-control input-xxlarge" id="id_school" maxlength="512" name="school" type="text"></div>
+								</div>
+								<div class="form-group">
+									<label>Country</label>
+									<div><input class="form-control input-xxlarge" id="id_country" maxlength="512" name="country" type="text"></div>
+								</div>
+
+								<div class="form-group">
+									<label>About me</label>
+									<textarea class="form-control" rows="5"></textarea>
+								</div>
+
+								<button id="btn-save-personal-information"class="col-md-7 btn btn-primary extra-margin-top" type="submit">Save Personal Information</button>
+							</form>
+						</td>
+
+
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>         
+
+	<div class="rightbar">
+		<div id="profile-social">
+			<div class="panel">
+				<div class="header"><h3><strong>My other OJs</strong></h3></div>
+				<form style="display:none" class="uniForm" method="post" action="/profile/?msg=disconnect">
+					<input type='hidden' name='csrfmiddlewaretoken' value='HQ1vWZRb9Ahx2Db1c9herCkO29OgnsSf' />
+					<input type="text" name="provider"/>
+					<button type="submit"></button>
+				</form>
+
+				<div id="confirm_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3 class="modal-title">Disconnect</h3>
+							</div>
+							<div class="modal-body">
+								<p>Are you sure?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">No</button>
+								<button class="btn btn-primary">Yes</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<table>
+					<tr id="google" class="row">
+						<td title="Google" class="google" id="social-name">TOJ</td>
+						<td><a class="btn btn-success btn-social-connect" id="google-connect" href="/accounts/google/login/?process=connect">Connect</a>
+							<a href="#confirm_dialog" class="hide text-danger btn btn-default btn-social-disconnect" id="google-disconnect" data-toggle="modal">Disconnect</a></td>
+					</tr>
+
+					<tr id="github" class="row">
+						<td title="GitHub" class="github" id="social-name">HDU
+						</td>
+						<td><a class="btn btn-success btn-social-connect" id="github-connect" href="/accounts/github/login/?process=connect">Connect</a>
+							<a href="#confirm_dialog" class="hide text-danger btn btn-default btn-social-disconnect" id="github-disconnect" data-toggle="modal">Disconnect</a>
+						</td>
+					</tr>
+
+					<tr id="facebook" class="row">
+						<td title="Facebook" class="facebook" id="social-name">POJ</td>
+						<td><a class="btn btn-success btn-social-connect" id="facebook-connect" href="/accounts/facebook/login/?process=connect">Connect</a>
+							<a href="#confirm_dialog" class="hide text-danger btn btn-default btn-social-disconnect" id="facebook-disconnect" data-toggle="modal">Disconnect</a>
+						</td>
+					</tr>
+
+					<tr id="linkedin" class="row">
+						<td title="LinkedIn" class="linkedin" id="social-name">SPOJ
+						</td>
+						<td><a class="btn btn-success btn-social-connect" id="linkedin-connect" href="/accounts/linkedin/login/?process=connect">Connect</a>
+							<a href="#confirm_dialog" class="hide text-danger btn btn-default btn-social-disconnect" id="linkedin-disconnect" data-toggle="modal">Disconnect</a>
+						</td>
+					</tr>
+
+				</table>
+			</table>
+		</div>
+	</td>
+</tr>
+</div>		
+<div id="solved-problem">
+	<div class="panel">
+		<div class="header">
+			<h3><strong>Problem Solved</strong></h3>
+		</div>
+		<div class="inner">
+			1001  1002  1003  1007  1008  1009  1011  1012  1015  1022  1025  1026  1031  1034  1035  1036  1038  1047  1049  1050  1051  1056  1057  1065  1073  1074  1075  1079  1082  1089  1090  1093  1100  1101  1102  1105  1112  1115  1117  1118  1119  1120  1123  1127  1129  1130  1131  1132  1133  1134  1135  1136  1137  1138  1139  1140  1142  1144  1150  1153  1154  1156  1159  1161  1162  1163  1167  1169  1170  1171  1172  1173  1175  1176  1178  1179  1183  1188  1191  1192  1193  1196  1203  1204  1205  1207  1208  1211  1224  1225  1233  1242  1257  1259  1263  1266  1279  1283  1287  1296  1301  1306  1310  1312  1326  1339  1348  1350  1355  1356  1365  1367  1368  1375  1378  1380  1387  1388  1391  1393  1394  1397  1398  1401  1407  1411  1412  1416  1423  1425  1432  1445  1457  1471  1473  1476  1477  1502  1503  1516  1517  1527  1528  1539  1541  1547  
+			more...
+		</div>
+	</div>
+</div>
+</div>
+ </div><!--end rightbar-->
