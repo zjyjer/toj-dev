@@ -302,10 +302,10 @@ exports.post_submit = function(req, res, next) {
 
 	var proxy = new EventProxy();
 	var render = function() {
-		res.redirect('/Status?page=1');
+		res.redirect('/Contest/Status?cid='+_cid+'&page=1');
 	};
 
-	proxy.assign('prob_update', 'counts', 'code_save', 'status_save', 'submit', render);
+	proxy.assign('prob_update', 'get_oj', 'counts', 'code_save', 'status_save', 'submit', render);
 
 	proxy.fail(next);
 
@@ -321,45 +321,51 @@ exports.post_submit = function(req, res, next) {
 		// 获取counts，以便计算runid，没有自增ID的好讨厌= = 
 		Status.getCount({}, proxy.done(function(counts) {
 
-			var _runid = counts + 1;
-			var data = config.submit_string + "\n" + _runid + "\n" + prob.oj;
-
 			proxy.emit('counts', counts);
 
-			// 好，现在有runid了
-			// 貌似存一下code和status就可以提交了，好开森= =
-			
-			Code.newAndSave(_cid, _runid, _code, proxy.done('code_save'));
+			Problem.getOne({ pid: prob.pid }, proxy.done(function(rprob) {
 
-			var _status = {
-				contest_belong:	_cid,
-				run_ID: 	_runid,
-				username: 	_username,
-				pid: 	prob.pid,
-				oj: 	prob.oj,
-				lang: 	_lang,
-				code_len:	_code.length,
-				submit_time:	new Date(),
-				result:		'Waiting'
-			};
-			Status.newAndSave(_status, proxy.done('status_save'));
+				var _runid = counts + 1;
+				var data = config.submit_string + "\n" + _runid + "\n" + rprob.oj;
 
-			// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
-			// later...
-			var client = new net.Socket();
-			client.connect(config.judge_port, config.judge_host, function() {
-				client.write(data);
-			});
-			client.on('error',function(error){
-				proxy.unbind();
-				req.flash('error', 'The judge is temporary unavailable.Sorry.');
-				return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
-			});
-			client.on('close', function() {
-				proxy.emit('submit');
-			});
+				proxy.emit('get_oj');
+
+
+				// 好，现在有runid了
+				// 貌似存一下code和status就可以提交了，好开森= =
+
+				Code.newAndSave(_cid, _runid, _code, proxy.done('code_save'));
+
+				var _status = {
+					contest_belong:	_cid,
+					run_ID: 	_runid,
+					username: 	_username,
+					pid: 	prob.pid,
+					oj: 	prob.oj,
+					lang: 	_lang,
+					code_len:	_code.length,
+					submit_time:	new Date(),
+					result:		'Waiting'
+				};
+				Status.newAndSave(_status, proxy.done('status_save'));
+
+				// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
+				// later...
+				var client = new net.Socket();
+				client.connect(config.judge_port, config.judge_host, function() {
+					client.write(data);
+				});
+				client.on('error',function(error){
+					proxy.unbind();
+					req.flash('error', 'The judge is temporary unavailable.Sorry.');
+					return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
+				});
+				client.on('close', function() {
+					proxy.emit('submit');
+				});
+			}));
 		}));
-		
+
 	}));
 };
 
@@ -376,7 +382,7 @@ exports.get_standing = function(req, res, next) {
 	var ep = EventProxy.create(events, function(cont, cont_probs) {
 		res.render('Contest/Contest_Standing', {
 			title: 'Standing',
-		       	fcont: cont,
+			fcont: cont,
 			fcont_probs: cont_probs,
 		});
 	});
@@ -390,16 +396,16 @@ exports.get_standing = function(req, res, next) {
 
 exports.post_standing = function(req, res, next) {
 	var _cid = parseInt(req.body['cid']);
-	
+
 	var events = ['cont', 'cont_probs', 'stats'];
-	
+
 	var ep = EventProxy.create(events, function(cont, cont_probs, stats) {
 		var ret = Util.get_standing_via_status(cont, cont_probs, stats);
 		res.send({ sa: ret['standing'], fb: ret['fb'], solve: ret['solve'] });
 	});
 
 	ep.fail(next);
-	
+
 	Contest.getOne({ cid: _cid }, ep.done('cont'));
 
 	Contest_Problem.getMulti({ cid: _cid }, {}, { sort: { nid: 1}}, ep.done('cont_probs'));

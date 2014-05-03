@@ -2,6 +2,8 @@ $(function() {
 	var editor = ace.edit("embedded_ace_code");
 	editor.setTheme("ace/theme/chrome");
 	editor.getSession().setMode("ace/mode/c_cpp");
+	editor.focus();
+	document.getElementById('embedded_ace_code').style.fontSize='12px';
 });
 
 function SelectLang(choose) {

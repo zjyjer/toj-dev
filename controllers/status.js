@@ -220,13 +220,15 @@ exports.contest_getByPage = function(req, res, next) {
 	var loginUser = '';
 	if (req.session.user) loginUser = req.session.user.username;
 
-	var events = ['cont', 'counts', 'stats'];
-	var ep = EventProxy.create(events, function(cont, counts, stats) {
+	var events = ['cont', 'counts', 'stats', 'map'];
+	var ep = EventProxy.create(events, function(cont, counts, stats, map) {
+
 		res.render('Contest/Contest_Status', {
 			title:'Status',
 			floginUser: loginUser,
 			fcont: cont,
 			fstats: stats,
+			fmap: map,
 			fcorrlang: config.corrlang,
 			fpageID: _page,
 			fselected:{
@@ -261,7 +263,19 @@ exports.contest_getByPage = function(req, res, next) {
 
 		ep.emit('counts', counts);
 	}));
-
+	Contest_Problem.getMulti({ cid: _cid }, {}, {}, function(err, probs) {
+		var map = {};
+		if (err || !probs) {
+			ep.unbind();
+			req.flash('error', 'Error, something happeded.');
+			return res.redirect('/Contest/Contests?type=0');
+		} else {
+			probs.forEach(function(prob, index) {
+				map[prob.pid] = prob.nid;
+				if (index == probs.length - 1) ep.emit('map', map);
+			});
+		}
+	});
 };
 
 /**

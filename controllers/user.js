@@ -240,6 +240,6 @@ exports.get_rank = function(req, res, next) {
 
 	var options = { limit: config.users_per_page, skip: (_page - 1) * config.users_per_page, sort: {total_ac: -1} };
 
-	Status.getMulti( {}, {}, options, ep.done('users'));
+	User.getMulti( {}, {}, options, ep.done('users'));
 
 };

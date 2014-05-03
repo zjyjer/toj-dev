@@ -1,4 +1,5 @@
 var EventProxy = require('eventproxy');
+var config = require('../config').config;
 
 var Code = require('../proxy').Code;
 var Status = require('../proxy').Status;
@@ -51,6 +52,6 @@ exports.getByRunid = function(req, res, next) {
 
 	ep.fail(next);
 
-	Status.getByRunid({ contest_belong: _cid, run_ID: _runid }, ep.done('status'));
+	Status.getOne({ contest_belong: _cid, run_ID: _runid }, ep.done('status'));
 	Code.getOne({ contest_belong: _cid, run_ID: _runid }, ep.done('code'));
 };

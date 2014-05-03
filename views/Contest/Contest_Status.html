@@ -90,7 +90,8 @@
 					<td><%- stat.run_ID %></td>
 					
 					
-					<td><%- stat.submit_time %></td>
+					<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
+					<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
 					<% if(stat.result == "Accepted") {%>
 					<td><font color="red"><%- stat.result %></font></td>
 					<% } else if(stat.result == "Compilation Error") {%>
@@ -102,7 +103,7 @@
 					<% } %>
 
 
-					<td><a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= stat.nid %>"><%= stat.nid + 1001 %></a></td>
+					<td><a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= fmap[stat.pid]+1001 %>"><%= fmap[stat.pid] + 1001 %></a></td>
 
 
 					<td><%- stat.time_used %>
@@ -114,7 +115,7 @@
 					</td>
 
 					<% if(floginUser == stat.username) { %>
-					<td><a href="/Contest/ShowCode?cid=<%- stat.cid %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a></td>
+					<td><a href="/Contest/ShowCode?cid=<%- stat.contest_belong %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a></td>
 					<% } else {%>
 					<td><%- stat.code_len %>B</td>
 					<% } %>
