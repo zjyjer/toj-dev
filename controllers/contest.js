@@ -281,7 +281,7 @@ exports.get_submit = function(req, res, next) {
 
 
 	Contest_Problem.getOne({ cid: _cid, nid: _nid }, ep.done(function(cprob) {
-		ep.emit('pid', cprob,pid);
+		ep.emit('pid', cprob.pid);
 		Problem.getOne({ pid: cprob.pid }, ep.done('prob'));
 	}));
 };
