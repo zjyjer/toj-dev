@@ -319,7 +319,7 @@ exports.post_submit = function(req, res, next) {
 		proxy.emit('prob_update');
 
 		// 获取counts，以便计算runid，没有自增ID的好讨厌= = 
-		Status.getCount({ contest_belong: _cid }, proxy.done(function(counts) {
+		Status.getCount({}, proxy.done(function(counts) {
 
 			var _runid = counts + 1;
 			var data = config.submit_string + "\n" + _runid + "\n" + prob.oj;
@@ -361,4 +361,51 @@ exports.post_submit = function(req, res, next) {
 		}));
 		
 	}));
+};
+
+exports.get_standing = function(req, res, next) {
+	var _cid = req.query.cid ? parseInt(req.query.cid) : 0;
+
+	if (!_cid) {
+		req.flash('error', 'Invalid Contest!');
+		return res.redirect('/Contest/Contests?type=0');
+	}
+
+	var events = ['cont', 'cont_probs'];
+
+	var ep = EventProxy.create(events, function(cont, cont_probs) {
+		res.render('Contest/Contest_Standing', {
+			title: 'Standing',
+		       	fcont: cont,
+			fcont_probs: cont_probs,
+		});
+	});
+
+	ep.fail(next);
+
+	Contest.getOne({ cid: _cid}, ep.done('cont'));
+
+	Contest_Problem.getMulti({ cid: _cid }, {}, { sort: {nid: 1} }, ep.done('cont_probs'));
+};
+
+exports.post_standing = function(req, res, next) {
+	var _cid = parseInt(req.body['cid']);
+	
+	var events = ['cont', 'cont_probs', 'stats'];
+	
+	var ep = EventProxy.create(events, function(cont, cont_probs, stats) {
+		var ret = Util.get_standing_via_status(cont, cont_probs, stats);
+		res.send({ sa: ret['standing'], fb: ret['fb'], solve: ret['solve'] });
+	});
+
+	ep.fail(next);
+	
+	Contest.getOne({ cid: _cid }, ep.done('cont'));
+
+	Contest_Problem.getMulti({ cid: _cid }, {}, { sort: { nid: 1}}, ep.done('cont_probs'));
+
+	var query = { contest_belong: _cid};
+	var options = { sort: {submit_time: 1} };
+	Status.getMulti(query, {}, options, ep.done('stats'));
+
 };

@@ -229,7 +229,7 @@ exports.post_submit = function(req, res, next) {
 
 			//题目和用户都没有问题，准备提交
 			//获取runid等
-			Status.getCount({ contest_belong: -1 }, proxy.done(function(counts) {
+			Status.getCount({}, proxy.done(function(counts) {
 
 				var _runid = counts + 1;
 				var data = config.submit_string + "\n" + _runid + "\n" + prob.oj;

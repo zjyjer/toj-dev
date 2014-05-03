@@ -94,4 +94,7 @@ module.exports = function (app) {
 
 	app.get('/Contest/Showceerror', status.get_ce);
 
+	app.get('/Contest/Standing', auth.accessRequired, contest.get_standing);
+	app.post('/Contest/post_Standing', contest.post_standing);
+
 };
