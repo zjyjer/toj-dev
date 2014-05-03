@@ -194,11 +194,10 @@ exports.contest_getByPage = function(req, res, next) {
 		return res.redirect('/Contest/Contests?type=0');
 	}
 
-	query.cid = _cid;
+	query.contest_belong = _cid;
 	_url += 'cid=' + _cid;
 
 	if (_nid) {
-		query.nid = _nid - 1001;
 		_url += 'pid=' + _nid;
 	} else  _url += 'pid=';
 
@@ -243,7 +242,18 @@ exports.contest_getByPage = function(req, res, next) {
 
 	ep.fail(next);
 
-	Contest.getOne({ cid: _cid}, ep.done('cont'));
+	Contest.getOne({ cid: _cid}, ep.done(function(cont) {
+		ep.emit('cont', cont);
+		var options = { limit: config.status_per_page, skip: (_page - 1) * config.status_per_page, sort: {run_ID: -1} };
+		if (_nid) {
+			Contest_Problem.getOne({ cid: _cid, nid: _nid }, function(err, cp) {
+				query.pid = cp.pid;
+				Status.getMulti(query, {}, options, ep.done('stats'));
+			});
+		} else {
+			Status.getMulti(query, {}, options, ep.done('stats'));
+		}
+	}));
 
 	Status.getCount(query, ep.done(function(counts) {
 		_total_page = Math.ceil(counts / 15);
@@ -252,8 +262,6 @@ exports.contest_getByPage = function(req, res, next) {
 		ep.emit('counts', counts);
 	}));
 
-	var options = { limit: config.status_per_page, skip: (_page - 1) * config.status_per_page, sort: {run_ID: -1} };
-	Status.getMulti(query, {}, options, ep.done('stats'));
 };
 
 /**
