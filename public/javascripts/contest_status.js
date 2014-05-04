@@ -15,8 +15,8 @@ function SetScrollPosition(){
 }
 window.onscroll = SetScrollPosition;
 
-function Search() {
-	var cid = <% JSON.stringify(fcont.cid) %>;
+function Search(_cid) {
+	var cid = _cid;
 	var pid = document.getElementById('pid').value;
 	var user = document.getElementById('user').value;
 	var result = document.getElementById('result').value;
@@ -26,3 +26,53 @@ function Search() {
 	if(!user) user = "";
 	window.location.replace("/Contest/Status?cid="+cid+"&pid="+pid+"&username="+user+"&lang="+lang+"&result="+result);
 }
+
+// update status
+function get_status(reget, rows) {
+	$.ajax ( {
+		url: '/refresh/Status',
+		type: 'POST',
+		data: {runid: reget},
+		async: false,
+		success: function(json_array) {
+			var table = document.getElementById('Status');
+			for(var i = 0;i < json_array.length; ++i) {
+				if (json_array[i].result == 'Waiting' || json_array[i].result == 'Judging') {
+					continue;
+				}
+				var newre = '';
+				if (json_array[i].result == 'Accepted') {
+					newre += '<font color="red">Accpepted</font>';
+				} else if (json_array[i].result == 'Compilation Error') {
+					newre += '<font color="#6633FF"><a href="/ShowCEError?runid='+json_array[i].runid+'">Compilation Error</a></font>';
+				} else if (json_array[i].result == 'Presentation Error') {
+					newre += '<font color="orange">Presentation Error</font>';
+				} else {
+					newre += '<font color="green">'+json_array[i].result+'</font>';
+				}
+				table.rows[rows[i]].cells[2].innerHTML = newre;
+				table.rows[rows[i]].cells[4].innerHTML = json_array[i].tu+'MS';
+				table.rows[rows[i]].cells[5].innerHTML = json_array[i].mu+'K';
+			}
+		}
+	});
+}
+function update_status() {
+	var table = document.getElementById('Status');
+	var reget = [];
+	var rows = [];
+	for(var i = 1;i < table.rows.length; ++i) {
+		//0-runid  1-submit_time 2-result 3-pid 4-time 5-memory 
+		var re = table.rows[i].cells[2].innerText;
+		if (re.substr(0, 5) == 'Waiti' || re.substr(0,5) == 'Judgi')  {
+			reget.push(table.rows[i].cells[0].innerText);
+			rows.push(i);
+		}
+	}
+	get_status(reget, rows);
+	setTimeout("update_status()", 1500);
+}
+
+$(document).ready(function() {
+	update_status();	
+});

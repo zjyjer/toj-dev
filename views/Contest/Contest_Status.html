@@ -48,7 +48,7 @@
 				<option value="16"<%if(fselected.lang=='16'){%>selected<%}%>>Python</option>
 			</select>
 		</div>
-		<button type="button" class="btn btn-primary" onclick="Search()">Search</button>
+		<button type="button" class="btn btn-primary" onclick="Search(<%= fcont.cid %>)">Search</button>
 
 	</div>
 	<div class="form-group">
@@ -89,36 +89,41 @@
 				<tr>
 					<td><%- stat.run_ID %></td>
 					
-					
 					<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
 					<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
+
+					<td>
 					<% if(stat.result == "Accepted") {%>
-					<td><font color="red"><%- stat.result %></font></td>
+					<font color="red"><%- stat.result %></font>
 					<% } else if(stat.result == "Compilation Error") {%>
-					<td><font color="#6633FF"><a href="/Contest/ShowCEError?cid=<%- fcont.cid %>&runid=<%- stat.run_ID %>"><%- stat.result %></a></font></td>
+					<font color="#6633FF"><a href="/Contest/ShowCEError?cid=<%- fcont.cid %>&runid=<%- stat.run_ID %>"><%- stat.result %></a></font>
 					<% } else if(stat.result == "Presentation Error") {%>
-					<td><font color="orange"><%- stat.result %></font></td>
+					<font color="orange"><%- stat.result %></font>
 					<% } else { %>
-					<td><font color="green"><%- stat.result %></font></td>
+					<font color="green"><%- stat.result %></font>
 					<% } %>
+					<% if (stat.result == "Waiting" || stat.result == "Judging") {%>
+					<img src="/icon/status_loader.gif">
+					<% } %>
+					</td>
 
 
 					<td><a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= fmap[stat.pid]+1001 %>"><%= fmap[stat.pid] + 1001 %></a></td>
 
 
-					<td><%- stat.time_used %>
-					<% if(stat.time_used) {%>MS<% } %>
+					<td><%- stat.time_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>MS<% } %>
 					</td>
 
-					<td><%- stat.mem_used %>
-					<% if(stat.mem_used) {%>K<% } %>
+					<td><%- stat.mem_used %><%- stat.time_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>K<% } %>
 					</td>
 
+					<td>
 					<% if(floginUser == stat.username) { %>
-					<td><a href="/Contest/ShowCode?cid=<%- stat.contest_belong %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a></td>
+					<a href="/Contest/ShowCode?cid=<%- stat.contest_belong %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a>
 					<% } else {%>
-					<td><%- stat.code_len %>B</td>
+					<%- stat.code_len %>B
 					<% } %>
+					</td>
 
 					<td><%- fcorrlang[stat.lang]%></td>
 					<td><a href="/profile/<%- stat.username %>"><%- stat.username %></a></td>
