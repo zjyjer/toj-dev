@@ -55,6 +55,7 @@ $(document).ready(function() {
 			var solve = json['solve'];
 			var html = '';
 			for (var i = 0;i < sa.length; ++i) {
+				html += '<tr>';
 				html += '<td>' + (i+1+'') + '</td>';
 				html += '<td>' + sa[i].user + '</td>';
 				html += '<td>' + sa[i].ac + '</td>';
@@ -72,9 +73,11 @@ $(document).ready(function() {
 						html += '<td></td>';
 					}
 				}
+				html += '<td>' + sa[i].penalty + '</td>';
+				html += '</tr>';
 			}
 			$("#loading").css("display","none");
-			$("#randing_body").html(html);
+			$("#ranking_body").html(html);
 		}
 	});
 });

@@ -49,9 +49,10 @@ exports.get_Pagelist = function(volume, counts) {
 	return page;
 };
 
-exports.getPenalty = function(start_time, submit_time) {
+function getPenalty(start_time, submit_time) {
 	return Math.ceil((submit_time - start_time)/60000);
-};
+}
+
 exports.get_standing_via_status = function(contest, contest_probs, status_array) {
 	var prob_num = contest_probs.length;
 	var stat_num = status_array.length;
@@ -82,7 +83,6 @@ exports.get_standing_via_status = function(contest, contest_probs, status_array)
 			if (!first_blood[nid]) first_blood[nid] = user;
 
 			if (users[user][nid] <= 0) {
-				if (!penalty[user]) penalty[user] = 0;
 				users[user][prob_num] += 1;
 				users[user][prob_num+1] += -users[user][nid] * 20;
 				users[user][prob_num+1] += getPenalty(contest.start_time, submit_time);
