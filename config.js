@@ -20,6 +20,7 @@ var config = {
 	statistics_per_page: 15, //每页显示的统计数
 	users_per_page : 50,	//ranklist每页人数
 	contest_per_page : 20,	//ranklist每页人数
+	rcont_per_page: 15,	//首页显示的recent contest数量
 
 	judge_string: 'yourjudgestring',
 	error_string: 'yourerrorjudgestring',

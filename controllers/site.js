@@ -19,7 +19,7 @@ exports.index = function(req, res, next) {
 	});
 	ep.fail(next);
 
-	Recent_Contest.getMulti({},{},{ sort: {start_time: 1} }, ep.done('rconts'));
+	Recent_Contest.getMulti({},{},{ limit: config.rcont_per_page, sort: {start_time: 1} }, ep.done('rconts'));
 };
 
 

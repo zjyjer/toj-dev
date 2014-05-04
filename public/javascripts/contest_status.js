@@ -42,7 +42,7 @@ function get_status(reget, rows) {
 				}
 				var newre = '';
 				if (json_array[i].result == 'Accepted') {
-					newre += '<font color="red">Accpepted</font>';
+					newre += '<font color="red">Accepted</font>';
 				} else if (json_array[i].result == 'Compilation Error') {
 					newre += '<font color="#6633FF"><a href="/ShowCEError?runid='+json_array[i].runid+'">Compilation Error</a></font>';
 				} else if (json_array[i].result == 'Presentation Error') {
