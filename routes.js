@@ -59,6 +59,8 @@ module.exports = function (app) {
 
 	app.get('/Status', status.getByPage);
 	app.get('/Statistics', status.getStatistics);
+	// status 刷新
+	app.post('/refresh/Status', status.getUndone);
 
 
 	app.get('/ShowCode', code.getByRunid);

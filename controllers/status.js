@@ -350,3 +350,23 @@ exports.contest_getStatistics = function(req, res, next) {
 
 };
 
+exports.getUndone = function(req, res, next) {
+	var s_array = req.body['runid'];
+	if (!s_array) return res.send({});
+	
+	var ep = new EventProxy();
+	ep.after('getnew', s_array.length, function(list) {
+		res.send(list);
+	});
+	for(var i = 0;i < s_array.length; ++i) {
+		(function(i) {
+			Status.getOne({ run_ID: s_array[i] }, function(err, stat) {
+				if (err) {
+					ep.emit('getnew', { runid: s_array[i] , result: 'Judge Error' , tu: stat.time_used, mu: stat.mem_used });	
+				} else {
+					ep.emit('getnew', { runid: s_array[i] , result:  stat.result , tu: stat.time_used, mu: stat.mem_used });
+				}
+			});
+		})(i);
+	}
+};

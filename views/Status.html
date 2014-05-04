@@ -88,28 +88,38 @@
 					<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
 					<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
 
+					<td>
 					<% if(stat.result == "Accepted") {%>
-					<td><font color="red"><%- stat.result %></font></td>
+					<font color="red"><%- stat.result %></font>
 					<% } else if(stat.result == "Compilation Error") {%>
-					<td><font color="#6633FF"><a href=/ShowCEError?runid=<%- stat.run_ID%>><%- stat.result %></a></font></td>
+					<font color="#6633FF"><a href=/ShowCEError?runid=<%- stat.run_ID%>><%- stat.result %></a></font>
 					<% } else if(stat.result == "Presentation Error") {%>
-					<td><font color="orange"><%- stat.result %></font></td>
+					<font color="orange"><%- stat.result %></font>
 					<% } else { %>
-					<td><font color="green"><%- stat.result %></font></td>
+					<font color="green"><%- stat.result %></font>
 					<% } %>
+					<% if (stat.result == "Waiting" || stat.result == "Judging") { %>
+					<img src = "/icon/status_loader.gif">
+					<% } %>
+					</td>
 
 					<td><a href=/ShowProblems?pid=<%- stat.pid%>> <%- stat.pid %></a></td>
-					<td><%- stat.time_used %>MS
+
+					<td>
+						<%- stat.time_used %><% if (stat.result != "Waiting" && stat.result != "Judging") { %>MS<% } %>
 					</td>
 
-					<td><%- stat.mem_used %>K
+					<td>
+						<%- stat.mem_used %><% if (stat.result != "Waiting" && stat.result != "Judging") { %>K<% } %>
 					</td>
 
+					<td>
 					<% if(floginUser == stat.username) { %>
-					<td><a href=/ShowCode?runid=<%- stat.run_ID %>><%- stat.code_len %>B</a></td>
+					<a href=/ShowCode?runid=<%- stat.run_ID %>><%- stat.code_len %>B</a>
 					<% } else {%>
-					<td><%- stat.code_len %>B</td>
+					<%- stat.code_len %>B
 					<% } %>
+					</td>
 
 					<td><%- fcorrlang[stat.lang]%></td>
 
