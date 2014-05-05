@@ -17,6 +17,7 @@ require('./code');
 require('./contest');
 require('./contest_user');
 require('./contest_prob');
+require('./oj_status');
 
 exports.User = mongoose.model('User');
 exports.Problem = mongoose.model('Problem');
@@ -26,3 +27,4 @@ exports.Code = mongoose.model('Code');
 exports.Contest = mongoose.model('Contest');
 exports.Contest_User = mongoose.model('Contest_User');
 exports.Contest_Problem = mongoose.model('Contest_Problem');
+exports.OJ_Status = mongoose.model('OJ_Status');

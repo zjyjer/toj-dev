@@ -30,7 +30,18 @@ var config = {
 	judge_host: '127.0.0.1',
 	judge_port: 5907,
 	
+
+
+	oj_msg: ['All seems OK.', 'Warning, more than 10 queues.', 'Error, can not connect.'], //OJ_Status的提示语
+
 	ojs: ['HDU', 'POJ', 'ZOJ', 'TOJ'],
+
+	oj_links: {
+		'HDU': ['acm.hdu.edu.cn/showproblem.php?pid=', ''],
+		'POJ': ['poj.org/problsm?id=', ''],
+		'ZOJ': ['acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=', ''],
+		'TOJ': ['acm.tju.edu.cn/toj/show', '.html'],
+	},
 
 	oj_lang: {
 		'HDU': '<option value="1">G++</option><option value="2">GCC</option><option value="3">Java</option><option value="4">Pascal</option><option value="12">C++</option><option value="13">C</option>',
