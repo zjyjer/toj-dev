@@ -29,11 +29,32 @@ $(document).ready(function(){
 	});
 });
 
-$(document).ready(function(){
+function get_acs() {
+	var table = document.getElementById('problemList');
+	var pids = [];
+	for(var i = 1;i < table.rows.length; ++i) {
+		var pid = table.rows[i].cells[1].innerText;
+		pids.push(pid);
+	}
+	$.ajax ({
+		url: '/Problem/getAC',
+		type: 'POST',
+		data: {pids: pids},
+		async: false,
+		success: function(json) {
+			var table = document.getElementById('problemList');
+			for(var i = 1;i < table.rows.length; ++i) {
+				var pid = table.rows[i].cells[1].innerText;
+				if (json[pid] == 1) table.rows[i].cells[i].addClass('ac');
+				else if (json[pid] == -1) table.rows[i].cells[i].addClass('not-ac');
+			}
+		}
+	});
+}
 
+$(document).ready(function(){
 	// hide #back-top first
 	$("#back-top").hide();
-
 	// fade in #back-top
 	$(function () {
 		$(window).scroll(function () {
@@ -52,5 +73,5 @@ $(document).ready(function(){
 			return false;
 		});
 	});
-
+	//get_acs();
 });

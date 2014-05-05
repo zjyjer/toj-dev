@@ -30,7 +30,7 @@ var config = {
 	judge_host: '127.0.0.1',
 	judge_port: 5907,
 	
-	ojs: ['HDU', 'POJ', 'ZOJ'],
+	ojs: ['HDU', 'POJ', 'ZOJ', 'TOJ'],
 
 	oj_lang: {
 		'HDU': '<option value="1">G++</option><option value="2">GCC</option><option value="3">Java</option><option value="4">Pascal</option><option value="12">C++</option><option value="13">C</option>',
@@ -38,6 +38,8 @@ var config = {
 		'POJ': '<option value="1">G++</option><option value="2">GCC</option><option value="3">Java</option><option value="4">Pascal</option><option value="12">C++</option><option value="13">C</option>',
 
 		'ZOJ': '<option value="1">G++</option><option value="2">GCC</option><option value="3">Java</option><option value="4">Pascal</option><option value="5">Python</option><option value="8">Perl</option>',
+
+		'TOJ': '<option value="1">G++</option><option value="2">GCC</option><option value="3">Java</option><option value="4">Pascal</option>',
 	},
 
 	digit2result: [
