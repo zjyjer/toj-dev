@@ -2,9 +2,12 @@
 <script type="text/javascript" src="/javascripts/sh_highlight/sh_main.min.js"></script>
 <!--<script type="text/javascript" src="/javascripts/ZeroClipboard.min.js"></script>-->
 <link type="text/css" rel="stylesheet" href="/stylesheets/sh_highlight/sh_emacs.min.css">
+<% var cls; %>
 <% if(fcorrlang[fstat.lang] == "C++" || fcorrlang[fstat.lang] == "G++") {%>
+<% cls = "sh_cpp" %>
 <script type="text/javascript" src="/javascripts/sh_highlight/sh_cpp.min.js"></script>
 <% } else if(fcorrlang[fstat.lang] == "Java") { %>
+<% cls = "sh_java" %>
 <script type="text/javascript" src="/javascripts/sh_highlight/sh_java.min.js"></script>
 <% } %>
 
@@ -50,4 +53,4 @@ Author:<a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
 </div>
 
 
-<pre id="src-code" class="sh_cpp"><%= fcode.code %></pre>
+<pre id="src-code" class="<%= cls %>"><%= fcode.code %></pre>

@@ -51,3 +51,20 @@ exports.getMulti = function(query, fields, opt, callback) {
 	});
 };
 
+
+/*
+ * 获取用户是否提交过某个题目，以及是否通过
+ * @param contest_belong, username, pid, callback
+ * @return 0:未提交 1: 提交并通过 -1: 提交但未通过
+ */
+exports.getSubmitted = function(cb, username, pid, callback) {
+	Status.findOne({ contest_belong: cb, username: username, pid: pid }, function(err, doc1) {
+		if (err || !doc1) {
+			return callback(err, 0);
+		}
+		Status.findOne({ contest_belong: cb, username: username, pid: pid, speed: 51 }, function(err, doc2) {
+			if (err || !doc2) return callback(err, -1);
+			callback(err, 1);
+		});
+	});
+};

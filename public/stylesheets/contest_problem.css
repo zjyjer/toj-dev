@@ -16,12 +16,14 @@
 	display: inline-block;
 	height: 16px;
 	width: 16px;
-	background-image: url('/static/images/correct.png');
+	background-image: url('/icon/ac.png');
 	background-repeat: no-repeat;
+}
+.not-ac {
 	display: inline-block;
 	height: 16px;
 	width: 16px;
-	background-image: url('/static/images/question.png');
+	background-image: url('/icon/notac.png');
 	background-repeat: no-repeat;
 }
 .header-status {

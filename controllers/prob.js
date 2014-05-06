@@ -31,12 +31,13 @@ exports.getByPage = function(req, res, next) {
 	}
 	_url += 'volume=';
 
-	var events = ['counts', 'probs'];
-	var ep = EventProxy.create(events, function(counts, probs) {
+	var events = ['counts', 'probs', 'submitted'];
+	var ep = EventProxy.create(events, function(counts, probs, submitted) {
 		res.render('Volume', {
 			title: 'Problems',
 			fvol_num: _volume,
 			fprobs: probs,
+			fsubmitted: submitted,
 			fpage: _page,
 			furl: _url,
 			foj: _oj,
@@ -67,7 +68,29 @@ exports.getByPage = function(req, res, next) {
 		'total_ac': 1
 	};
 
-	Problem.getByPage(query2, fields, options, ep.done('probs'));
+	//Problem.getByPage(query2, fields, options, ep.done('probs'));
+	Problem.getByPage(query2, fields, options, ep.done(function(probs) {
+		ep.emit('probs', probs);
+		var currentUser = req.session.user;		
+		if (!currentUser) {
+			ep.emit('submitted', {});
+		} else {
+			var ep2 = new EventProxy();
+			var list = {};
+			ep2.after('getone', probs.length, function(as) {
+				ep.emit('submitted', list);
+			});
+			var username = currentUser.username;
+			for(var i = 0;i < probs.length; ++i) {
+				(function(i) {
+					Status.getSubmitted(-1, username, probs[i].pid, function(err, mark) {
+						list[probs[i].pid] = mark;
+						ep2.emit('getone', '');
+					});
+				})(i);
+			}
+		}
+	}));
 };
 
 /**
@@ -89,6 +112,7 @@ exports.getByPid = function(req, res, next) {
 		res.render('ShowProblem', {
 			title: prob.title,
 			fprob: prob,
+			flinks: config.oj_links,
 		});
 	});
 
@@ -123,11 +147,12 @@ exports.search = function(req, res, next) {
 		'total_ac': 1,
 	};
 	var options = { sort: {pid: 1} };
-	var events = ['probs'];
-	var ep = EventProxy.create(events, function(probs) {
+	var events = ['probs', 'submitted'];
+	var ep = EventProxy.create(events, function(probs, submitted) {
 		res.render('SearchProblems', {
 			title: 'Search Result',
 			fprobs: probs,
+			fsubmitted: submitted,
 			foj: _oj,
 			fojs: config.ojs,
 			fnum: probs.length,
@@ -136,7 +161,28 @@ exports.search = function(req, res, next) {
 
 	ep.fail(next);
 
-	Problem.search(_info, query, fields, options, ep.done('probs'));
+	Problem.search(_info, query, fields, options, ep.done(function(probs) {
+		ep.emit('probs', probs);
+		var currentUser = req.session.user;		
+		if (!currentUser) {
+			ep.emit('submitted', {});
+		} else {
+			var ep2 = new EventProxy();
+			var list = {};
+			ep2.after('getone', probs.length, function(as) {
+				ep.emit('submitted', list);
+			});
+			var username = currentUser.username;
+			for(var i = 0;i < probs.length; ++i) {
+				(function(i) {
+					Status.getSubmitted(-1, username, probs[i].pid, function(err, mark) {
+						list[probs[i].pid] = mark;
+						ep2.emit('getone', '');
+					});
+				})(i);
+			}
+		}
+	}));
 };
 
 /**
@@ -240,14 +286,14 @@ exports.post_submit = function(req, res, next) {
 
 				var _status = {
 					contest_belong:	-1,
-					run_ID: 	_runid,
-					username: 	_username,
-					pid: 	_pid,
-					oj: 	prob.oj,
-					lang: 	_lang,
-					code_len:	_code.length,
-					submit_time:	new Date(),
-					result:		'Waiting'
+				run_ID: 	_runid,
+				username: 	_username,
+				pid: 	_pid,
+				oj: 	prob.oj,
+				lang: 	_lang,
+				code_len:	_code.length,
+				submit_time:	new Date(),
+				result:		'Waiting'
 				};
 
 				Status.newAndSave(_status, proxy.done('status_save'));

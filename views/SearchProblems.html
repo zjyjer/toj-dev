@@ -58,14 +58,18 @@
 			<tbody>
 				<% fprobs.forEach(function(prob, index) { %>
 				<tr>
-					<span class="ac"> </span>
-					<td>
-						<td><%= prob.pid %></td>
-						<td><a href="/ShowProblems?pid=<%= prob.pid %>"><%- prob.title %></a></td>
-						<td><%= prob.oj %></td>
-						<td><%= prob.vid %></td>
-						<td><%= Math.round(prob.vtotal_ac/prob.vtotal_submit*10000)/100 %>&#37;(<a href=/Status?pid=<%- prob.pid %>&result=0><%= prob.vtotal_ac+prob.total_ac %></a>/<a href=/Status?pid=<%- prob.pid%>&result=><%= prob.vtotal_submit+prob.total_submit %></a>)</td>
-					</td>
+					<% if (fsubmitted[prob.pid] == 1) { %>
+					<td><span class="ac"></span></td>
+					<% } else if (fsubmitted[prob.pid] == -1) { %>
+					<td><span class="not-ac"></span></td>
+					<% } else { %>
+					<td></td>
+					<% } %>
+					<td><%= prob.pid %></td>
+					<td><a href="/ShowProblems?pid=<%= prob.pid %>"><%- prob.title %></a></td>
+					<td><%= prob.oj %></td>
+					<td><%= prob.vid %></td>
+					<td><%= Math.round(prob.vtotal_ac/prob.vtotal_submit*10000)/100 %>&#37;(<a href=/Status?pid=<%- prob.pid %>&result=0><%= prob.vtotal_ac+prob.total_ac %></a>/<a href=/Status?pid=<%- prob.pid%>&result=><%= prob.vtotal_submit+prob.total_submit %></a>)</td>
 				</tr>
 				<% }); %>
 

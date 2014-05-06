@@ -198,13 +198,14 @@ exports.get_problem = function(req, res, next) {
 exports.show_problem = function(req, res, next) {
 	var _cid = parseInt(req.query.cid);
 
-	var events = ['cont', 'probs'];
+	var events = ['cont', 'probs', 'submitted'];
 
-	var ep = EventProxy.create(events, function(cont, probs) {
+	var ep = EventProxy.create(events, function(cont, probs, submitted) {
 		return res.render('Contest/Contest_Problem', {
 			title: 'Problems',
 		       	fcont: cont,
 		       	fprobs: probs,
+		       	fsubmitted: submitted,
 		});
 	});
 
@@ -215,6 +216,28 @@ exports.show_problem = function(req, res, next) {
 	var query = { cid: _cid };
 	var options = { sort: {nid: 1} };
 	Contest_Problem.getMulti(query, {}, options, ep.done('probs'));
+	Contest_Problem.getMulti(query, {}, options, ep.done(function(probs) {
+		ep.emit('probs', probs);
+		var currentUser = req.session.user;		
+		if (!currentUser) {
+			ep.emit('submitted', {});
+		} else {
+			var ep2 = new EventProxy();
+			var list = {};
+			ep2.after('getone', probs.length, function(as) {
+				ep.emit('submitted', list);
+			});
+			var username = currentUser.username;
+			for(var i = 0;i < probs.length; ++i) {
+				(function(i) {
+					Status.getSubmitted(_cid, username, probs[i].pid, function(err, mark) {
+						list[probs[i].pid] = mark;
+						ep2.emit('getone', '');
+					});
+				})(i);
+			}
+		}
+	}));
 };
 
 exports.show_one_problem = function(req, res, next) {
@@ -338,14 +361,14 @@ exports.post_submit = function(req, res, next) {
 
 				var _status = {
 					contest_belong:	_cid,
-					run_ID: 	_runid,
-					username: 	_username,
-					pid: 	prob.pid,
-					oj: 	prob.oj,
-					lang: 	_lang,
-					code_len:	_code.length,
-					submit_time:	new Date(),
-					result:		'Waiting'
+				run_ID: 	_runid,
+				username: 	_username,
+				pid: 	prob.pid,
+				oj: 	prob.oj,
+				lang: 	_lang,
+				code_len:	_code.length,
+				submit_time:	new Date(),
+				result:		'Waiting'
 				};
 				Status.newAndSave(_status, proxy.done('status_save'));
 
