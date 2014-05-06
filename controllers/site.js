@@ -29,3 +29,8 @@ exports.index = function(req, res, next) {
 };
 
 
+exports.faq = function(req, res, next) {
+	res.render('FAQ', {
+		title: 'FAQ',
+	});
+};

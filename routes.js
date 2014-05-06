@@ -22,6 +22,8 @@ module.exports = function (app) {
 	//主页
 	app.get('/', site.index);
 
+	app.get('/FAQ', site.faq);
+
 	//注册相关
 	app.get('/reg', auth.logoutRequired, user.get_register);
 	app.post('/reg',auth.logoutRequired, user.post_register);

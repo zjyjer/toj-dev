@@ -62,7 +62,7 @@ exports.getSubmitted = function(cb, username, pid, callback) {
 		if (err || !doc1) {
 			return callback(err, 0);
 		}
-		Status.findOne({ contest_belong: cb, username: username, pid: pid, speed: 51 }, function(err, doc2) {
+		Status.findOne({ contest_belong: cb, username: username, pid: pid, result: 'Accepted' }, function(err, doc2) {
 			if (err || !doc2) return callback(err, -1);
 			callback(err, 1);
 		});
