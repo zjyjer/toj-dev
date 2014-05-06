@@ -142,7 +142,18 @@
 			setTimeout(function() {
 				$("#msg").slideUp();
 			}, 1500);
-			$("header").headroom();
+			$("header").headroom({
+				"tolerance": 13,
+				"offset": 205,
+				"classes": {
+					"initial": "animated",
+					"pinned": "headroom--pinned",
+					"unpinned": "headroom--unpinned",
+					"top": "headroom--top",
+					"notTop": "headroom--not-top"
+				}
+			});
+
 		</script>
 
 		<div id="container" class="container">

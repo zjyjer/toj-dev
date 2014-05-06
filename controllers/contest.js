@@ -231,7 +231,7 @@ exports.show_problem = function(req, res, next) {
 			for(var i = 0;i < probs.length; ++i) {
 				(function(i) {
 					Status.getSubmitted(_cid, username, probs[i].pid, function(err, mark) {
-						list[probs[i].pid] = mark;
+						if (mark != 0) list[probs[i].pid] = mark;
 						ep2.emit('getone', '');
 					});
 				})(i);

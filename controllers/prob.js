@@ -84,7 +84,7 @@ exports.getByPage = function(req, res, next) {
 			for(var i = 0;i < probs.length; ++i) {
 				(function(i) {
 					Status.getSubmitted(-1, username, probs[i].pid, function(err, mark) {
-						list[probs[i].pid] = mark;
+						if (mark != 0) list[probs[i].pid] = mark;
 						ep2.emit('getone', '');
 					});
 				})(i);
@@ -176,7 +176,7 @@ exports.search = function(req, res, next) {
 			for(var i = 0;i < probs.length; ++i) {
 				(function(i) {
 					Status.getSubmitted(-1, username, probs[i].pid, function(err, mark) {
-						list[probs[i].pid] = mark;
+						if (mark != 0) list[probs[i].pid] = mark;
 						ep2.emit('getone', '');
 					});
 				})(i);
