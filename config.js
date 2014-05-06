@@ -40,7 +40,7 @@ var config = {
 		'HDU': ['acm.hdu.edu.cn/showproblem.php?pid=', ''],
 		'POJ': ['poj.org/problsm?id=', ''],
 		'ZOJ': ['acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=', ''],
-		'TOJ': ['acm.tju.edu.cn/toj/show', '.html'],
+		'TOJ': ['acm.tju.edu.cn/toj/showp', '.html'],
 	},
 
 	oj_lang: {
