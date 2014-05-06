@@ -23,6 +23,8 @@
 		<!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
 		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1-rc2/jquery.min.js"></script>
+		<script src="/javascripts/jquery.headroom.js"></script>
+		<script src="/javascripts/headroom.min.js"></script>
 		<script src="/javascripts/bootstrap.min.js"></script>
 		<script src="/javascripts/moment.js"></script>
 		<script src="/javascripts/countdown.min.js"></script>
@@ -44,98 +46,113 @@
 			body {
 				background:url('/icon/brillant.png');
 			}
+			.headroom--unpinned {
+				-webkit-transform: translateY(-100%);
+				-ms-transform: translateY(-100%);
+				transform: translateY(-100%);
+			}
+			.headroom--pinned {
+				-webkit-transform: translateY(0);
+				-ms-transform:translateY(0);
+				transform:translateY(0);
+			}
+			.slide {
+				-webkit-transition: all .25s ease-in-out;
+				-moz-transition: all .25s ease-in-out;
+				-o-transition: all .25s ease-in-out;
+				transition: all .25s ease-in-out;
+			}
 		</style>
 	</head>
 	<body>
-		<div id="wrap">
-			<!-- Fixed navbar -->
-			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-				<div class="container">
-					<div class="navbar-header">
-						<a class="navbar-brand" href="/">NewTOJ</a>
+		<!-- Fixed navbar -->
+		<header class="headroom slide navbar navbar-inverse navbar-fixed-top" role="navigation" id="topbar">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">NewTOJ</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="/Problems">Problem</a></li>
+						<li><a href="#about">Pick One!</a></li>
+						<li><a href="/Status">Status</a></li>
+						<li><a href="/Ranklist">Ranklist</a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Contest<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/Contest/Contests?type=0">Virtual Contests</a></li>
+							<li><a href="/Contest/Contests?type=1">ICPC Contests</a></li>
+							<li><a href="/Contest/Contests?type=2">Classical Contests</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">Arrange a contest</li>
+							<li><a href="#">Separated link</a></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul>
+						</li>
+					</ul>
+
+					<% if (!user) { %>
+					<div class="navbar-form navbar-right">
+						<a class="btn btn-primary" href="/reg">Sign up</a>
+						<a class="btn btn-default" href="/login">Sign in</a>
 					</div>
-					<div class="navbar-collapse collapse">
-						<ul class="nav navbar-nav">
-							<li><a href="/Problems">Problem</a></li>
-							<li><a href="#about">Pick One!</a></li>
-							<li><a href="/Status">Status</a></li>
-							<li><a href="/Ranklist">Ranklist</a></li>
-							<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Contest<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="/Contest/Contests?type=0">Virtual Contests</a></li>
-								<li><a href="/Contest/Contests?type=1">ICPC Contests</a></li>
-								<li><a href="/Contest/Contests?type=2">Classical Contests</a></li>
-								<li class="divider"></li>
-								<li class="dropdown-header">Arrange a contest</li>
-								<li><a href="#">Separated link</a></li>
-								<li><a href="#">One more separated link</a></li>
-							</ul>
-							</li>
+					<% } else {%>
+					<ul id="navBar-right" class="nav navbar-nav navbar-right">
+
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" style="margin-bottom:-5px" data-toggle="dropdown">
+							<img src="http://www.gravatar.com/avatar/9ec418b31946b80fafb4c0a51667eaaf?s=25" />&nbsp&nbsp<%=user.username %>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/discuss/user/jie414341055">My Discuss</a></li>
+							<li><a href=/profile/<%= user.username %>>Profile</a></li>
+							<!-- TODO:  Dashboard  -->
+							<li><a href=/accounts/ChangePasswd?u=<%= user.username %>>Change Password</a></li>
+							<li class="divider"></li>
+							<li><a href="/logout/">Sign out</a></li>
 						</ul>
-
-						<% if (!user) { %>
-						<div class="navbar-form navbar-right">
-							<a class="btn btn-primary" href="/reg">Sign up</a>
-							<a class="btn btn-default" href="/login">Sign in</a>
-						</div>
-						<% } else {%>
-						<ul id="navBar-right" class="nav navbar-nav navbar-right">
-
-							<li class="dropdown">
-							<a href="#" class="dropdown-toggle" style="margin-bottom:-5px" data-toggle="dropdown">
-								<img src="http://www.gravatar.com/avatar/9ec418b31946b80fafb4c0a51667eaaf?s=25" />&nbsp&nbsp<%=user.username %>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="/discuss/user/jie414341055">My Discuss</a></li>
-								<li><a href=/profile/<%= user.username %>>Profile</a></li>
-								<!-- TODO:  Dashboard  -->
-								<li><a href=/accounts/ChangePasswd?u=<%= user.username %>>Change Password</a></li>
-								<li class="divider"></li>
-								<li><a href="/logout/">Sign out</a></li>
-							</ul>
-							</li>
-						</ul>
-						<% } %>
-					</div><!--/.nav-collapse -->
-				</div>
+						</li>
+					</ul>
+					<% } %>
+				</div><!--/.nav-collapse -->
 			</div>
+		</header>
 
 
 
-			<!-- Main jumbotron for a primary marketing message or call to action -->
+		<!-- Main jumbotron for a primary marketing message or call to action -->
 
 
-			<div id="msg" class="container" style="position: relative;width:1100px;">
-				<% if (success) { %>
-				<div class="alert alert-success alert-dismissable">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					<%= success %>
-				</div>
-				<% } %>
-				<% if (error) { %>
-				<div class="alert alert-danger alert-dismissable">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					<%= error %>
-				</div> 
-				<% } %>
-
+		<div id="msg" class="container" style="position: relative;width:1100px;">
+			<% if (success) { %>
+			<div class="alert alert-success alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<%= success %>
 			</div>
-			<script>
-				setTimeout(function() {
-					$("#msg").slideUp();
-				}, 1500);
-			</script>
+			<% } %>
+			<% if (error) { %>
+			<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<%= error %>
+			</div> 
+			<% } %>
 
-			<div id="container" class="container">
-				<%- body %>
-				<hr />
-			</div>
+		</div>
+		<script>
+			setTimeout(function() {
+				$("#msg").slideUp();
+			}, 1500);
+			$("header").headroom();
+		</script>
+
+		<div id="container" class="container">
+			<%- body %>
+			<hr />
 		</div>
 
 		<div id="footer">
 			<div class="container">
-				<p class="text-muted">TJU-ACM 2014. Developed by <a href="mailto:jie414341055#gmail.com">MINJIE</a></p>
+				<p class="text-muted">TJU-ACM 2014. Developed by <a href="mailto:jie414341055#gmail.com">minjie.</a></p>
 			</div>
 		</div>
 	</body>
