@@ -28,6 +28,10 @@ function add_tags(pid, tag) {
 		}
 	});
 }
+function submit_tag(pid) {
+	var val = $("#alltags option:selected").text();  
+	add_tags(pid, val);
+}	
 function tag_string(list) {
 	var html = '<div class="panel-body">';
 	for (var i = 0;i < list.length; ++i) {
@@ -61,8 +65,4 @@ function dotags(pid) {
 function choose(pid) {
 	$('#notice').hide();
 	$('#choose').show();
-	$('#alltags').change(function() { 
-		var val = $("#alltags option:selected").text();  
-		add_tags(pid, val);
-	});
 }

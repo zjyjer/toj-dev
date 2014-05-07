@@ -72,5 +72,7 @@
 	 </div>
 	<div id="notice" style="font-size:12px; color:#878787; ">
  	</div>
-	<div id="choose" style="display:none;"><%- partial("select_tag") %></div>
+	<div id="choose" style="display:none;">
+		<%- partial("select_tag") %><button type="button" class="btn btn-link" onclick="submit_tag(<%= fprob.pid %>)">confirm</button>
+	</div>
  </div>
