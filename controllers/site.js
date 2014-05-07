@@ -22,7 +22,11 @@ exports.index = function(req, res, next) {
 	});
 	ep.fail(next);
 
-	Recent_Contest.getMulti({},{},{ limit: config.rcont_per_page, sort: {start_time: 1} }, ep.done('rconts'));
+	var now = new Date();
+	now.setHours(now.getHours() + 8);
+	var tm = now.toISOString().replace(/T/,' ').replace(/\..+/,'');
+
+	Recent_Contest.getMulti({ start_time: {$gt: tm} },{},{ limit: config.rcont_per_page, sort: {start_time: 1} }, ep.done('rconts'));
 
 	OJ_Status.getAllStatus(ep.done('oj_status'));
 
