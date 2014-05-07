@@ -54,6 +54,7 @@ module.exports = function (app) {
 	app.post('/ProblemSearch', prob.search);
 
 	app.post('/Problem/getTags', prob.getTags);
+	app.post('/Problem/addTags', prob.addTags);
 
 
 	//提交题目

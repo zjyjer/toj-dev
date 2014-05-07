@@ -326,6 +326,31 @@ exports.post_submit = function(req, res, next) {
 exports.getTags = function(req, res, next ) {
 	var _pid = req.body['pid'] ? parseInt(req.body['pid']) : 0;
 	Problem.getTags({ pid: _pid }, function(err, doc) {
-		res.send(doc.tag);
+		var json = {};
+		json.tag = doc ? doc.tag : [];
+		json.access = 0;
+		if (req.session.user) {
+			Status.getOne({ pid: _pid, username: req.session.user.username, result: 'Accepted' }, function(err, doc) {
+				if (doc) json.access = 1;
+				res.send(json);
+			});
+		} else {
+			res.send(json);
+		}
+	});
+};
+
+exports.addTags = function(req, res, next ) {
+	var _pid = req.body['pid'] ? parseInt(req.body['pid']) : 0;
+	var _tag = req.body['tag'] ? req.body['tag'] : '';
+
+	if (!_pid) return res.send({ ok: 0, list: [] });
+	if (!_tag) return res.send({ ok: 0, list: [] });
+
+	Problem.getOne({ pid: _pid }, function(err, doc) {
+		if (err || !doc) return res.send({ ok: 0, list: [] });
+		doc.tag.addToSet(_tag);
+		doc.save();
+		res.send({ ok: 1, list: doc.tag });
 	});
 };
