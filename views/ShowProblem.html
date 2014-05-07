@@ -56,9 +56,42 @@
 			</div>
 		 </div>
 	 </div>
+	 <center>
+		 <a href="/ProbSubmit?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Submit</button></a>
+		 <a href="/Status?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Status</button></a>
+		 <a href="/Statistics?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Statistics</button></a>
+	 </center>
+
+	 <br/><br/>
+	 <div style="width:940px;height:1px; background:#C0C0C0;"></div>
+	 <h4><a id="tag-title" href="javascript:dotags();">Show Tags</a></h4>
+	 <div id="prob-tags">
+		 <div id="tags" style="display:none;">
+	 	 </div>
+	 </div>
  </div>
- <center>
-	 <a href="/ProbSubmit?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Submit</button></a>
-	 <a href="/Status?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Status</button></a>
-	 <a href="/Statistics?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Statistics</button></a>
- </center>
+ <script>
+	 var pid = <%- JSON.stringify(fprob.pid) %>;
+	 function dotags() {
+		 if ($('#tag-title').html() == 'Show Tags') { // change to 'Hide Tags', query for tags
+			 $('#tag-title').html('Hide Tags');
+			 $.ajax ( {
+				 url: '/Problem/getTags',
+				 type: 'POST',
+				 data: {pid: pid},
+				 async: false,
+				 success: function(list) {
+					 var html = '';
+					 for (var i = 0;i < list.length; ++i) {
+						 html += '  <span class="label label-default">' + list[i] + '</span>';
+					 }
+					 $('#tags').html(html);
+					 $('#tags').removeAttr("style");
+				 }
+			 } );
+		 } else if ($('#tag-title').html() == 'Hide Tags') {
+			 $('#tag-title').html('Show Tags');
+			 $('#tags').css("display", "none");
+		 }
+	 }
+ </script>

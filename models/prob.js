@@ -35,7 +35,8 @@ var ProbSchema = new Schema({
 	mem_limit: { type: Number, default: 65536 },
 	hint: { type: String },
 	source: { type: String },
-	author: { type: String }
+	author: { type: String },
+	tag: { type: Array, default: [] }
 }, { collection: 'Problem' });
 
 ProbSchema.index({pid: 1}, {unique: true});

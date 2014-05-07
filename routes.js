@@ -53,6 +53,8 @@ module.exports = function (app) {
 	app.get('/ShowProblems', prob.getByPid);
 	app.post('/ProblemSearch', prob.search);
 
+	app.post('/Problem/getTags', prob.getTags);
+
 
 	//提交题目
 	app.get('/ProbSubmit', auth.loginRequired, prob.get_submit);

@@ -321,3 +321,11 @@ exports.post_submit = function(req, res, next) {
 	}));
 
 };
+
+
+exports.getTags = function(req, res, next ) {
+	var _pid = req.body['pid'] ? parseInt(req.body['pid']) : 0;
+	Problem.getTags({ pid: _pid }, function(err, doc) {
+		res.send(doc.tag);
+	});
+};

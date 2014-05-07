@@ -69,3 +69,10 @@ exports.search = function(info, query, fields, opt, callback) {
 		proxy.emit('by_info');
 	});
 };
+
+exports.getTags = function(query, callback) {
+	Problem.findOne(query, {tag: 1}, {}, function(err, doc) {
+		if (err) return callback(err, null);
+		callback(null, doc);
+	});
+};
