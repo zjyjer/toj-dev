@@ -5,6 +5,7 @@ var EventProxy = require('eventproxy');
 var User = require('../proxy').User;
 var Status = require('../proxy').Status;
 var config = require('../config').config;
+var Util = require('../libs/util');
 
 exports.get_register = function(req, res, next) {
 	return res.render('reg', {
@@ -171,19 +172,23 @@ exports.get_profile = function(req, res, next) {
 	var _currentUser = req.session.user;
 	var _username = _currentUser ? _currentUser.username : '';
 
-	var events = ['user', 'pids'];
-	var ep = EventProxy.create(events, function(user, pids) {
+
+	var events = ['user', 'pids', 'rank'];
+	var ep = EventProxy.create(events, function(user, pids, rank) {
 		return res.render('profile', {
 			title: 'Profile',
 		       	fuser: user,
 		       	fusername: _username,
 		       	fpids: pids,
+		       	frank: rank,
 		});
 	});
 
 	ep.fail(next);
 
 	User.getByName({ username: req.params.user }, ep.done('user'));
+
+	User.getRankByAC( req.params.user, ep.done('rank'));
 
 	var query = { speed: 51, username: req.params.user};
 	var fields = { pid: 1 };
@@ -242,4 +247,23 @@ exports.get_rank = function(req, res, next) {
 
 	User.getMulti( {}, {}, options, ep.done('users'));
 
+};
+
+exports.getPunchCard = function(req, res, next) {
+	var _username = req.body['username'];
+	
+	var events = ['stats'];
+	var ep = EventProxy.create(events, function(stats) {
+		var json = Util.getPunchCard(stats);
+		res.send(json);
+	});
+
+	ep.fail(next);
+	
+	var now = new Date();
+	now.setDate(now.getDate()-7);
+	var query = { username: _username, result: 'Accepted', submit_time: { $gt: now } };
+	var fields = { submit_time: 1 };
+	var options = { sort: { submit_time : 1 }};
+	Status.getMulti(query, fields, options, ep.done('stats'));
 };

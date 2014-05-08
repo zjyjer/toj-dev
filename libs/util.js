@@ -124,3 +124,49 @@ exports.get_standing_via_status = function(contest, contest_probs, status_array)
 	ret['solve'] = solve;
 	return ret;
 };
+
+function formate_date(d) {
+	var month = d.getMonth();
+	var day = d.getDate();
+	var mm, dd;
+	if (month < 10) mm = '0' + month;
+	else mm = '' + month;
+
+	if (day < 10) dd = '0' + day;
+	else dd = '' + day;
+	return mm + '-' + dd;
+};;
+
+exports.getPunchCard = function(stats) {
+	var list = [], ret = [], y_axis = [];
+	for (var i = 0;i < 7; ++i) {
+		list[i] = [];
+		for (var j = 0;j < 24; ++j) {
+			list[i][j] = 0;
+		}
+	}
+	var now = new Date();
+	var now_day = now.getDate();
+
+	for (var i = 6;i >= 0; --i) {
+		var tmp = now;
+		tmp.setDate(tmp.getDate()-i);
+		y_axis.push(formate_date(tmp));
+	}
+	
+	for (var i = 0;i < stats.length; ++i) {
+		var t_day = stats[i].submit_time.getDate();
+		var t_hour = stats[i].submit_time.getHours();
+		list[6-(now_day-t_day)][t_hour] += 1;
+	}
+	for (var i = 0;i < 7; ++i) {
+		for (var j = 0;j < 24; ++j) {
+			var tmp = {};
+			tmp.y = i;
+			tmp.x = j;
+			tmp.marker = { radius: list[i][j] };
+			ret.push(tmp);
+		}
+	}
+	return { y_axis: y_axis, data: ret };
+};

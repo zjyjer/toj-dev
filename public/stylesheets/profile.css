@@ -1,26 +1,116 @@
-td {
-	max-width: 10px;
-	word-wrap: break-word;
+.main-content {
+	float: left;
+	width: 100%;
 }
-th {
-	text-align:center;
+.main-content-inner {
+	/* background:url('/icon/brillant11.png'); */
+	/* background-color: #FFFFFF; */
+	background-color:  transparant;
+	margin: 0px 478px 0px 0px;
 }
-#show-info{
-	float:left;
-	width:48%; 
-	text-align:center;
-}
-#solved-problem{
-	float:right;
-	width:45%;
-}
-.pbody{
-	padding:5px 5px 5px 5px;
-	/*border: 1px solid #DDD;*/
+.profile-header {
+	border: 1px solid #DDD;
 	border-radius: 4px;
-	overflow-y: scroll; 
-	border:1px solid #DDD;
-	/* height: 408px; */
-	height: 410px;
-	
+	box-shadow: 0px 1px 0px #F2F4F5;
+	color: #666;
+}
+.profile-header-main {
+	padding: 12px 18px;
+}
+.profile-header-main .top {
+	font-size: 1.4em;
+	margin-bottom: 10px;
+}
+.profile-header-info {
+	margin-left: 115px;
+}
+.profile-header .items {
+	position: relative;
+	min-height: 22px;
+}
+.ellipsis {
+	margin-left: 20px;
+	word-wrap: normal;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.avatar {
+	width: 100px;
+	height: 100px;
+	border: 1px;
+	border-radius: 4px;
+}
+.clearfix:after {
+	clear: both;
+}
+.clearfix:before, .clearfix:after {
+	display: table;
+	content: "";
+}
+.profile-header-avatar-container {
+	float: left;
+	position: relative;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3) inset;
+	border-radius: 4px;
+	width: 100px;
+	height: 100px;
+}
+.profile-header-info {
+	margin-left: 115px;
+}
+.profile-header .items {
+	position: relative;
+	min-height: 22px;
+}
+.profile-header-description {
+	overflow: hidden;
+	position: relative;
+	padding: 12px 15px 0px 0px;
+	border-top: 1px dotted #EEE;
+	margin: 10px -18px 0px 0px;
+}
+.rofile-header .editable-group.empty .info-empty-wrap {
+	display: inline-block;
+}
+.profile-header .profile-header-user-describe .item + .item {
+	margin-top: 6px;
+}
+.profile-header .profile-header-user-detail {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+.zg-clear:after {
+	clear: both;
+}
+.zg-clear:before, .zg-clear:after {
+	content: " ";
+	display: block;
+	height: 0px;
+	visibility: hidden;
+}
+.zg-right {
+	float: right;
+}
+.profile-navbar .item {
+	float: left;
+	padding: 12px 20px;
+	font-weight: 700;
+	color: #666;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+	line-height: 22px;
+}
+.moto {
+	padding-top: 8px;
+}
+.main-sidebar {
+	float: left;
+	width: 510px;
+	margin: -210px 0px 0px 510px;
+}
+.item .num {
+	color: rgb(96, 136, 204);
 }

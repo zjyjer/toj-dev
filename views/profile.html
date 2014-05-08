@@ -1,79 +1,114 @@
-<script src="/javascripts/mindmup-editabletable.js"></script>
-<script src="/javascripts/profile.js"></script>
-<link href="/stylesheets/profile.css"rel="stylesheet">
-<h2 class="text-center"><%= fuser.username %></h2>
-<div id="show-info">
-	<h3 class="text-center">Information</h3>
-	<table id="info" class="table table-hover table-bordered table-striped">
-		<tr>
-			<th width=20%>Rank</th>
-			<th width=30%>1</th>
-		</tr>
-		<tr>
-			<th>UserName</th>
-			<th><%- fuser.username %></th>
-		</tr>
-		<tr>
-			<th>NickName</th>
-			<td id="nickname" class="editable"><%- fuser.nickname %></td>
-		</tr>
-		<tr>
-			<th>Accepted</th>
-			<th><%= fuser.total_ac %></th>
-		</tr>
-		<tr>
-			<th>Submitted</th>
-			<th><%= fuser.total_submit %></th>
-		</tr>
-		<tr>
-			<th>AC_Ratio</th>
-			<th>
-				<%= Math.round((fuser.total_ac/fuser.total_submit*10000)/100) %>&#37;
-			</th>
-		</tr>
-		<tr>
-			<th>Rating</th>
-			<th></th>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td id="email" class="editable"><%- fuser.email %></td>
-		</tr>
-		<tr>
-			<th>University</th>
-			<td id="univer" class="editable">
-				<%- fuser.school %>
-			</td>
-		</tr>
-		<tr>
-			<th>Country</th>
-			<td id="country" class="editable"><%- fuser.country %></td>
-		</tr>
-		<tr>
-			<th>Declaration</th>
-			<td id="decl" class="editable" height="100" align="left">
-				<%- fuser.decl %>
-			</td>
-		</tr>
-	</table>
-	<% if(fusername == fuser.username) { %>
-	<button id="editbtn" type="button" class="btn btn-primary" onclick="edit_profile()">Edit my profile</button>
-	<% } %>
-</div>
-<!---solved-problem-->
+<link href="/stylesheets/profile.css" rel="stylesheet">
+<script type="text/javascript" src="/javascripts/profile.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-<div id="solved-problem">
-		<div class="phead">
-			<h3 class="text-center">Problem Solved</h3>
+<div class="main-content">
+	<div class="main-content-inner" id="left-bar">
+
+		<div class="profile-header">
+			<div class="profile-header-main">
+
+				<!-- username, nickname -->
+				<div class="top">
+					<div class="title-section ellipsis">
+							<span  title="username"><a href=#><%= fuser.username %></a></span>
+					</div>
+				</div>
+				<!-- username end -->
+
+				<div class="body clearfix">
+
+					<!-- avatar -->
+					<div class="profile-header-avatar-container self">
+						<img alt="avatar" src="/icon/avatar2.jpg" class="avatar">
+					</div>
+					<!-- avatar end -->
+
+					<!-- personal info -->
+					<div class="profile-header-info">
+						<div class="profile-header-user-describe">
+							<div class="items">
+								<div class="item editable-group" data-name="location">
+									<span class="glyphicon glyphicon-map-marker"></span>
+									<span class="info-wrap">
+											<% if(fuser.country) {%>
+											<span class="location item" title="country"><%- fuser.country %></span>
+											<% } else {%>
+											<span class="location item" title="country">Earth</span>
+											<% } %>
+										<span class="glyphicon glyphicon-user"></span>
+										<% if(fuser.gender) {%>
+										<span class="gender item" title="gender"><%= fuser.gender %></span>
+										<% } else {%>
+										<span class="gender item" title="gender">Male or Female?</span>
+										<% } %>
+									</span>
+								</div>
+
+								<div class="item editable-group empty" data-name="employment">
+									<span class="info-wrap">
+										<span class="glyphicon glyphicon-tags"></span>
+										<% if(fuser.univer) {%>
+										<span class="education item" title="university">Tianjin University</span>
+										<% } %>
+									</span>
+								</div>
+								<div class="item editable-group empty" data-name="employment">
+									<span class="info-wrap">
+										<span class="glyphicon glyphicon-home"></span>
+										<% if(fuser.univer) {%>
+										<span class="website item" title="website"><%= fuser.website %></span>
+										<% } %>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="moto">
+							<% if(fuser.decl) {%>
+							<span title="moto"><%= fuser.decl %></span>
+							<% } else {%>
+							<span title="moto">This guy is too lazy. He didn't leave anything...</span>
+							<% } %>
+						</div>
+					</div>
+					<!-- personal info end -->
+
+				</div>
+			</div>
+
+			<!-- AC and solved -->
+			<div class="profile-navbar clearfix">
+				<a class="item " href="/Ranklist">
+					Rank
+					<span class="num"><%= frank %></span>
+				</a>
+				<a class="item " href="/Status?username=<%= fuser.username %>">
+					Submitted
+					<span class="num"><%= fuser.total_submit %></span>
+				</a>
+				<a class="item " href="/Status?username=<%= fuser.username %>&result=0">
+					Accepted
+					<span class="num"><%= fuser.total_ac %></span>
+				</a>
+				<a class="item " href="/Ranklist">
+					Rating
+					<span class="num">0</span>
+				</a>
+			</div>
+
 		</div>
-		<div class="pbody">
-			<% fpids.forEach(function(pid, index) {%>
-			<a href=/ShowProblems?pid=<%- pid%>><%= pid %></a>
-			<% }) %>
-		</div>
+	</div>
+	<div class="main-sidebar" id="right-bar">
+		<div id="punch-loader" style="width:5%; margin: 75px auto;"><img src=/icon/punch_loader.gif></img></div>
+		<div id="punch-card" style="display:none"></div>
+	</div>
 </div>
+
 <script>
-$('.editable').change(function() {
-	$('#editbtn').html('Save');
-});
+	var u = <%- JSON.stringify(fuser.username) %>;
+	$(function() {
+		deal_with(u);
+	});
 </script>

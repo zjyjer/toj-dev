@@ -1,52 +1,57 @@
-$('.pbody').height($('#info').height());
-function Save() {
-	var email = $('#email').html();
-	var univer = $('#univer').html();
-	var country = $('#country').html();
-	var decl = $('#decl').html();
-
-	var aform = document.createElement('form');
-	aform.method = 'post';
-	aform.action='/SaveProfile';
-
-	var a=document.createElement('input');
-	a.type='hidden';
-	a.name='nickname';
-	a.value=$('#nickname').html();
-
-	var b=document.createElement('input');
-	b.type='hidden';
-	b.name='email';
-	b.value=$('#email').html();
-
-	var c=document.createElement('input');
-	c.type='hidden';
-	c.name='univer';
-	c.value=$('#univer').html();
-
-	var d=document.createElement('input');
-	d.type='hidden';
-	d.name='country';
-	d.value=$('#country').html();
-
-	var e=document.createElement('input');
-	e.type='hidden';
-	e.name='decl';
-	e.value=$('#decl').html();
-
-	aform.appendChild(a);
-	aform.appendChild(b);
-	aform.appendChild(c);
-	aform.appendChild(d);
-	aform.appendChild(e);
-	document.body.appendChild(aform);
-	aform.submit();
+function getPunchCard(username) {
+	var data = {};
+	$.ajax ( {
+		url: '/user/getPunchCard',
+		type: 'POST',
+		data: {username: username},
+		async: false,
+		success: function(json) {
+			data = json;
+		}
+	});
+	return data;
 }
-function edit_profile() {
-	if($('#editbtn').html() == "Edit my profile") {
-		$('#info').editableTableWidget();
-		$('#editbtn').html('Type the filed to change');
-	} else if($('#editbtn').html() == 'Save') {
-		Save();
+function draw(json) {
+	$('#punch-card').highcharts({
+		chart: {
+			defaultSeriesType: 'scatter',
+			backgroundColor: 'rgba(255, 255, 255, 0)',  
+			plotBorderColor : null,  
+		        plotBackgroundColor: null,  
+		        plotBackgroundImage:null,  
+		        plotBorderWidth: null,  
+		        plotShadow: false,    
+			orderWidth : 0,  
+		},
+
+	title: {
+		text: 'Recent ACs in the Past week'
+	},
+
+	xAxis: {
+		tickInterval: 1
+	},
+
+	yAxis: {
+		title: '',
+		categories: json.y_axis
+	},
+	series: [{
+		name: 'Good work!',
+		showInLegend: false,
+		data: json.data
+	}],
+	tooltip: {
+		pointFormat: 'You solved {point.marker.radius} problems.'
 	}
+
+	});
+}
+
+function deal_with(username) {
+	var data = getPunchCard(username);
+	$('#punch-loader').hide();
+	$('#punch-card').show();
+	draw(data);
+
 }

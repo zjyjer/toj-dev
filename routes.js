@@ -47,6 +47,7 @@ module.exports = function (app) {
 	//查看用户
 	app.get('/profile/:user', user.get_profile);
 	app.post('/SaveProfile', user.save_profile);
+	app.post('/user/getPunchCard', user.getPunchCard);
 
 
 	app.get('/Problems', prob.getByPage);

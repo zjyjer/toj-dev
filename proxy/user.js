@@ -45,3 +45,13 @@ exports.getMulti = function(query, fields, opt, callback) {
 	});
 };
 
+
+exports.getRankByAC = function(username, callback) {
+	User.findOne({ username: username }, function(err, doc) {
+		if (err || !doc) return callback(err, 0);
+		User.count({ total_ac: { $gt: doc.total_ac }}, function(err, cnt) {
+			if (err) return callback(err);
+			callback(null, cnt + 1);
+		});
+	});
+}
