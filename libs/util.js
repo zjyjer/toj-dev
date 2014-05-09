@@ -112,10 +112,10 @@ exports.get_standing_via_status = function(contest, contest_probs, status_array)
 	}
 
 	result.sort(function(a, b) {
-		if (a.ac == b.ac) {
-			return a.penalty > b.penalty;
+		if (a.ac === b.ac) {
+			return a.penalty - b.penalty;
 		} else {
-			return a.ac < b.ac;
+			return b.ac - a.ac;
 		}
 	});
 
