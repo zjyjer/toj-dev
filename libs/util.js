@@ -126,7 +126,7 @@ exports.get_standing_via_status = function(contest, contest_probs, status_array)
 };
 
 function formate_date(d) {
-	var month = d.getMonth();
+	var month = d.getMonth() + 1;
 	var day = d.getDate();
 	var mm, dd;
 	if (month < 10) mm = '0' + month;
@@ -149,7 +149,7 @@ exports.getPunchCard = function(stats) {
 	var now_day = now.getDate();
 
 	for (var i = 6;i >= 0; --i) {
-		var tmp = now;
+		var tmp = new Date();
 		tmp.setDate(tmp.getDate()-i);
 		y_axis.push(formate_date(tmp));
 	}
