@@ -1,5 +1,6 @@
 var Contest = require('../proxy').Contest;
 var Contest_User = require('../proxy').Contest_User;
+var querystring = require('querystring');
 
 /**
  * need admin access
@@ -23,8 +24,8 @@ exports.adminRequired = function(req, res, next) {
  */
 exports.loginRequired = function(req, res, next) {
 	if (!req.session.user) {
-		req.flash('error', 'Please login first!');
-		return res.redirect('/login');
+		//req.flash('error', 'Please login first!');
+		return res.redirect('/login?referer=' + querystring.escape(req.headers.referer));
 	}
 	next();
 };

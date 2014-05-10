@@ -64,8 +64,8 @@ exports.post_login = function(req, res, next) {
 
 	var proxy = new EventProxy();
 	var render = function() {
-		req.flash('success', 'Sign in success.');
-		res.redirect('/');
+		//req.flash('success', 'Sign in success.');
+		res.redirect(req.query.referer || '/');
 	};
 
 	proxy.assign('check', render);
