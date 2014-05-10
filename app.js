@@ -8,6 +8,7 @@ var express = require('express');
 var routes = require('./routes');
 var config = require('./config');
 var MongoStore = require('connect-mongo')(express);
+var User = require('./controllers/user');
 
 var app = module.exports = express.createServer();
 
@@ -17,15 +18,16 @@ app.configure(function(){
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'html');
 	app.register('.html', require('ejs'));
-	app.use(express.bodyParser());
 	app.use(express.methodOverride());
+	app.use(express.bodyParser());
 	app.use(express.cookieParser());
 	app.use(express.session({
 		secret: config.session_secret,
 		store: new MongoStore({
 			db: config.db_name,
-		})
+		}),
 	}));
+	app.use(User.auth_user);
 	//app.use(express.router(routes));
 	routes(app);
 	app.use(express.static(__dirname + '/public'));

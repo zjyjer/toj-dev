@@ -9,6 +9,7 @@ var config = {
 	db: 'mongodb://127.0.0.1/toj',
 	db_name: 'toj',
 	session_secret: 'newtoj',
+	auth_cookie_name: 'mycatisturing',
 
 	host: '127.0.0.1',
 	port: 3000,

@@ -7,6 +7,32 @@ var Status = require('../proxy').Status;
 var config = require('../config').config;
 var Util = require('../libs/util');
 
+exports.auth_user = function(req, ers, next) {
+	if (req.session.user) {
+		return next();
+	} else {
+		var cookie = req.cookies[config.auth_cookie_name];
+		if (!cookie) {
+			return next();
+		}
+
+		var auth_token = decrypt(cookie, config.session_secret);
+		var auth = auth_token.split('\t');
+		var username = auth[0];
+		User.getByName({ username: username }, function(err, doc) {
+			if (err) {
+				return next(err);
+			}
+			if (user && user.password == auth[1]) {
+				req.session.user = user;
+				return next();
+			} else {
+				return next();
+			}
+		});
+	}
+};
+
 exports.get_register = function(req, res, next) {
 	return res.render('reg', {
 		title: 'Register',
@@ -45,6 +71,7 @@ exports.post_register = function(req, res, next) {
 		
 		User.newAndSave(req.body['username'], password, proxy.done(function(user, na) {
 			req.session.user = user;
+			gen_session(user, res);
 			proxy.emit('add');
 		}));
 	}));
@@ -83,6 +110,7 @@ exports.post_login = function(req, res, next) {
 			return res.redirect('/login');
 		} else {
 			req.session.user = user;
+			gen_session(user, res);
 			proxy.emit('check');
 		}
 	}));
@@ -99,8 +127,8 @@ exports.checkExists = function(req, res, next) {
 };
 	
 exports.get_logout = function(req, res, next) {
-	req.session.user = null;
-	req.flash('success', 'Sign out success.');
+	req.session.destroy();
+	res.clearCookie(config.auth_cookie_name, {path: '/'});
 	return res.redirect('/');
 };
 
@@ -138,7 +166,6 @@ exports.post_changePasswd = function(req, res, next) {
 		user.save(function(err) {
 			if (err) {
 				proxy.unbind();
-				console.log(err);
 				req.flash('error', err);
 				return res.redirect('/');
 			} else {
@@ -266,4 +293,26 @@ exports.getPunchCard = function(req, res, next) {
 	var fields = { submit_time: 1 };
 	var options = { sort: { submit_time : 1 }};
 	Status.getMulti(query, fields, options, ep.done('stats'));
+};
+
+//private 
+function  gen_session(user, res) {
+	var auth_token = encrypt(user.username + '\t' + user.password, config.session_secret);
+	res.cookie(config.auth_cookie_name, auth_token, {path: '/', maxAge: 1000 * 60 * 60 * 24 * 30});
+};
+
+exports.gen_session = gen_session;
+
+function encrypt(str, secret) {
+	var cipher = crypto.createCipher('aes192', secret);
+	var enc = cipher.update(str, 'utf8', 'hex');
+	enc += cipher.final('hex');
+	return enc;
+};
+
+function decrypt(str, secret) {
+	var decipher = crypto.createDecipher('aes192', secret);
+	var dec = decipher.update(str, 'hex', 'utf8');
+	dec += decipher.final('utf8');
+	return dec;
 };
