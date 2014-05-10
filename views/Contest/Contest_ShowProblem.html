@@ -33,20 +33,28 @@
 					<div class="content-wrapper well">
 						 <%- fprob.desc %>
 					 </div>
+				<% if(fprob.input) { %>
 					 <h3> Input </h3>
 					 <div class="content-wrapper well">
 						 <%- fprob.input %>
 						 <div style="clear:both"></div>
 					 </div>
+				<% } %>
+				<% if(fprob.output) { %>
 					 <h3> Output </h3>
 					 <div class="content-wrapper well">
 						 <%- fprob.output %>
 						 <div style="clear:both"></div>
 					 </div>
+				<% } %>
+				<% if(fprob.sample_in) { %>
 					 <h3> Sample Input </h3>
 					 <pre class="content-wrapper"><%- fprob.sample_in %></pre>
+				<% } %>
+				<% if(fprob.sample_out) { %>
 					 <h3> Sample Output </h3>
 					 <pre class="content-wrapper"><%- fprob.sample_out %></pre>
+				<% } %>
 				 </div>
 			 </div>
 		 </div>

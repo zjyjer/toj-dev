@@ -33,7 +33,11 @@
 			<tr>
 					<td><%= (fpage-1)*50 + index + 1 %></td>
 					<td><a href=/profile/<%- user.username %>><%= user.username %></a></td>
+					<% if(user.nickname) { %>
 					<td><a href=/profile/<%- user.username %>><%= user.nickname %></a></td>
+					<% } else {%>
+					<td><a href=/profile/<%- user.username %>><%= user.username %></a></td>
+					<% } %>
 					<td><a href=/Status?username=<%= user.username%>&result=0><%= user.total_ac %></a></td>
 					<td><a href=/Status?username=<%= user.username%>&result=><%= user.total_submit %></a></td>
 					<td>
@@ -55,4 +59,22 @@
 
 		</tbody>
 	</table>
+	<div class="form-group">
+		<center>
+		<ul class="pager"> 
+			<li><a href=/Ranklist?&page=1>First Page</a></li>
+			<% if(fpage == 1) { %>
+			<li><a href=#>Prev Page</a></li>
+			<% } else {%>
+			<li><a href=/Ranklist?page=<%= fpage-1%>>Prev Page</a></li>
+			<% } %>
+			<% if(fpage == ftotal_page) { %>
+			<li><a href=#>Next Page</a></li>
+			<% } else {%>
+			<li><a href=/Ranklist?page=<%= fpage+1%>>Next Page</a></li>
+			<% } %>
+			<li><a href=/Ranklist?page=<%= ftotal_page %>>Last Page</a></li>
+		</ul>
+		</center>
+	</div>
 </div>

@@ -69,7 +69,7 @@ function update_status() {
 		}
 	}
 	get_status(reget, rows);
-	setTimeout("update_status()", 1000);
+	setTimeout("update_status()", 1500);
 }
 
 $(document).ready(function() {
