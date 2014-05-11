@@ -1,17 +1,19 @@
-<link href="/stylesheets/status.css" rel="stylesheet">
+<link href="/stylesheets/contest_status.css" rel="stylesheet">
 <script src="/javascripts/contest_status.js"></script>
 
-<ul class="nav nav-tabs" id="ctab">
-	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Info</a></li>
+<ul class="nav nav-pills nav-stacked" style="margin-top:20px; width:13%; float:left; border-bottom:1px solid #ddd;" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Overview</a></li>
 	<li id="prob"><a href="/Contest/Problems?cid=<%- fcont.cid %>">Problem</a></li>
 	<li class="active"><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
+	<li><a href="#">Clarification</a></li>
+	<li><a href="#">Settings</a></li>
 </ul>
 
-
+<div id="ccontent" style="float:right; width:80%;">
 <div class="form-horizontal" style="padding-top: 30px;" role="form">
-	<div class="form-group">
-		<label class="col-sm-1 control-label">Prob ID:</label>
+	<div class="form-group" style="margin-left:-40px;">
+		<label class="col-sm-1 control-label">PID:</label>
 		<div class="col-xs-1">
 			<input id = "pid" type="text" class="form-control" <%if(fselected.pid){%>value="<%-fselected.pid%>"<%}else{%>placeholder="PID"<%}%>>
 		</div>
@@ -34,7 +36,7 @@
 				<option value="8"<%if(fselected.result=="Judge Error"){%>selected<%}%>>Judge Error</option>
 			</select>
 		</div>
-		<label class="col-sm-1 control-label">Language:</label>
+		<label class="col-sm-1 control-label">Lang:</label>
 		<div class="col-xs-2">
 			<select id = "lang" class="form-control">
 				<option value=""<%if(!fselected.lang){%>selected<%}%>>All</option>
@@ -150,4 +152,5 @@
 		</ul>
 		</center>
 	</div>
+</div>
 </div>

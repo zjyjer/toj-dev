@@ -13,24 +13,27 @@
 	}
 	#langselect {
 		margin-top: 15px;
-		margin-left: 135px;
+		margin-left: -40px;
 	}
 	#submit-btn {
-		margin-left: 450px;
+		margin-left: 280px;
 		margin-top: 20px;
 	}
 
 </style>
 
-<ul class="nav nav-tabs" id="ctab">
-	<li><a href="/Contest/ShowContests?cid=<%= fcid %>">Info</a></li>
+<ul class="nav nav-pills nav-stacked" style="margin-top:20px; width:13%; float:left; border-bottom:1px solid #ddd;" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcid %>">Overview</a></li>
 	<li><a href="/Contest/Problems?cid=<%- fcid %>">Problem</a></li>
 	<li><a href="/Contest/Status?cid=<%= fcid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcid %>">Standing</a></li>
+	<li><a href="#">Clarification</a></li>
+	<li><a href="#">Settings</a></li>
 </ul>
 
+<div id="ccontent" style="float:right; width:80%;">
 <div id="title">
-	<h2 style="text-align:center"><font color="#428BCA">Submit Your Solution</font></h2>
+	<h2 style="margin-left:161px;"><font color="#428BCA">Submit Your Solution</font></h2>
 	<h6 id="code-err_msg" style="text-align:center; font-weight:normal;"></h6>
 </div>
 <div class="col-md-2" id="langselect">
@@ -38,10 +41,11 @@
 		<%- flang %>
 	</select>
 </div>
-<div id="embedded_ace_code" style="opacity:1" >
+<div id="embedded_ace_code" style="opacity:1; margin-left:-25px;" >
 </div>
 <div id="submit-btn">
-<button type="submit" class="btn btn-primary" onclick="Submit()"> Submit </button>
+	<button type="submit" class="btn btn-primary" onclick="Submit()"> Submit </button>
+</div>
 </div>
 
 <script src="/javascripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>

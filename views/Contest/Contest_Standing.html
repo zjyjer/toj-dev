@@ -1,84 +1,87 @@
 <script src="/javascripts/animator.js"></script>
 <link href="/stylesheets/contest_standing.css" rel="stylesheet">
-<ul class="nav nav-tabs" id="ctab">
-	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Info</a></li>
+
+<ul class="nav nav-pills nav-stacked" style="margin-top:20px; width:13%; float:left; border-bottom:1px solid #ddd;" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcont.cid %>">Overview</a></li>
 	<li id="prob"><a href="/Contest/Problems?cid=<%= fcont.cid %>">Problem</a></li>
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li class="active"><a href="#">Standing</a></li>
+	<li><a href="#">Clarification</a></li>
+	<li><a href="#">Settings</a></li>
 </ul>
 
-<!-- Title -->
-<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
-
-<!-- Standing -->
-
-<div id="contest_standing">
-	<table id="standing" class="table table-bordered table-hover table-condensed table-striped table-centered">
-		<thead id="ranking_head">
-			<tr>
-				<th class="header-rank anim:position">
-					<div id="searchTitleBtn" class="" order='asc'><a href="#">#</a></div>
-				</th>
-				<th class="header-username anim:id">
-					<div id="searchTitleBtn" class="" order='asc'><a href="#">User</a></div>
-				</th>
-				<th class="header-AC anim:update">
-					<div id="titleBtn" class="" order='asc'><a href="#">AC</a></div>
-				</th>
-				<% for(var i = 0;i < fcont_probs.length; ++i) {%>
-				<th class="header-<%= 1001+i %> anim:update" style="width:<%= 70.0/fcont_probs.length %>%;">
-					<div id="titleBtn" class="" order='asc'><a href=/Contest/ShowProblems?cid=<%- fcont.cid %>&pid=<%= i+1001 %>><%= i+1001 %></a></div>
-				</th>
-				<% } %>
-				<th class="header-Penalty anim:update">
-					<div id="searchAcrateBtn" class="" order='asc'><a href="#">Penalty</a></div>
-				</th>
-			</tr>
-		</thead>
-		<tbody id="ranking_body"></tbody>
-	</table>
+<div id="ccontent" style="float:right; width:80%;">
+	<!-- Title -->
+	<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
+	<!-- Standing -->
+	<div id="contest_standing" style="margin-right: -22px;margin-left:-25px;">
+		<table id="standing" class="table table-bordered table-hover table-condensed table-striped table-centered">
+			<thead id="ranking_head">
+				<tr>
+					<th class="header-rank anim:position">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">#</a></div>
+					</th>
+					<th class="header-username anim:id">
+						<div id="searchTitleBtn" class="" order='asc'><a href="#">User</a></div>
+					</th>
+					<th class="header-AC anim:update">
+						<div id="titleBtn" class="" order='asc'><a href="#">AC</a></div>
+					</th>
+					<% for(var i = 0;i < fcont_probs.length; ++i) {%>
+					<th class="header-<%= 1001+i %> anim:update" style="width:<%= 70.0/fcont_probs.length %>%;">
+						<div id="titleBtn" class="" order='asc'><a href=/Contest/ShowProblems?cid=<%- fcont.cid %>&pid=<%= i+1001 %>><%= i+1001 %></a></div>
+					</th>
+					<% } %>
+					<th class="header-Penalty anim:update">
+						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Penalty</a></div>
+					</th>
+				</tr>
+			</thead>
+			<tbody id="ranking_body"></tbody>
+		</table>
+	</div>
 </div>
 <div id="loading" style="margin-top:30px;margin-left:50%;left:-width/2;">
 	<img src="/icon/ajax-loader.gif">
 </div>
 <script>
-$(document).ready(function() {
-	var cid = <%- JSON.stringify(fcont.cid) %>;
-	$.ajax ({
-		url: '/Contest/post_Standing',
-		type: 'POST',
-		data:{cid:cid},
-		async: false,
-		success: function(json) {
-			var sa = json['sa'];
-			var fb = json['fb'];
-			var solve = json['solve'];
-			var html = '';
-			for (var i = 0;i < sa.length; ++i) {
-				html += '<tr>';
-				html += '<td>' + (i+1+'') + '</td>';
-				html += '<td>' + sa[i].user + '</td>';
-				html += '<td>' + sa[i].ac + '</td>';
-				for (var j = 0;j < sa[i].probs.length; ++j) {
-					if (sa[i].probs[j] > 0) {
-						if (fb[j] == sa[i].user) {
-							html += '<td class="prob-fb">';
-						} else {
-							html += '<td class="prob-ac">';
-						}
-						html += sa[i].probs[j] + '/' + solve[sa[i].user][j] + '</td>';
-					} else if (sa[i].probs[j] < 0) {
-						html += '<td class="prob-wa">' + sa[i].probs[j] + '</td>';
-					} else {
-						html += '<td></td>';
+	$(document).ready(function() {
+		var cid = <%- JSON.stringify(fcont.cid) %>;
+		$.ajax ({
+			url: '/Contest/post_Standing',
+			type: 'POST',
+			data:{cid:cid},
+			async: false,
+			success: function(json) {
+				var sa = json['sa'];
+				var fb = json['fb'];
+				var solve = json['solve'];
+				var html = '';
+				for (var i = 0;i < sa.length; ++i) {
+					html += '<tr>';
+						html += '<td>' + (i+1+'') + '</td>';
+						html += '<td>' + sa[i].user + '</td>';
+						html += '<td>' + sa[i].ac + '</td>';
+						for (var j = 0;j < sa[i].probs.length; ++j) {
+							if (sa[i].probs[j] > 0) {
+								if (fb[j] == sa[i].user) {
+									html += '<td class="prob-fb">';
+										} else {
+										html += '<td class="prob-ac">';
+										}
+										html += sa[i].probs[j] + '/' + solve[sa[i].user][j] + '</td>';
+									} else if (sa[i].probs[j] < 0) {
+									html += '<td class="prob-wa">' + sa[i].probs[j] + '</td>';
+									} else {
+									html += '<td></td>';
+								}
+							}
+							html += '<td>' + sa[i].penalty + '</td>';
+							html += '</tr>';
 					}
+					$("#loading").css("display","none");
+					$("#ranking_body").html(html);
 				}
-				html += '<td>' + sa[i].penalty + '</td>';
-				html += '</tr>';
-			}
-			$("#loading").css("display","none");
-			$("#ranking_body").html(html);
-		}
-	});
-});
-</script>
+			});
+		});
+	</script>

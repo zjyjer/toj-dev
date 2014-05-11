@@ -1,65 +1,69 @@
 <link href="/stylesheets/contest_showproblem.css" rel="stylesheet">
-<ul class="nav nav-tabs" id="ctab">
-	<li><a href="/Contest/ShowContests?cid=<%= fcid %>">Info</a></li>
+<ul class="nav nav-pills nav-stacked" style="margin-top:20px; width:13%; float:left; border-bottom:1px solid #ddd;" id="ctab">
+	<li><a href="/Contest/ShowContests?cid=<%= fcid %>">Overview</a></li>
 	<li class="active"><a href="/Contest/Problems?cid=<%- fcid %>">Problem</a></li>
 	<li><a href="/Contest/Status?cid=<%= fcid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcid %>">Standing</a></li>
+	<li><a href="#">Clarification</a></li>
+	<li><a href="#">Settings</a></li>
 </ul>
-	<div style="margin-top: 15px; margin-bottom: -25px;">
-	<% for(var i = 0;i < fcounts; ++i) { %>
-		<% if(i == findex ) { %> <%= findex+1001 %><% } else {%>
-		<a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= i+1001 %></a>
-		<% } %>
-	<% } %>
+<div id="ccontent" style="float:right; width:80%;">
+	<div id="problist">
+		<ul class="pagination">
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<% for(var i = 0;i < fcounts; ++i) { %>
+				<% if(i == findex ) { %><li class="active"><a href="#"><%= i+1001 %></a></li><% } else {%>
+				<li><a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= i+1001 %></a></li>
+				<% } %>
+			<% } %>
+			<li class="disabled"><a href="#">&raquo;</a></li>
+		</ul>
 	</div>
-
-	<div class="row-fluid">
-		<div class="span12">
-			<div id="showProblem">
-			<div class="page-header">
-				<h2><%- fprob.title %></h2>
+	<div id="showProblem" style="margin-top:-34px;">
+		<div class="page-header">
+			<h2><%- fprob.title %></h2>
+		</div>
+		<div id="showprob">
+			<div class="row">
+				<div class="col-md-3"><b>Time Limit:</b><%= fprob.time_limit %>MS</div>
+				<div class="col-md-4"><b>Memory Limit:</b><%= fprob.mem_limit %>K</div>
 			</div>
-			<div>
-				<div class="row">
-					<div class="col-md-3"><b>Time Limit:</b><%= fprob.time_limit %>MS</div>
-					<div class="col-md-4"><b>Memory Limit:</b><%= fprob.mem_limit %>K</div>
-				</div>
-				<div class="row">
-					<div class="col-md-3"><b>Total Runs:</b><%= fprob.vtotal_submit+fprob.total_submit %></div>
-					<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
-					<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
-				</div>
-				<h3> Description </h3>
-					<div class="content-wrapper well">
-						 <%- fprob.desc %>
-					 </div>
-				<% if(fprob.input) { %>
-					 <h3> Input </h3>
-					 <div class="content-wrapper well">
-						 <%- fprob.input %>
-						 <div style="clear:both"></div>
-					 </div>
-				<% } %>
-				<% if(fprob.output) { %>
-					 <h3> Output </h3>
-					 <div class="content-wrapper well">
-						 <%- fprob.output %>
-						 <div style="clear:both"></div>
-					 </div>
-				<% } %>
-				<% if(fprob.sample_in) { %>
-					 <h3> Sample Input </h3>
-					 <pre class="content-wrapper"><%- fprob.sample_in %></pre>
-				<% } %>
-				<% if(fprob.sample_out) { %>
-					 <h3> Sample Output </h3>
-					 <pre class="content-wrapper"><%- fprob.sample_out %></pre>
-				<% } %>
+			<div class="row">
+				<div class="col-md-3"><b>Total Runs:</b><%= fprob.vtotal_submit+fprob.total_submit %></div>
+				<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
+				<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
+			</div>
+			<h3> Description </h3>
+				<div class="content-wrapper well">
+					 <%- fprob.desc %>
 				 </div>
+			<% if(fprob.input) { %>
+			 <h3> Input </h3>
+			 <div class="content-wrapper well">
+				 <%- fprob.input %>
+				 <div style="clear:both"></div>
 			 </div>
+			<% } %>
+			<% if(fprob.output) { %>
+			 <h3> Output </h3>
+			 <div class="content-wrapper well">
+				 <%- fprob.output %>
+				 <div style="clear:both"></div>
+			 </div>
+			<% } %>
+			<% if(fprob.sample_in) { %>
+			 <h3> Sample Input </h3>
+			 <pre class="content-wrapper"><%- fprob.sample_in %></pre>
+			<% } %>
+			<% if(fprob.sample_out) { %>
+			 <h3> Sample Output </h3>
+			 <pre class="content-wrapper"><%- fprob.sample_out %></pre>
+			 <% } %>
 		 </div>
+	 </div>
 	 <center>
 		 <a href="/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>"><button type="button" class="btn btn-default">Submit</button></a>
 		 <a href="/Contest/Status?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Status</button></a>
 		 <a href="/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Statistics</button></a>
 	 </center>
+ </div>
