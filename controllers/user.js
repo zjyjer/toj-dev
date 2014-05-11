@@ -23,8 +23,8 @@ exports.auth_user = function(req, ers, next) {
 			if (err) {
 				return next(err);
 			}
-			if (user && user.password == auth[1]) {
-				req.session.user = user;
+			if (doc && doc.password == auth[1]) {
+				req.session.user = doc;
 				return next();
 			} else {
 				return next();
@@ -288,7 +288,7 @@ exports.getPunchCard = function(req, res, next) {
 	ep.fail(next);
 	
 	var now = new Date();
-	now.setDate(now.getDate()-7);
+	now.setDate(now.getDate()-6);
 	var query = { username: _username, result: 'Accepted', submit_time: { $gt: now } };
 	var fields = { submit_time: 1 };
 	var options = { sort: { submit_time : 1 }};

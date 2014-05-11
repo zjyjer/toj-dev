@@ -31,6 +31,16 @@ app.configure(function(){
 	//app.use(express.router(routes));
 	routes(app);
 	app.use(express.static(__dirname + '/public'));
+	// Handle 404
+	app.use(function(req, res) {
+		res.status(404);
+		res.render('404.html', {title: '404: Not Found'});
+	});
+	// Handle 500
+	app.use(function(error, req, res, next) {
+		res.status(500);
+		res.render('500.html', {title: '500: Internal Server Error', error: error});
+	});
 });
 
 app.configure('development', function(){
