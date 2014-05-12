@@ -344,7 +344,7 @@ exports.contest_getStatistics = function(req, res, next) {
 			ep.emit('counts', counts);
 		}));
 
-		var options = { limit: config.statistics_per_page , skip: (_page - 1) * config.statistics_per_page };
+		var options = { limit: config.statistics_per_page , skip: (_page - 1) * config.statistics_per_page, sort: {time_used: 1, mem_used: 1} };
 		Status.getMulti(query, {}, options, ep.done('statistics'));
 	}));
 

@@ -46,12 +46,13 @@
 				<% fstatistics.forEach(function(stat, index) { %>
 				<tr>
 					<td><%= (fpageID-1)*15 + index+1 %></td>
-					<td><%- stat.username %></td>
+					<td><a href=/profile/<%- stat.username %>><%- stat.username %></a></td>
 					<td><%- stat.time_used %>MS</td>
 					<td><%- stat.mem_used %>K</td>
 					<td><%- stat.code_len %>B</td>
 					<td><%- fcorrlang[stat.lang] %></td>
-					<td><%- stat.submit_time %></td>
+					<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
+					<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
 				</tr>
 				<% }) %>
 			</tbody>
