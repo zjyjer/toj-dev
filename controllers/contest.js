@@ -27,18 +27,21 @@ exports.getByPage = function(req, res, next) {
 
 	ep.fail(next);
 
-	var query = { type: _type };
+	var query = { type: _type , visible: true };
 	var options = { limit: config.contest_per_page, skip: (_page - 1) * config.contest_per_page, sort: {cid: -1} };
 
-	Contest.getMulti({ type: _type }, {}, options, ep.done('conts'));
+	Contest.getMulti(query, {}, options, ep.done('conts'));
 
 };
 
 exports.get_arrange = function(req, res, next) {
+	var _type = parseInt(req.query.type);
+
 	return res.render('Contest/Arrange', {
 		title: 'Arrange a Contest',
 	       	fuser: req.session.user,
-		ftype: req.query.type,
+		ftype: _type,
+	       	fojs: config.ojs,
 	});
 };
 
@@ -108,6 +111,61 @@ exports.post_arrange = function(req, res, next) {
 
 };
 
+exports.get_setting = function(req, res, next) {
+	var _cid = parseInt(req.query.cid);
+
+	Contest.getOne({ cid:_cid }, function(err, doc) {
+		if (doc.author != req.session.user.username) {
+			res.render('500.html', {title: '500 Error'});
+		} else {
+			return res.render('Contest/Settings', {
+				title: 'Settings',
+				fuser: req.session.user,
+				fcont: doc,
+				fcid: _cid,
+			});
+		}
+	});
+};
+
+exports.post_setting = function(req, res, next) {
+	var _cid = parseInt(req.query.cid);
+	var _title = req.body['ctitle'];
+	var _desc = req.body['cdesc'];
+	var _st_time = req.body['csttime'];
+	var _ed_time = req.body['cedtime'];
+	var _passwd = req.body['cpasswd'];
+
+	Contest.getOne({ cid: _cid }, function(err, doc) {
+		if (err || !doc) {
+			req.flash('error', 'Invalid Contest!');
+			return res.redirect('/Contest/Contests?type=0');
+		}
+		if (_title) doc.title = _title;
+		if (_desc) doc.desc = _desc;
+		if (_st_time) doc.start_time = _st_time;
+		if (_ed_time) doc.end_time = _ed_time;
+		doc.save();
+		req.flash('success', 'The Contest has been updated!');
+		res.redirect('/Contest/ShowContests?cid='+_cid);
+	});
+};
+
+exports.post_del = function(req, res, next) {
+	var _cid = req.body['cid'] ? parseInt(req.body['cid']) : 0;
+
+	if (!_cid) return res.send(0);
+
+	Contest.getOne({ cid: _cid }, function(err, doc) {
+		if (err || !doc) {
+			return res.send({ ok: 0 });
+		}
+		if (doc.author != req.session.user.username) return res.send({ ok: 0 });
+		doc.visible = false;
+		doc.save();
+		return res.send({ ok: 1 });
+	});
+};
 
 exports.check_pid = function(req, res, next) {
 	var _oj = req.body['oj'];
@@ -206,6 +264,7 @@ exports.show_problem = function(req, res, next) {
 		       	fcont: cont,
 		       	fprobs: probs,
 		       	fsubmitted: submitted,
+		       	fshow: (new Date() > cont.start_time),
 		});
 	});
 

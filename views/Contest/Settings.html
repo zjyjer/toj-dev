@@ -1,0 +1,101 @@
+<link href="/stylesheets/arrange.css" rel="stylesheet">
+<script src="/javascripts/contest_setting.js"></script>
+<script src="/javascripts/jquery.validate.js"></script>
+<script>
+	$().ready(function() {
+		$("#carrange").validate({
+			rules: {
+				csttime: {
+					required: true,
+					dateISO: true
+				},
+				cedtime: {
+					required: true,
+					dateISO: true
+				},
+				ctitle: {
+					required: true,
+					minlength: 5,
+					maxlength: 50
+				},
+				cdesc: {
+					required: false,
+					maxlength: 500
+				}
+			},
+			messages: {
+				ctitle: {
+					required: "Please enter a title.",
+					minlength: "Title must consist of at least 5 characters."
+				},
+				csttime: {
+					required: "Start time is required."
+				},
+				cedtime: {
+					required: "End time is required."
+				}
+			},
+			submitHandler: function(form) {  
+				form.submit();
+			}
+		});
+	});
+</script>
+<style type="text/css">
+	#carrange label.error {
+		font-weight: normal;
+		color: red;
+	}
+</style>
+
+<div class="modal-header">
+	<h3 style="text-align:center;"><font color="#428BCA">Contest Settings</font></h3>
+</div>
+<div class="modal-body">
+	<form id="carrange" method="post" action="/Contest/Settings?cid=<%= fcid %>">
+		<div id="arrange" class="form-horizontal">
+			<div class="form-group">
+				<label for="ctitle" class="col-sm-3 control-label">Title:</label>
+				<div class="col-sm-7"><input id="ctitle" name="ctitle" type="text" class="form-control" placeholder="Contest Title" ></div>
+				<div class="col-sm-1" style="color:red; padding-left:3px; padding-top:7px;">*</div>
+			</div>
+
+			<div class="form-group">
+				<label for="cdesc" class="col-sm-3 control-label">Desc:</label>
+				<div class="col-sm-7"><textarea id="cdesc" name="cdesc" class="form-control" rows="6" placeholder="This is a ICPC format Contest, the contest will last 5 hours."></textarea></div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="csttime" class="col-sm-3 control-label">Start Time:</label>
+				<div class="col-sm-7 input-group date" id="datetimepicker1" data-date-format="YYYY/MM/DD hh:mm A" style="padding-left:15px;padding-right:15px;">
+					<input type='text' name="csttime" class="form-control">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+				<label class="error" for="csttime" style="margin-left:140px;"></label>
+			</div>
+
+
+			<div class="form-group">
+				<label for="cedtime" class="col-sm-3 control-label">End Time:</label>
+				<div class="col-sm-7 input-group date" id="datetimepicker2" data-date-format="YYYY/MM/DD hh:mm A" style="padding-left:15px;padding-right:15px;">
+					<input type='text' name="cedtime" class="form-control">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+				<label class="error" for="cedtime" style="margin-left:140px;"></label>
+			</div>
+
+			<div class="form-group">
+				<label for="cpasswd" class="col-sm-3 control-label">Password:</label>
+				<div class="col-sm-7"><input id="cpasswd" name="cpasswd" class="form-control" placeholder="Leave it blank if no need."></div>
+			</div><br>
+			<div style="text-align:center; margin-bottom:30px;">
+				<button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</div>
+	</form>
+</div>

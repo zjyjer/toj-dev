@@ -12,8 +12,8 @@
 		<ul class="pagination">
 			<li class="disabled"><a href="#">&laquo;</a></li>
 			<% for(var i = 0;i < fcounts; ++i) { %>
-				<% if(i == findex ) { %><li class="active"><a href="#"><%= i+1001 %></a></li><% } else {%>
-				<li><a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= i+1001 %></a></li>
+				<% if(i == findex ) { %><li class="active"><a href="#"><%= String.fromCharCode(i+65) %></a></li><% } else {%>
+				<li><a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= String.fromCharCode(i+65) %></a></li>
 				<% } %>
 			<% } %>
 			<li class="disabled"><a href="#">&raquo;</a></li>

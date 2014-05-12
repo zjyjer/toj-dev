@@ -19,6 +19,9 @@ var contest = require('./controllers/contest');
 
 module.exports = function (app) {
 
+	app.get('/admin/Problem', prob.get_update);
+	app.post('/admin/Problem', prob.post_update);
+
 	//主页
 	app.get('/', site.index);
 
@@ -79,6 +82,10 @@ module.exports = function (app) {
 	app.get('/Contest/Contests', contest.getByPage);
 	app.get('/Contest/ArrangeContest', auth.loginRequired, contest.get_arrange);
 	app.post('/Contest/ArrangeContest', auth.loginRequired, contest.post_arrange);
+
+	app.get('/Contest/Settings', auth.loginRequired, contest.get_setting);
+	app.post('/Contest/Settings', auth.loginRequired, contest.post_setting);
+	app.post('/Contest/del', auth.loginRequired, contest.post_del);
 
 	app.post('/Contest/CheckPid', contest.check_pid);
 

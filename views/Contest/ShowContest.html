@@ -4,7 +4,12 @@
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<li><a href="#">Settings</a></li>
+	<% if (user.username != fcont.author || (new Date() > fcont.start_time)) {%>
+	<li class="disabled"><a href="#">Settings</a></li>
+	<% }else{%>
+	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>
+	<%}%>
+	
 </ul>
 
 <% var st = new Date(fcont.start_time); st.setHours(st.getHours()+8); %>
@@ -12,40 +17,72 @@
 
 <div id="ccontent" style="float:right; width:80%;">
 	<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
+	<% if(user.username == fcont.author && new Date() < fcont.start_time) { %>
+		<button class="btn btn-sm btn-danger" style="margin-left:720px;margin-bottom:5px;" id="delbtn" onclick="del()">Delete</button>
+	<% } %>
 	<div id="cinfo" class="text-center tcenter well">
 		Start Time: <%= st.toISOString().replace(/T/,' ').replace( /\..+/,'') %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		End Time: <%= ed.toISOString().replace(/T/,' ').replace( /\..+/,'') %><br/><br/>
-		Status: 
-		<% if(new Date() > fcont.end_time) { %>
-		<span style="color:green;">Passed</span>	
-		<br/><br/>
-		<% } else if(new Date() > fcont.start_time && new Date() < fcont.end_time) { %>
-		<span style="color:red;">Running</span>
-		<br/><br/>
-		Time Remaining:<br/><br/> <span style="color:red;" id="curTime"></span><br/><br/>
-		<% } else { %>
-		<span style="color:#EE7600;">Pending</span><br/>
+		<div id="pending" style="display:none;">
+			<span class="glyphicon glyphicon-time"></span>
+			<span style="color:red;" id="pending_curTime"></span><br/><br/>
+			<span class="label label-warning">Pending</span><br/>
+		</div>
+		<div id="running" style="display:none;">
+			<span class="glyphicon glyphicon-time"></span>
+			<span style="color:red;" id="running_curTime"></span><br/><br/>
+			<span class="label label-danger">Running</span><br/>
+		</div>
+		<div id="passed" style="display:none;">
+			<span class="label label-success">Passed</span>	
+		</div>
 		<br/>
-		Before Start:<br/><br/> <span style="color:red;" id="curTime"></span><br/><br/>
-		<% } %>
 		<p><%= fcont.desc %></p>
 	</div>
 </div>
 <script>
 	function cd() {
-	var st = <%- JSON.stringify(fcont.start_time) %>;
-	var ed = <%- JSON.stringify(fcont.end_time) %>;
-	st = new Date(st);
-	ed = new Date(ed);
-	var ss;
-	if(new Date() < st) {
-	ss = countdown(null, st,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
-	} else {
-	ss = countdown(null, ed,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
-	}
-	document.getElementById('curTime').innerHTML = ss.toString();
-	setTimeout("cd()",1000);
+		var st = <%- JSON.stringify(fcont.start_time) %>;
+		var ed = <%- JSON.stringify(fcont.end_time) %>;
+		var today = new Date();
+		st = new Date(st);
+		ed = new Date(ed);
+		var ss;
+		if(today < st) {
+			$('#pending').show();
+			ss = countdown(null, st,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
+			document.getElementById('pending_curTime').innerHTML = ss.toString();
+		} else if(today > st && today < ed) {
+			$('#pending').hide();
+			$('#running').show();
+			ss = countdown(null, ed,  countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
+			document.getElementById('running_curTime').innerHTML = ss.toString();
+		} else {
+			$('#running').hide();
+			$('#passed').show();
+		}
+		setTimeout("cd()",1000);
 	}
 	window.onload = cd;
 
+	function del() {
+		var cid = <%- JSON.stringify(fcont.cid) %>;
+		var r = confirm("Are you sure you want to delete this contest?");
+		if (r == true) {
+			$.ajax({
+				type:'POST',
+				url: '/Contest/del',
+				data: {cid: cid},
+				async: false,
+				success: function(msg) {
+					if (msg.ok == 1) {
+						alert('Contest has been deleted.');	
+						location.replace('/Contest/Contests?type=0');
+					} else {
+						alert('You don\'t have the permission or contest can not be deleted!');
+					}
+				}
+			});
+		}
+	}
 </script>
