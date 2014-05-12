@@ -11,8 +11,13 @@
 		<title><%= title %> - NewTOJ</title>
 		<link rel="shortcut icon" href="/icon/favicon-toj.ico">
 
+		<!--
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+		-->
 		<link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
 		<link href="/stylesheets/bootstrap-theme.min.css" rel="stylesheet">
+		
 		<!--[if lt IE 9]>
 		<script type="text/javascript" src="/javascripts/html5shiv.min.js"></script>
 		<script type="text/javascript" src="/javascripts/respond.js"></script>
@@ -29,9 +34,6 @@
 		<script src="/javascripts/moment.js"></script>
 		<script src="/javascripts/countdown.min.js"></script>
 		<script src="/javascripts/bootstrap-datetimepicker.js"></script>
-		<!--<script src="/javascripts/bootstrap.min.js"></script>-->
-		<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
-		<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
 
 		<link href="/stylesheets/bootstrap-datetimepicker.css" rel="stylesheet">
 		<link href="/stylesheets/jumbotron.css" rel="stylesheet">
@@ -101,7 +103,7 @@
 
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle" style="margin-bottom:-5px" data-toggle="dropdown">
-							<img src="http://www.gravatar.com/avatar/9ec418b31946b80fafb4c0a51667eaaf?s=25" />&nbsp&nbsp<%=user.username %>
+							<img src="/avatar/<%= user.username %>.png" style="width:20px;height:20px;">&nbsp&nbsp<%=user.username %>
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="/discuss/user/jie414341055">My Discuss</a></li>

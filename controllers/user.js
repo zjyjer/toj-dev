@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var fs = require('fs');
+var identicon = require('identicon');
 var EventProxy = require('eventproxy');
 
 var User = require('../proxy').User;
@@ -72,7 +73,12 @@ exports.post_register = function(req, res, next) {
 		User.newAndSave(req.body['username'], password, proxy.done(function(user, na) {
 			req.session.user = user;
 			gen_session(user, res);
-			proxy.emit('add');
+			//give the user a avatar
+			identicon.generate(user.username, 150, function(err, buffer) {
+				if (err) throw err;
+				fs.writeFileSync(__dirname+'/../public/avatar/' + user.username + '.png', buffer);
+				proxy.emit('add');
+			});
 		}));
 	}));
 };
