@@ -41,6 +41,8 @@ exports.get_arrange = function(req, res, next) {
 		title: 'Arrange a Contest',
 	       	iscopy: 0,
 	       	fuser: req.session.user,
+	       	fcont: '',
+	       	fprobs: [],
 		ftype: _type,
 	       	fojs: config.ojs,
 	});
