@@ -164,7 +164,7 @@ exports.getPunchCard = function(stats) {
 			var tmp = {};
 			tmp.y = i;
 			tmp.x = j;
-			tmp.marker = { radius: list[i][j] };
+			tmp.marker = { radius: list[i][j] * 2}; //radius为题目数的两倍
 			ret.push(tmp);
 		}
 	}
