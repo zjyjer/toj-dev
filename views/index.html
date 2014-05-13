@@ -2,6 +2,8 @@
 
 <div id="main">
 	<div id="sidebar">
+		
+		<% if (user.username == 'admin') { %>
 		<div class="panel">
 			<div class="header">
 				<span>News</span>
@@ -10,35 +12,7 @@
 				<%- partial('news')%>
 			</div>
 		</div>
-
-		<div class="panel">
-			<div class="header">
-				<span style="color:red;">Running Contest</span>
-			</div>
-			<div class="inner">
-				Here is running contest.<br>
-				HDU, POJ added.
-			</div>
-		</div>
-
-		<div class="panel">
-			<div class="header">
-				<span style="color:green;">Scheduled Contest</span>
-			</div>
-			<div class="inner">
-				Here is scheduled contest.<br>
-				HDU, POJ added.
-			</div>
-		</div>
-		<div class="panel">
-			<div class="header">
-				<span>Top Rated</span>
-			</div>
-			<div class="inner">
-				Here is running contest.<br>
-				HDU, POJ added.
-			</div>
-		</div>
+		<% } %>
 		<div class="panel">
 			<div class="header">
 				<span>Judge Status</span>
@@ -70,6 +44,70 @@
 				</table>
 			</div>
 		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:red;">Running Virtual Contest</span>
+			</div>
+			<div class="inner">
+				<% frun_conts0.forEach(function(cont, i) {%>
+				<%var tm = cont.end_time; tm.setHours(tm.getHours()+8); %>
+				<a href=/Contest/ShowContests?cid=<%= cont.cid %>><%= cont.title %></a> ends at <%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %><br/>
+				<% }); %>
+				<a href=/Contest/Contests?type=0>[More...]</a>
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:red;">Running ICPC-Format Contest</span>
+			</div>
+			<div class="inner">
+				<% frun_conts1.forEach(function(cont, i) {%>
+				<%var tm = cont.end_time; tm.setHours(tm.getHours()+8); %>
+				<a href=/Contest/ShowContests?cid=<%= cont.cid %>><%= cont.title %></a> ends at <%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %><br/>
+				<% }); %>
+				<a href=/Contest/Contests?type=1>[More...]</a>
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:green;">Scheduled Virtual Contest</span>
+			</div>
+			<div class="inner">
+				<% fsch_conts0.forEach(function(cont, i) {%>
+				<%var tm = cont.end_time; tm.setHours(tm.getHours()+8); %>
+				<a href=/Contest/ShowContests?cid=<%= cont.cid %>><%= cont.title %></a> ends at <%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %><br/>
+				<% }); %>
+				<a href=/Contest/Contests?type=0>[More...]</a>
+			</div>
+		</div>
+
+		<div class="panel">
+			<div class="header">
+				<span style="color:green;">Scheduled ICPC-Format Contest</span>
+			</div>
+			<div class="inner">
+				<% fsch_conts1.forEach(function(cont, i) {%>
+				<%var tm = cont.end_time; tm.setHours(tm.getHours()+8); %>
+				<a href=/Contest/ShowContests?cid=<%= cont.cid %>><%= cont.title %></a> ends at <%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %><br/>
+				<% }); %>
+				<a href=/Contest/Contests?type=1>[More...]</a>
+			</div>
+		</div>
+
+		<!--
+		<div class="panel">
+			<div class="header">
+				<span>Top Rated</span>
+			</div>
+			<div class="inner">
+				Here is running contest.<br>
+				HDU, POJ added.
+			</div>
+		</div>
+		-->
 	</div>
 	<div id="content">
 		<div class="jumbotron">
@@ -99,7 +137,7 @@
 						<tr>
 							<td><%= index+1 %></td>
 							<td><%= cont.oj %></td>
-							<td><a id=name_<%= cont.id %> href=<%= cont.link %>><%= cont.name %></a></td>
+							<td><a id=name_<%= cont.id %> href=<%= cont.link %> target="rcont"><%= cont.name %></a></td>
 							<td><%= cont.start_time %></td>
 							<!--<td><%= cont.week %></td>-->
 							<td><%= cont.access %></td>
