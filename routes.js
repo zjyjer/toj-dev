@@ -27,6 +27,8 @@ module.exports = function (app) {
 
 	app.get('/FAQ', site.faq);
 
+	app.get('/PickOne', prob.getRandomOne);
+
 	//注册相关
 	app.get('/reg', auth.logoutRequired, user.get_register);
 	app.post('/reg',auth.logoutRequired, user.post_register);

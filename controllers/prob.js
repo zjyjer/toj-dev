@@ -9,6 +9,19 @@ var User = require('../proxy').User;
 var Code = require('../proxy').Code;
 var Status = require('../proxy').Status;
 
+
+/**
+ * PickOne, 随机一道题目，暂时用random解决吧= =
+ * Math.random() 
+ **/
+exports.getRandomOne = function(req, res, next) {
+	Problem.getCount({}, function(err, counts) {
+		var rand_pid = Math.floor(counts * Math.random()) + 1000;
+		return res.redirect('/ShowProblems?pid=' + rand_pid);
+	});
+};
+
+
 /**
  * 查看题目列表，可选择oj，页数
  * Volume page
