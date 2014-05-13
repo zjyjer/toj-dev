@@ -39,6 +39,7 @@ exports.get_arrange = function(req, res, next) {
 
 	return res.render('Contest/Arrange', {
 		title: 'Arrange a Contest',
+	       	iscopy: 0,
 	       	fuser: req.session.user,
 		ftype: _type,
 	       	fojs: config.ojs,
@@ -167,6 +168,50 @@ exports.post_del = function(req, res, next) {
 	});
 };
 
+exports.clone = function(req, res, next) {
+	var _cid = req.query.from ? parseInt(req.query.from) : 0;
+
+	if (!_cid) {
+		req.flash('Invalid Contest!');
+		return res.redirect('/Contest/Contests?type=0');
+	}
+
+	var events = ['cont', 'probs'];
+
+	var ep = EventProxy.create(events, function(cont, probs) {
+		return res.render('Contest/Arrange', {
+			title: 'Clone a Contest',
+		       	iscopy: 1,
+		       	fuser: req.session.user,
+		       	ftype: cont.type,
+		       	fojs: config.ojs,
+		       	fcont: cont,
+		       	fprobs: probs,
+		});
+	});
+
+	ep.fail(next);
+
+	Contest.getOne({ cid: _cid }, ep.done('cont'));
+
+	var query = { cid: _cid };
+	var fields = { pid: 1 };
+	var options = { sort: {nid: 1} };
+	Contest_Problem.getMulti(query, fields, options, ep.done(function(probs) {
+			var ep2 = new EventProxy();
+			ep2.after('get_oj_vid', probs.length, function (list) {
+				ep.emit('probs', list);
+			});
+			for (var i = 0; i < probs.length; i++) {
+				(function(i) {
+					Problem.getOne({ pid: probs[i].pid } , function(err, prob) {
+						ep2.emit('get_oj_vid', prob);
+					});
+				})(i);
+			}
+	}));
+};
+
 exports.check_pid = function(req, res, next) {
 	var _oj = req.body['oj'];
 	var _vid = req.body['pid'];
@@ -196,7 +241,7 @@ exports.post_enter = function(req, res, next) {
 	var _cid = req.query.cid ? parseInt(req.query.cid) : 0;
 	var _passwd = req.body['passwd'];
 
-	Contest.getOne( {cid: _cid}, function(err, cont) {
+	Contest.getOne( {cid: _cid, visible: true }, function(err, cont) {
 		if (err || !cont) {
 			req.flash('error', 'Contest does not exists.Maybe it has been deleted.');
 			return res.redirect('/Contest/Contests?type=0');
@@ -222,7 +267,7 @@ exports.show_info = function(req, res, next) {
 		return res.redirect('/Contest/Contests?type=0');
 	}
 
-	Contest.getOne({ cid: _cid }, function(err, cont) {
+	Contest.getOne({ cid: _cid, visible: true }, function(err, cont) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/Contest/Contests?type=0');

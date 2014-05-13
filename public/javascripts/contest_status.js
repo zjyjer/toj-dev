@@ -76,3 +76,7 @@ function update_status() {
 $(document).ready(function() {
 	update_status();	
 });
+function update_all_status() {
+	window.location.reload();
+}
+setTimeout("update_all_status()", 100000);

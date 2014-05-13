@@ -40,6 +40,14 @@ $().ready(function() {
 		}
 	});
 });
+$(function() {
+	var iscopy = <%- JSON.stringify(iscopy) %>;
+	if (iscopy == 1) {
+		var cont = <%- JSON.stringify(fcont) %>;
+		var probs = <%- JSON.stringify(fprobs) %>;
+		fill(cont, probs);
+	}
+});
 </script>
 <style type="text/css">
 #carrange label.error {
@@ -70,7 +78,7 @@ $().ready(function() {
 				<div class="form-group">
 					<label for="csttime" class="col-sm-3 control-label">Start Time:</label>
 					<div class='input-group date' id='datetimepicker1' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
-						<input type='text' name="csttime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<input type='text' name="csttime" id="csttime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -82,7 +90,7 @@ $().ready(function() {
 				<div class="form-group">
 					<label for="cedtime" class="col-sm-3 control-label">End Time:</label>
 					<div class='input-group date' id='datetimepicker2' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
-						<input type='text' name="cedtime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<input type='text' name="cedtime" id="cedtime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>

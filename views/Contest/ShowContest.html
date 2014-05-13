@@ -20,6 +20,9 @@
 	<% if(user.username == fcont.author && new Date() < fcont.start_time) { %>
 		<button class="btn btn-sm btn-danger" style="margin-left:720px;margin-bottom:5px;" id="delbtn" onclick="del()">Delete</button>
 	<% } %>
+	<% if(new Date() > fcont.end_time) { %>
+		<button class="btn btn-sm btn-primary" style="margin-left:720px;margin-bottom:5px;" id="copybtn" onclick="copy()">Clone</button>
+	<% } %>
 	<div id="cinfo" class="text-center tcenter well">
 		Start Time: <%= st.toISOString().replace(/T/,' ').replace( /\..+/,'') %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		End Time: <%= ed.toISOString().replace(/T/,' ').replace( /\..+/,'') %><br/><br/>
@@ -84,5 +87,10 @@
 				}
 			});
 		}
+	}
+
+	function copy() {
+		var cont = <%- JSON.stringify(fcont) %>;
+		location.replace('/Contest/Clone?from='+cont.cid + '&type=' + cont.type);
 	}
 </script>

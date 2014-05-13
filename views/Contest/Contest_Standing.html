@@ -7,14 +7,18 @@
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li class="active"><a href="#">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<li><a href="#">Settings</a></li>
+	<% if (user.username != fcont.author || (new Date() > fcont.start_time)) {%>
+	<li class="disabled"><a href="#">Settings</a></li>
+	<% }else{%>
+	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>
+	<%}%>
 </ul>
 
 <div id="ccontent" style="float:right; width:80%;">
 	<!-- Title -->
 	<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
 	<!-- Standing -->
-	<div id="contest_standing" style="margin-right: -22px;margin-left:-25px;padding-bottom:30px;">
+	<div id="contest_standing" style="margin-right: -22px;padding-bottom:30px;">
 		<table id="standing" class="table table-bordered table-hover table-condensed table-striped table-centered">
 			<thead id="ranking_head">
 				<tr>
@@ -48,11 +52,12 @@
 		</table>
 	</div>
 </div>
-<div id="loading" style="margin-top:30px;margin-left:50%;left:-width/2;">
+<div id="loading" style="margin-top:30px;margin-left:55%;left:-width/2;">
 	<img src="/icon/ajax-loader.gif">
 </div>
 <script>
-	$(document).ready(function() {
+	//$(document).ready(function() {
+	$(function() {
 		var cid = <%- JSON.stringify(fcont.cid) %>;
 		$.ajax ({
 			url: '/Contest/post_Standing',

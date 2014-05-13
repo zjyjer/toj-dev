@@ -86,6 +86,7 @@ module.exports = function (app) {
 	app.get('/Contest/Settings', auth.loginRequired, contest.get_setting);
 	app.post('/Contest/Settings', auth.loginRequired, contest.post_setting);
 	app.post('/Contest/del', auth.loginRequired, contest.post_del);
+	app.get('/Contest/Clone', auth.loginRequired, contest.clone);
 
 	app.post('/Contest/CheckPid', contest.check_pid);
 

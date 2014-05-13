@@ -59,6 +59,15 @@ function validate() {
 	}
 	return true;
 }
+//if it's cloned from other contest
+function fill(cont, probs) {
+	$('#ctitle').val(cont.title);
+	$('#cdesc').val(cont.desc);
+	for (var i = 0;i < probs.length; ++i) {
+		$('#oj'+(1001+i)).val(probs[i].oj);
+		$('#pid'+(1001+i)).val(probs[i].vid);
+	}
+}
 
 function Submit() {
 	if (!validate()) {
