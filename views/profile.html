@@ -38,28 +38,30 @@
 											<% } else {%>
 											<span class="location item" title="country">Earth</span>
 											<% } %>
-										<span class="glyphicon glyphicon-user"></span>
-										<% if(fuser.gender) {%>
-										<span class="gender item" title="gender"><%= fuser.gender %></span>
-										<% } else {%>
-										<span class="gender item" title="gender">Male or Female?</span>
-										<% } %>
 									</span>
 								</div>
 
 								<div class="item editable-group empty" data-name="employment">
 									<span class="info-wrap">
 										<span class="glyphicon glyphicon-tags"></span>
-										<% if(fuser.univer) {%>
-										<span class="education item" title="university">Tianjin University</span>
+										<% if(fuser.school) {%>
+										<span class="education item" title="university"><%- fuser.school %></span>
 										<% } %>
 									</span>
 								</div>
 								<div class="item editable-group empty" data-name="employment">
 									<span class="info-wrap">
 										<span class="glyphicon glyphicon-home"></span>
-										<% if(fuser.univer) {%>
+										<% if(fuser.website) {%>
 										<span class="website item" title="website"><%= fuser.website %></span>
+										<% } %>
+									</span>
+								</div>
+								<div class="item editable-group empty" data-name="employment">
+									<span class="info-wrap">
+										<span class="glyphicon glyphicon-collapse-up"></span>
+										<% if(fuser.email) {%>
+										<span class="email item" title="email"><%= fuser.email %></span>
 										<% } %>
 									</span>
 								</div>

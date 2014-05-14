@@ -51,6 +51,7 @@ module.exports = function (app) {
 
 	//查看用户
 	app.get('/profile/:user', user.get_profile);
+	app.get('/edit_profile/edit', auth.loginRequired, user.edit_profile);
 	app.post('/SaveProfile', user.save_profile);
 	app.post('/user/getPunchCard', user.getPunchCard);
 

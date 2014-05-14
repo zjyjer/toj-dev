@@ -229,6 +229,12 @@ exports.get_profile = function(req, res, next) {
 	Status.getMulti(query, fields, { sort: { pid: 1 }}, ep.done('pids'));
 };
 
+exports.edit_profile = function(req, res, next) {
+	return res.render('edit_profile', {
+		title: 'Edit my profile',
+	});
+};
+
 exports.save_profile = function(req, res, next) {
 	var _currentUser = req.session.user;
 
@@ -245,9 +251,12 @@ exports.save_profile = function(req, res, next) {
 	User.getByName({ username: _currentUser.username }, proxy.done(function(user) {
 		if (req.body['nickname']) user.nickname = req.body['nickname'];
 		if (req.body['email']) user.email = req.body['email'];
-		if (req.body['univer']) user.univer = req.body['univer'];
 		if (req.body['country']) user.country = req.body['country'];
-		if (req.body['decl']) user.decl = req.body['decl'];
+		if (req.body['univer']) user.school = req.body['univer'];
+		if (req.body['website']) user.website = req.body['website'];
+		if (req.body['about']) user.decl = req.body['about'];
+
+
 		user.save(function(err) {
 			if (err) {
 				console.log("This is error");
