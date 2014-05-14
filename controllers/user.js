@@ -226,7 +226,7 @@ exports.get_profile = function(req, res, next) {
 	var query = { speed: 51, username: req.params.user};
 	var fields = { pid: 1 };
 
-	Status.getMulti(query, fields, {}, ep.done('pids'));
+	Status.getMulti(query, fields, { sort: { pid: 1 }}, ep.done('pids'));
 };
 
 exports.save_profile = function(req, res, next) {

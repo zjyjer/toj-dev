@@ -99,6 +99,12 @@
 			</div>
 
 		</div>
+		<div style="margin-top:20px;">
+			<h3 class="text-center" style="color:#428BCA">Problem Solved</h3>
+			<div id="prob_solved" style="min-height:100px;">
+				<%fpids.forEach(function(p, i) {%><a href=/ShowProblems?pid=<%=p.pid %>><%= p.pid %> </a><%});%>
+			</div>
+		</div>
 	</div>
 	<div class="main-sidebar" id="right-bar">
 		<div id="punch-loader" style="width:5%; margin: 75px auto;"><img src=/icon/punch_loader.gif></img></div>
