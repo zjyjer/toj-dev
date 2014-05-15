@@ -160,16 +160,16 @@ exports.get_ce = function(req, res, next) {
 	var events = ['stat'];
 	var ep = EventProxy.create(events, function(stat) {
 		res.render('ShowCEError', {
-			title: 'Compile Information',
+			title: 'Compilation Information',
 			fce_info: stat.ce_info,
 		});
 	});
 
 	ep.fail(next);
 
-	var _cid = req.query.cid ? parseInt(req.query.cid) : -1;
+	//var _cid = req.query.cid ? parseInt(req.query.cid) : -1;
 	var _runid = req.query.runid ? parseInt(req.query.runid) : -1;
-	Status.getOne({ contest_belong: _cid, run_ID: _runid }, ep.done('stat'));
+	Status.getOne({ run_ID: _runid }, ep.done('stat'));
 };
 
 
