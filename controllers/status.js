@@ -321,6 +321,8 @@ exports.contest_getStatistics = function(req, res, next) {
 			fprob: prob,
 			fstatistics: statistics,
 			fcorrlang: config.corrlang,
+			fcid: _cid,
+			fnid: _nid,
 			fpageID: _page,
 			flang: _lang,
 			furl: _url,
