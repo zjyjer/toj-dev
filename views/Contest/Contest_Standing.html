@@ -7,7 +7,7 @@
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li class="active"><a href="#">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<% if (user.username != fcont.author || (new Date() > fcont.start_time)) {%>
+	<% if (!user || (user.username != fcont.author || (new Date() > fcont.start_time))) {%>
 	<li class="disabled"><a href="#">Settings</a></li>
 	<% }else{%>
 	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>

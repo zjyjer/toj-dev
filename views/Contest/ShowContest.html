@@ -4,7 +4,7 @@
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<% if (user.username != fcont.author || (new Date() > fcont.start_time)) {%>
+	<% if (!user || (user.username != fcont.author || (new Date() > fcont.start_time))) {%>
 	<li class="disabled"><a href="#">Settings</a></li>
 	<% }else{%>
 	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>
@@ -17,7 +17,7 @@
 
 <div id="ccontent" style="float:right; width:80%;">
 	<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
-	<% if(user.username == fcont.author && new Date() < fcont.start_time) { %>
+	<% if(user && user.username == fcont.author && new Date() < fcont.start_time) { %>
 		<button class="btn btn-sm btn-danger" style="margin-left:720px;margin-bottom:5px;" id="delbtn" onclick="del()">Delete</button>
 	<% } %>
 	<% if(new Date() > fcont.end_time) { %>

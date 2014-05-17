@@ -124,8 +124,9 @@
 </div>
 <script>
 	function lang(slang) {
-		var pid = <%- JSON.stringify(fprob.pid) %>;
-		var newurl = '/Statistics?pid=' + pid + '&lang=' + slang;
+		var nid = <%- JSON.stringify(fnid )%>;
+		var cid = <%- JSON.stringify(fcid ) %>;
+		var newurl = '/Contest/Statistics?cid=' + cid + '&pid=' + nid + '&lang=' + slang;
 		window.location.replace(newurl);
 	}
 </script>

@@ -59,7 +59,7 @@
 					<%} else {%>
 					<td style="color:#008B00;">Passed</td>
 					<% } %>
-					<% if(cont.access) {%>
+					<% if(!cont.passwd) {%>
 					<td style="color:#0000FF;">Public</td>
 					<%} else {%>
 					<td style="color:#EE0000;">Private</td>
