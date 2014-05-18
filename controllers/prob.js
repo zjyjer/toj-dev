@@ -159,7 +159,7 @@ exports.search = function(req, res, next) {
 		'total_submit': 1,
 		'total_ac': 1,
 	};
-	var options = { sort: {pid: 1} };
+	var options = { limit: 500, sort: {pid: 1} };
 	var events = ['probs', 'submitted'];
 	var ep = EventProxy.create(events, function(probs, submitted) {
 		res.render('SearchProblems', {
@@ -321,7 +321,9 @@ exports.post_submit = function(req, res, next) {
 				client.on('error',function(error){
 					proxy.unbind();
 					req.flash('error', 'The judge is temporary unavailable.Sorry.');
-					return res.redirect('/Status?&page=1');
+					Status.update({ run_ID: _runid }, { result: 'Judge Error', time_used: 0, mem_used: 0 }, function(err, na, raw) {
+						return res.redirect('/Status?&page=1');
+					});
 				});
 				client.on('close', function() {
 					proxy.emit('submit');

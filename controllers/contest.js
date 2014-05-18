@@ -277,6 +277,7 @@ exports.show_info = function(req, res, next) {
 		return res.render('Contest/ShowContest', {
 			title: cont.title,
 		       	fcont: cont,
+		       	fnow: new Date(),
 		});
 	});
 };
@@ -311,7 +312,7 @@ exports.show_problem = function(req, res, next) {
 		       	fcont: cont,
 		       	fprobs: probs,
 		       	fsubmitted: submitted,
-		       	fshow: (new Date() > cont.start_time),
+		       	fnow: new Date(),
 		});
 	});
 

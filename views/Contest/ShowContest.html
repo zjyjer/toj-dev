@@ -47,9 +47,10 @@
 	function cd() {
 		var st = <%- JSON.stringify(fcont.start_time) %>;
 		var ed = <%- JSON.stringify(fcont.end_time) %>;
-		var today = new Date();
+		var today = <%- JSON.stringify(fnow) %>;
 		st = new Date(st);
 		ed = new Date(ed);
+		today = new Date(today);
 		var ss;
 		if(today < st) {
 			$('#pending').show();

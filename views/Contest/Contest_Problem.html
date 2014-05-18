@@ -23,7 +23,7 @@
 </p>
 <!-- Problem List -->
 <div class="form-group">
-	<% if (fshow) { %>
+	<% if (fnow > fcont.start_time) { %>
 	<table id="problemList" class="table table-striped">
 		<thead id="cstatus_head">
 			<th class="header-status">
@@ -62,9 +62,10 @@
 	function get_status() {
 		var st = <%- JSON.stringify(fcont.start_time)%>;
 		var ed = <%- JSON.stringify(fcont.end_time)%>;
-		var now = new Date();
+		var now = <%- JSON.stringify(fnow)%>;
 		st = new Date(st);
 		ed = new Date(ed);
+		now = new Date(now);
 		if(now < st) {
 			$("#cstatus").css({'color':'#EE7600'});
 			$("#cstatus").html('Pending');
