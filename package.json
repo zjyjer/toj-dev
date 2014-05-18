@@ -7,6 +7,8 @@
 		"ejs": ">= 0.0.1",
 		"connect-mongo": ">= 0.1.7",
 		"mongoose": ">=2.8.0",
-		"eventproxy": "0.2.6"
+		"identicon": "0.0.1",
+		"eventproxy": "0.2.6",
+		"iconv-lite": "0.2.11"
 	}
 }
