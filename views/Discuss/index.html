@@ -1,0 +1,23 @@
+<link href="/stylesheets/Discuss/index.css" rel="stylesheet">
+<div id="main">
+	<div id="sidebar">
+		<%- partial('Discuss/help')%>
+	</div>
+	<div id="content">
+		<div class="panel">
+			<div class="header">
+				<span>Questions</span>
+				<span style="float:right;">
+					<a href=/Discuss/create>
+						<button class="btn btn-sm btn-success">New Question</button>
+					</a>
+				</span>
+			</div>
+			<div class="inner no-padding">
+				<div id="topic_list">
+					<%- partial('Discuss/abstract', {collection:ftopics, as:'topic'}) %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -7,3 +7,5 @@ exports.Contest_Problem = require('./contest_prob');
 exports.Contest_User= require('./contest_user');
 exports.Recent_Contest = require('./recent_contest');
 exports.OJ_Status = require('./oj_status');
+exports.Topic = require('./topic');
+exports.Reply = require('./reply');

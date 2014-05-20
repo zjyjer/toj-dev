@@ -1,0 +1,72 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/wmd.css" />
+<script type="text/javascript" src="/javascripts/wmd/showdown.js"></script>
+<script type="text/javascript" src="/javascripts/wmd/Markdown.Converter.js"></script>
+<script type="text/javascript" src="/javascripts/wmd/Markdown.Sanitizer.js"></script>
+<link href="/stylesheets/Discuss/topic.css" rel="stylesheet">
+<script type="text/javascript" src="/javascripts/Topic/reply.js"></script>
+
+<div id="main">
+	<div id="sidebar">
+		<%- partial('Discuss/notice')%>
+	</div>
+	<div id="content">
+		<div class="panel">
+			<div class="header">
+				<span class="topic_full_title">
+					<% if (ftopic.top) { %>
+					<span class="put_top">Top</span>
+					<% } %>
+					<%= ftopic.title %>
+					<% if (ftopic.pid !== -1) {%>
+					<a class="show_pid" href="/ShowProblems?pid=<%= ftopic.pid %>">[<%= ftopic.pid %>]</a>
+					<% } %>
+
+				</span>
+				<% if (user.username === 'admin') { %>
+				<% if (ftopic.top) {%>
+				<a href='/Discuss/topic/<%= ftopic._id %>/top/0'>
+				<button class="btn btn-sm btn-primary" style="float:right;">UnTop</button>
+				<% } else {%>
+				<a href='/Discuss/topic/<%= ftopic._id %>/top/1'>
+				<button class="btn btn-sm btn-primary" style="float:right;">Top</button>
+				<% } %>
+				<% } %>
+				</a>
+				<div class="changes">
+					<span>
+						published <%= ftopic.friendly_create_at %>
+					</span>
+					<span>
+						<%= ftopic.visit_count %> views
+					</span>
+				</div>
+			</div>
+			<div class="inner topic">
+				<div class="topic_content">
+					<div class="markdown-text">
+						<%- ftopic.content %>
+					</div>
+				</div>
+			</div>
+		</div>
+		<% if (ftopic.replies && ftopic.replies.length > 0) { %>
+		<div class='panel'>
+			<div class='header'>
+				<span class="col_fade"><%= ftopic.replies.length %> replies</span>
+			</div>
+			<%- partial('Discuss/reply', ftopic.replies) %>
+		</div>
+		<% } %>
+		<div class="panel" style="height:408px;">
+			<div class="header">
+				<span>Post A Reply</span>
+			</div>
+			<div class="inner no-padding">
+				<%- partial('Discuss/edit_body') %>
+			</div>
+		</div>
+		<div id="submit" style="margin-bottom:20px;">
+			<button class="btn btn-primary" onclick="Reply()">Submit</button>
+		</div>
+	</div>
+</div>

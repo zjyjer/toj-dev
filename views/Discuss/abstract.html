@@ -1,0 +1,37 @@
+<div class="cell">
+	<a class="user_avatar pull-left" href="/profile/<%= topic.author %>">
+		<img src="/avatar/<%= topic.author %>.png"
+		title="<%= topic.author %>"
+		/>
+	</a>
+	<span class="reply_count pull-left">
+		<span class="count_of_replies" title="reply_num"><%= topic.reply_count %></span>
+
+		<span class="count_seperator">/</span>
+
+		<span class="count_of_visits" title="click_num"><%= topic.visit_count %></span>
+	</span>
+	<% if (topic.reply) {%>
+	<a class='last_time pull-right' href="/Discuss/topic/<%= topic._id %><%- '#' + topic.reply._id %>">
+		<img class="user_small_avatar" src="/avatar/<%= topic.reply.user.username %>.png">
+		<span class="last_active_time"><%= topic.reply.friendly_create_at %></span>
+	</a>
+	<% } %>
+	<% if (!topic.reply) {%>
+	<span class='last_time pull-right'>
+		<span class="last_active_time"><%= topic.friendly_create_at %></span>
+	</span>
+	<% } %>
+
+	<div class="topic_title_wrapper">
+		<a class='topic_title' href='/Discuss/topic/<%= topic._id %>'>
+			<% if (topic.top) { %>
+			<span class='put_top'>Top</span>
+			<% } %>
+			<%= topic.title %>
+			<% if (topic.pid !== -1) {%>
+			<a class="show_pid" href="/ShowProblems?pid=<%= topic.pid %>">[<%= topic.pid %>]</a>
+			<% } %>
+		</a>
+	</div>
+</div>

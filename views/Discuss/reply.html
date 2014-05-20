@@ -1,0 +1,49 @@
+<div class='cell reply_area reply_item' id="reply<%= indexInCollection+1 %>" reply_id="<%- reply._id %>">
+	<a class="anchor" id="<%- reply._id %>"></a>
+	<div class='author_content'>
+
+		<a href="/profile/<%= reply.user.username %>" class="user_avatar">
+			<img src="/avatar/<%= reply.user.username %>.png"
+			title="<%= reply.user.username %>" /></a>
+		<div class='user_info'>
+			<a class='dark reply_author' href="/profile/<%= reply.user.username %>"><%= reply.user.username %>
+			</a>
+			<a class="reply_time" href="#<%- reply._id %>">#<%= indexInCollection+1 %>• <%= reply.friendly_create_at %></a>
+		</div>
+		<div class="user_action">
+			<span>
+				<% if(user){ %>
+				<img class='dark reply2_btn' src="/icon/reply_btn.png" title="reply" onclick="$('#reply2reply_<%- reply._id %>').show();">
+				<% } %>
+				<!--<% if(reply.replies.length>0){ %>
+				<span class='col_fade'>{<%= reply.replies.length %>}</span>
+				<% } %>-->
+			</span>
+		</div>
+	</div>
+	<div class='reply_content'>
+		<div class="markdown-text">
+			<%- reply.content %>
+		</div>
+	</div>
+	<div class='clearfix'>
+		<div class='reply2_area'>
+			<% if (reply.replies.length >0) { %>
+			<%- partial('Discuss/reply2',{collection: reply.replies, as: 'reply2'}) %>
+			<% } %>
+			<% if (user) { %>
+			<form id="reply2reply_<%- reply._id %>" class='reply2_form' action='/Discuss/reply2/<%= reply._id %>' method='post' style='display:none;'>
+				<input type='hidden' name='topic_id' value='<%- ftopic._id %>' />
+				<input type='hidden' name='reply_id' value='<%- reply._id %>' />
+				<div class='markdown_in_editor'>
+					<textarea id="reply2_editor_<%- reply._id %>" name='r2_content' style="width:100%;margin:10px;"></textarea>
+					<div class='editor_buttons' style='float:right;'>
+						<button class='btn btn-sm btn-primary' type="submit" data-id='<%= reply._id %>'>Reply</button>
+					</div>
+				</div>
+
+			</form>
+			<% } %>
+		</div>
+	</div>
+</div>

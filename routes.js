@@ -15,6 +15,8 @@ var prob = require('./controllers/prob');
 var code = require('./controllers/code');
 var status = require('./controllers/status');
 var contest = require('./controllers/contest');
+var topic = require('./controllers/topic');
+var reply = require('./controllers/reply');
 
 
 module.exports = function (app) {
@@ -116,4 +118,13 @@ module.exports = function (app) {
 	app.get('/Contest/Standing', auth.accessRequired, contest.get_standing);
 	app.post('/Contest/post_Standing', contest.post_standing);
 
+
+	//Discuss
+	app.get('/Discuss', topic.index);
+	app.get('/Discuss/topic/:tid', topic.get_topic);
+	app.get('/Discuss/topic/:tid/top/:is_top?', topic.top);
+	app.get('/Discuss/create', auth.loginRequired, topic.get_create);
+	app.post('/Discuss/create', auth.loginRequired, topic.post_create);
+	app.post('/Discuss/reply/:tid', auth.loginRequired, reply.add);
+	app.post('/Discuss/reply2/:rid', auth.loginRequired, reply.add2);
 };

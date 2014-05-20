@@ -217,8 +217,14 @@ exports.clone = function(req, res, next) {
 exports.check_pid = function(req, res, next) {
 	var _oj = req.body['oj'];
 	var _vid = req.body['pid'];
+	var query = {};
+	if (_oj) {
+		query.oj = _oj;
+		query.vid  = _vid;
 
-	Problem.getOne({ oj: _oj, vid: _vid }, function(err, prob) {
+	} else query.pid = parseInt(_vid);
+
+	Problem.getOne(query, function(err, prob) {
 		if(err || !prob) {
 			return res.send({ error:1, title: '' });
 		} else {
