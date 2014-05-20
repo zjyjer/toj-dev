@@ -91,6 +91,7 @@
 							<li><a href="#">One more separated link</a></li>
 						</ul>
 						</li>
+						<li><a style="color:#ED9C28;" href="/Discuss">Discuss</a></li>
 					</ul>
 
 					<% if (!user) { %>
@@ -106,10 +107,10 @@
 							<img src="/avatar/<%= user.username %>.png" style="width:20px;height:20px;">&nbsp&nbsp<%=user.username %>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="/discuss/user/jie414341055">My Discuss</a></li>
-							<li><a href=/profile/<%= user.username %>>Profile</a></li>
-							<!-- TODO:  Dashboard  -->
+							<li><a href=/profile/<%= user.username %>>My Profile</a></li>
 							<li><a href=/accounts/ChangePasswd?u=<%= user.username %>>Change Password</a></li>
+							<li><a href="/edit_profile/edit">Edit Profile</a></li>
+							<!-- TODO:  Dashboard  -->
 							<li class="divider"></li>
 							<li><a href="/logout/">Sign out</a></li>
 						</ul>

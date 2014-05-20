@@ -33,6 +33,14 @@
 				<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
 				<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
 			</div>
+			 <div style="text-align:center;margin-top:15px;">
+			 	<div class="btn-group" style="text-align:center;">
+					<button type="button" class="btn btn-primary"><a style="color:white;" href="/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>">Submit</a></button>
+					<button type="button" class="btn btn-default"><a style="color:black;" href="/Contest/Status?cid=<%= fcid %>&pid=<%= findex+1001 %>">Status</a></button>
+					<button type="button" class="btn btn-default"><a style="color:black;" href="/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex+1001 %>">Statistics</a></button>
+					<button type="button" class="btn btn-default"><a style="color:black;" href="#">Discuss</a></button>
+				 </div>
+			 </div>
 			<h3> Description </h3>
 				<div class="content-wrapper well">
 					 <%- fprob.desc %>
@@ -61,10 +69,13 @@
 			 <% } %>
 		 </div>
 	 </div>
-	 <center>
-		 <a href="/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>"><button type="button" class="btn btn-default">Submit</button></a>
-		 <a href="/Contest/Status?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Status</button></a>
-		 <a href="/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Statistics</button></a>
-	 </center>
+	 <div style="text-align:center;">
+	 	<div class="btn-group" style="text-align:center;">
+			<button type="button" class="btn btn-primary"><a style="color:white;" href="/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>">Submit</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="/Contest/Status?cid=<%= fcid %>&pid=<%= findex+1001 %>">Status</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex+1001 %>">Statistics</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="#">Discuss</a></button>
+		 </div>
+	 </div>
 	 <br/>
  </div>

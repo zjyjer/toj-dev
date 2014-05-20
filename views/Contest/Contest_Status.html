@@ -19,7 +19,7 @@
 		<div class="form-group">
 			<label class="col-sm-1 control-label">PID:</label>
 			<div class="col-xs-1">
-				<input id = "pid" type="text" class="form-control" <%if(fselected.pid){%>value="<%-fselected.pid%>"<%}else{%>placeholder="PID"<%}%>>
+				<input id = "pid" type="text" class="form-control" <%if(fselected.pid!=1000){%>value="<%-fselected.pid%>"<%}else{%>placeholder="PID"<%}%>>
 			</div>
 			<label class="col-sm-1 control-label">User:</label>
 			<div class="col-xs-3">

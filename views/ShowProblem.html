@@ -18,6 +18,20 @@
 					<div class="col-md-4"><b>Accepted Runs: </b><%= fprob.vtotal_ac+fprob.total_ac %></div>
 					<div class="col-md-3"><b>64bit IO: </b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
 				</div>
+				 <div style="text-align:center;margin-top:15px;">
+					<ul class="pager" style="float:left;margin-top:0px;">
+						<li class="previous"><a href="/ShowProblems?pid=<%= fprob.pid-1 %>">&larr; Prev</a></li>
+					</ul>
+				 	<div class="btn-group" style="text-align:center;">
+						<button type="button" class="btn btn-primary"><a style="color:white;" href="/ProbSubmit?pid=<%= fprob.pid %>">Submit</a></button>
+						<button type="button" class="btn btn-default"><a style="color:black;" href="/Status?pid=<%= fprob.pid %>">Status</a></button>
+						<button type="button" class="btn btn-default"><a style="color:black;" href="/Statistics?pid=<%= fprob.pid %>">Statistics</a></button>
+						<button type="button" class="btn btn-default"><a style="color:black;" href="/Discuss?pid=<%= fprob.pid %>">Discuss</a></button>
+					 </div>
+					<ul class="pager" style="float:right;margin-top:0px;">
+						<li class="next"><a href="/ShowProblems?pid=<%= fprob.pid+1 %>">Next &rarr;</a></li>
+					</ul>
+				 </div>
 				<% if(fprob.desc) { %>
 					<h3> Description </h3>
 					<div class="content-wrapper well">
@@ -57,11 +71,14 @@
 			</div>
 		 </div>
 	 </div>
-	 <center>
-		 <a href="/ProbSubmit?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Submit</button></a>
-		 <a href="/Status?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Status</button></a>
-		 <a href="/Statistics?pid=<%= fprob.pid %>"><button type="button" class="btn btn-default">Statistics</button></a>
-	 </center>
+	 <div style="text-align:center;">
+	 	<div class="btn-group" style="text-align:center;">
+			<button type="button" class="btn btn-primary"><a style="color:white;" href="/ProbSubmit?pid=<%= fprob.pid %>">Submit</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="/Status?pid=<%= fprob.pid %>">Status</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="/Statistics?pid=<%= fprob.pid %>">Statistics</a></button>
+			<button type="button" class="btn btn-default"><a style="color:black;" href="/Discuss?pid=<%= fprob.pid %>">Discuss</a></button>
+		 </div>
+	 </div>
 
 	<br/><br/>
 	<div style="width:940px;height:1px; background:#C0C0C0;"></div>
