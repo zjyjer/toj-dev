@@ -43,6 +43,21 @@
 	height: 100px;
 	border: 1px;
 	border-radius: 4px;
+	position: relative;
+}
+.avatar-edit {
+	display: none;
+	background: none repeat scroll 0% 0% #323232;
+	text-align: center;
+	position: absolute;
+	text-indent: 0px;
+	height: 25px;
+	left: 0px;
+	padding: 0px;
+	bottom: 0px;
+	width: 100%;
+	line-height: 25px;
+	border-radius: 0px 0px 2px 2px;
 }
 .clearfix:after {
 	clear: both;

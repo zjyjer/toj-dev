@@ -1,5 +1,7 @@
 var crypto = require('crypto');
 var fs = require('fs');
+var gm = require('gm');
+var imageMagick = gm.subClass({ imageMagick : true });
 var identicon = require('identicon');
 var EventProxy = require('eventproxy');
 
@@ -244,9 +246,30 @@ exports.save_profile = function(req, res, next) {
 	};
 
 
-	proxy.assign('save', render);
+	proxy.assign('avatar', 'save', render);
 
 	proxy.fail(next);
+
+	if (req.files) {
+		var tmp_path = req.files.avatar.path;
+		var target_path = './public/avatar/' + _currentUser.username + '.png';
+		fs.rename(tmp_path, target_path, function(err) {
+			if (err) {
+				proxy.emit('avatar');
+				throw err;
+			} else {
+				imageMagick(target_path)
+				.resize(150, 150, '!')
+				.autoOrient()
+				.write(target_path, function (err) {
+				  	if (!err) {
+						throw err;
+					}
+				});
+				proxy.emit('avatar');
+			}
+		});
+	} else proxy.emit('avatar');
 
 	User.getByName({ username: _currentUser.username }, proxy.done(function(user) {
 		if (req.body['nickname']) user.nickname = req.body['nickname'];
@@ -267,6 +290,11 @@ exports.save_profile = function(req, res, next) {
 	}));
 };
 
+exports.upload =  function(req, res, next) {
+	console.log(req.body);
+	console.log(req.files);
+};
+
 exports.get_rank = function(req, res, next) {
 	var _page = req.query.page ? parseInt(req.query.page) : 1;
 
@@ -274,9 +302,9 @@ exports.get_rank = function(req, res, next) {
 	var ep = EventProxy.create(events, function(counts, users) {
 		return res.render('Ranklist', {
 			title: 'Ranklist',
-		       	fusers: users,
-		       	fpage: _page,
-		       	ftotal_page: Math.ceil( counts / config.users_per_page),
+		       fusers: users,
+		       fpage: _page,
+		       ftotal_page: Math.ceil( counts / config.users_per_page),
 		});
 	});
 
@@ -293,7 +321,7 @@ exports.get_rank = function(req, res, next) {
 
 exports.getPunchCard = function(req, res, next) {
 	var _username = req.body['username'];
-	
+
 	var events = ['stats'];
 	var ep = EventProxy.create(events, function(stats) {
 		var json = Util.getPunchCard(stats);
@@ -301,7 +329,7 @@ exports.getPunchCard = function(req, res, next) {
 	});
 
 	ep.fail(next);
-	
+
 	var now = new Date();
 	now.setDate(now.getDate()-6);
 	var query = { username: _username, result: 'Accepted', submit_time: { $gt: now } };

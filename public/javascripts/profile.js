@@ -59,3 +59,7 @@ function deal_with(username) {
 	draw(data);
 
 }
+function cl() {
+	return $('#avatar-file').click();
+}
+

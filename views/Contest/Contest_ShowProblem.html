@@ -27,10 +27,6 @@
 			<div class="row">
 				<div class="col-md-3"><b>Time Limit:</b><%= fprob.time_limit %>MS</div>
 				<div class="col-md-4"><b>Memory Limit:</b><%= fprob.mem_limit %>K</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3"><b>Total Runs:</b><%= fprob.vtotal_submit+fprob.total_submit %></div>
-				<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
 				<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
 			</div>
 			 <div style="text-align:center;margin-top:15px;">
