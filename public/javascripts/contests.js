@@ -3,7 +3,9 @@ function getURLParameter(name) {
 }
 
 $(function() {
+	$('#admin_arrange').hide();
 	if (getURLParameter('type') == 2) {
 		$('#arrange').hide();
+		$('#admin_arrange').show();
 	}	
 });
