@@ -5,7 +5,9 @@ exports.get_Pagelist = function(volume, counts) {
 
 	var page = [];
 	if(total_volume <= 10) {
+		page.push(-1);
 		for(var i = 1;i <= total_volume; ++i) page.push(i);
+		page.push(-1);
 		return page;
 	}
 

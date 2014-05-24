@@ -98,7 +98,11 @@
 						<td><a href="/ShowProblems?pid=<%= prob.pid %>"><%- prob.title %></a></td>
 						<td><%= prob.oj %></td>
 						<td><%= prob.vid %></td>
+						<% if (prob.oj === 'SGU') { %>
+						<td>0.00&#37;(<a href=/Status?pid=<%- prob.pid %>&result=0><%= prob.vtotal_ac+prob.total_ac %></a>/<a href=/Status?pid=<%- prob.pid%>&result=><%= prob.vtotal_submit+prob.total_submit %></a>)</td>
+						<% } else {%>
 						<td><%= Math.round((prob.vtotal_ac+prob.total_ac)/(prob.vtotal_submit+prob.total_submit)*10000)/100 %>&#37;(<a href=/Status?pid=<%- prob.pid %>&result=0><%= prob.vtotal_ac+prob.total_ac %></a>/<a href=/Status?pid=<%- prob.pid%>&result=><%= prob.vtotal_submit+prob.total_submit %></a>)</td>
+						<% } %>
 				</tr>
 				<% }); %>
 
