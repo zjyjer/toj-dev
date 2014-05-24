@@ -58,6 +58,19 @@ exports.post_arrange = function(req, res, next) {
 	var _passwd = req.body['cpasswd'];
 	var _probs = [];
 
+	if (_type !== 0 && _type !== 1 && _type !== 2) {
+		req.flash('error', 'Invalid contest type!');
+		return res.redirect('/Contest/Contests?type=' + _type);
+	}
+	if (_currentUser.username !== 'admin' && _type === 2) {
+		req.flash('error', 'Invalid contest type!');
+		return res.redirect('/Contest/Contests?type=' + _type);
+	}
+	if (_type === 1) { 	//ICPC比赛的结束时间是开始时间+5小时
+		_ed_time = new Date(_st_time);
+		_ed_time.setHours(_ed_time.getHours() + 5);
+	}
+
 	for(var i = 1001;i <= config.contest_max_probs + 1000; ++i) {
 		if (req.body['pid'+i] == '') break;
 		_probs.push({ 'oj': req.body['oj'+i], 'vid': req.body['pid'+i] });
@@ -483,22 +496,24 @@ exports.post_submit = function(req, res, next) {
 				submit_time:	new Date(),
 				result:		'Waiting'
 				};
-				Status.newAndSave(_status, proxy.done('status_save'));
-
-				// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
-				// later...
-				var client = new net.Socket();
-				client.connect(config.judge_port, config.judge_host, function() {
-					client.write(data);
-				});
-				client.on('error',function(error){
-					proxy.unbind();
-					req.flash('error', 'The judge is temporary unavailable.Sorry.');
-					return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
-				});
-				client.on('close', function() {
-					proxy.emit('submit');
-				});
+				//Status.newAndSave(_status, proxy.done('status_save'));
+				Status.newAndSave(_status, proxy.done(function(stat, na) {
+					proxy.emit('status_save');
+					// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
+					// done
+					var client = new net.Socket();
+					client.connect(config.judge_port, config.judge_host, function() {
+						client.write(data);
+					});
+					client.on('error',function(error){
+						proxy.unbind();
+						req.flash('error', 'The judge is temporary unavailable.Sorry.');
+						return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
+					});
+					client.on('close', function() {
+						proxy.emit('submit');
+					});
+				}));
 			}));
 		}));
 
