@@ -27,6 +27,36 @@ function Search(_cid) {
 	window.location.replace("/Contest/Status?cid="+cid+"&pid="+pid+"&username="+user+"&lang="+lang+"&result="+result);
 }
 
+// rejudge request
+function rejudge(runid) {
+	//alert(runid);
+	$.ajax ({
+		url: '/rejudge/Status',
+		type: 'POST',
+		data: {runid: runid},
+		async: false,
+		success: function(result) {
+			if (result.success) {
+				alert('This submit has been sent to rejudge.');
+				var table = document.getElementById('Status');
+				for(var i = 1;i < table.rows.length; ++i) {
+					var re = table.rows[i].cells[0].innerText;
+					var t = '';
+					if (re == runid) {
+						t += '<font color="green">Judging</font>';
+						t += '<img src = "/icon/status_loader2.gif">';
+						table.rows[i].cells[2].innerHTML = t;
+						break;
+					}
+				}
+			}
+			if (result.error) {
+				alert('This submit doesn\'t need to rejudge.');
+			}
+		}
+	});
+}
+
 // update status
 function get_status(reget, rows) {
 	$.ajax ( {
@@ -75,6 +105,9 @@ function update_status() {
 
 $(document).ready(function() {
 	update_status();	
+	$('.rejudge').click(function() {
+		rejudge(this.id);
+	});
 });
 function update_all_status() {
 	window.location.reload();

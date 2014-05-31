@@ -109,7 +109,10 @@
 							<font color="green"><%- stat.result %></font>
 							<% } %>
 							<% if (stat.result == "Waiting" || stat.result == "Judging") {%>
-							<img src="/icon/status_loader.gif">
+							<img src="/icon/status_loader2.gif">
+							<% } %>
+							<% if(stat.result == "Judge Error") { %>
+							<button id = "<%= stat.run_ID %>" class="btn btn-default btn-sm rejudge" style="padding:0px 0px;"><img style="height:12px;width:12px;border-radius:4px;" src = "/icon/status_rejudge.png">rejudge</button>
 							<% } %>
 						</td>
 

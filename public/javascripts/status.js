@@ -26,6 +26,36 @@ function Search() {
 	window.location.replace("/Status?pid="+pid+"&username="+user+"&lang="+lang+"&result="+result);
 }
 
+// rejudge request
+function rejudge(runid) {
+	//alert(runid);
+	$.ajax ({
+		url: '/rejudge/Status',
+		type: 'POST',
+		data: {runid: runid},
+		async: false,
+		success: function(result) {
+			if (result.success) {
+				alert('This submit has been sent to rejudge.');
+				var table = document.getElementById('Status');
+				for(var i = 1;i < table.rows.length; ++i) {
+					var re = table.rows[i].cells[0].innerText;
+					var t = '';
+					if (re == runid) {
+						t += '<font color="green">Judging</font>';
+						t += '<img src = "/icon/status_loader2.gif">';
+						table.rows[i].cells[2].innerHTML = t;
+						break;
+					}
+				}
+			}
+			if (result.error) {
+				alert('This submit doesn\'t need to rejudge.');
+			}
+		}
+	});
+}
+
 // update status
 function get_status(reget, rows) {
 	$.ajax ( {
@@ -48,6 +78,9 @@ function get_status(reget, rows) {
 					newre += '<font color="orange">Presentation Error</font>';
 				} else {
 					newre += '<font color="green">'+json_array[i].result+'</font>';
+				}
+				if (json_array[i].result == 'Judge Error') {
+					newre += '\n<button id="' + table.rows[rows[i]].cells[0].innerText + '" class="btn btn-default btn-sm rejudge" style="padding:0px 0px;"><img style="height:12px;width:12px;border-radius:4px;" src = "/icon/status_rejudge.png">rejudge</button>';
 				}
 				table.rows[rows[i]].cells[2].innerHTML = newre;
 				table.rows[rows[i]].cells[4].innerHTML = json_array[i].tu+'MS';
@@ -74,4 +107,11 @@ function update_status() {
 
 $(document).ready(function() {
 	update_status();	
+	$('.rejudge').click(function() {
+		rejudge(this.id);
+	});
 });
+function update_all_status() {
+	window.location.reload();
+}
+setTimeout("update_all_status()", 100000);
