@@ -1,3 +1,4 @@
+var net = require('net');
 var querystring = require('querystring');
 
 var config = require('../config').config;
@@ -391,4 +392,49 @@ exports.getUndone = function(req, res, next) {
 			});
 		})(i);
 	}
+};
+
+
+exports.rejudge = function(req, res, next) {
+	var runid = parseInt(req.body['runid']);
+	var events = ['update', 'stat', 'prob'];
+
+	var ep = EventProxy.create(events, function(tt, stat, prob) {
+		var data = config.error_string + "\n" + runid + "\n" + prob.oj;
+		var client = new net.Socket();
+		client.connect(config.judge_port, config.judge_host, function() {
+			client.write(data);
+		});
+		client.on('error',function(error){
+			//req.flash('error', 'The judge is temporary unavailable.Sorry.');
+			Status.update({ run_ID: runid }, { result: 'Judge Error', time_used: 0, mem_used: 0 }, function(err, na, raw) {
+				return res.send({ error: 1 });
+			});
+		});
+		client.on('close', function() {
+			res.send({ success: 1 });
+		});
+
+	});
+
+	ep.fail(next);
+
+
+	Status.update({ run_ID: runid },{ result: 'Judging' }, ep.done('update'));
+
+	Status.getOne({ run_ID: runid }, function(err, stat) {
+		if (err || !stat) {
+			ep.unbind();
+			return res.send({ error: 1 });
+		}
+		ep.emit('stat', stat);
+
+		Problem.getOne({ pid: stat.pid }, function(err, prob) {
+			if (err || !prob) {
+				proxy.unbind();
+				return res.send({ error: 1 });
+			}
+			ep.emit('prob', prob);
+		});
+	});
 };

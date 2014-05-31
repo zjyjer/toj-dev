@@ -39,7 +39,7 @@ function rejudge(runid) {
 				alert('This submit has been sent to rejudge.');
 				var table = document.getElementById('Status');
 				for(var i = 1;i < table.rows.length; ++i) {
-					var re = table.rows[i].cells[0].innerText;
+					var re = table.rows[i].cells[0].innerText || table.rows[i].cells[0].textContent;
 					var t = '';
 					if (re == runid) {
 						t += '<font color="green">Judging</font>';
@@ -80,7 +80,7 @@ function get_status(reget, rows) {
 					newre += '<font color="green">'+json_array[i].result+'</font>';
 				}
 				if (json_array[i].result == 'Judge Error') {
-					newre += '\n<button id="' + table.rows[rows[i]].cells[0].innerText + '" class="btn btn-default btn-sm rejudge" style="padding:0px 0px;"><img style="height:12px;width:12px;border-radius:4px;" src = "/icon/status_rejudge.png">rejudge</button>';
+					newre += '\n<button id="' + (table.rows[rows[i]].cells[0].innerText || table.rows[rows[i]].cells[0].textContent)+ '" class="btn btn-default btn-sm rejudge" style="padding:0px 0px;"><img style="height:12px;width:12px;border-radius:4px;" src = "/icon/status_rejudge.png">rejudge</button>';
 				}
 				table.rows[rows[i]].cells[2].innerHTML = newre;
 				table.rows[rows[i]].cells[4].innerHTML = json_array[i].tu+'MS';
@@ -95,9 +95,10 @@ function update_status() {
 	var rows = [];
 	for(var i = 1;i < table.rows.length; ++i) {
 		//0-runid  1-submit_time 2-result 3-pid 4-time 5-memory 
-		var re = table.rows[i].cells[2].innerText;
+		var re = table.rows[i].cells[2].innerText || table.rows[i].cells[2].textContent;
+		var runid = table.rows[i].cells[0].innerText || table.rows[i].cells[0].textContent;
 		if (re.substr(0, 5) == 'Waiti' || re.substr(0,5) == 'Judgi')  {
-			reget.push(table.rows[i].cells[0].innerText);
+			reget.push(runid);
 			rows.push(i);
 		}
 	}
