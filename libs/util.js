@@ -132,8 +132,8 @@ function formate_date(d) {
 	var day = d.getDate();
 	var mm, dd;
 
-	mm = month < 10 ? '0' : '' + month;
-	dd = day < 10 ? '0' : '' + day;
+	mm = month < 10 ? '0' + month : '' + month;
+	dd = day < 10 ? '0'  + day : '' + day;
 	return mm + '-' + dd;
 };;
 
