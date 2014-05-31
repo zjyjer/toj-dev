@@ -26,7 +26,7 @@ $(function() {
 	<h2 style="text-align:center"><font color="#428BCA">View Code</font></h2>
 </div>
 <div class="code-info">
-Problem:<a href=/Contest/ShowProblems?cid=<%- fstat.cid %>&pid=<%- fstat.nid %>><%- fstat.nid %></a>&nbsp;&nbsp;&nbsp;&nbsp;
+Problem: <a href=/Contest/ShowProblems?cid=<%= fstat.contest_belong %>&pid=<%= fstat.nid + 1001 %>><%= String.fromCharCode(fstat.nid + 65) %></a>&nbsp;&nbsp;&nbsp;&nbsp;
 Result:
 <% if(fstat.result == "Accepted") { %>
 <font color="red">Accepted</font>
@@ -38,9 +38,9 @@ Result:
 <font color="green"><%- fstat.result %></font>
 <% } %>
 <br>
-RunID:<%- fstat.run_ID %>&nbsp;&nbsp;&nbsp;
-Lanuage:<%- fcorrlang[fstat.lang] %>&nbsp;&nbsp;&nbsp;
-Author:<a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
+RunID: <%- fstat.run_ID %>&nbsp;&nbsp;&nbsp;
+Lanuage: <%- fcorrlang[fstat.lang] %>&nbsp;&nbsp;&nbsp;
+Author: <a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
 </div>
 
 <pre class="sh_cpp"><%= fcode.code %></pre>
