@@ -133,7 +133,7 @@ function formate_date(d) {
 	var mm, dd;
 
 	mm = month < 10 ? '0' + month : '' + month;
-	dd = day < 10 ? '0'  + day : '' + day;
+	dd = day < 10 ? '0' + day : '' + day;
 	return mm + '-' + dd;
 };;
 
@@ -155,9 +155,9 @@ exports.getPunchCard = function(stats) {
 	}
 	
 	for (var i = 0;i < stats.length; ++i) {
-		var t_day = stats[i].submit_time.getDate();
+		var t_day = parseInt((now - stats[i].submit_time) / (1000 * 60 * 60 * 24));
 		var t_hour = stats[i].submit_time.getHours();
-		list[6-(now_day-t_day)][t_hour] += 1;
+		list[6-t_day][t_hour] += 1;
 	}
 	for (var i = 0;i < 7; ++i) {
 		for (var j = 0;j < 24; ++j) {
