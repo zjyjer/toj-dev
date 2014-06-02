@@ -28,7 +28,22 @@ function CheckPID(id) {
 	});
 }
 $(function () {
-	$('#datetimepicker1').datetimepicker();
+	var _type = getURLParameter('type');
+	if (_type == 0) {
+		$('#all_title').html('Arrange Contest(Virtual Contest)');
+	} else if (_type == 1) {
+		$('#all_title').html('Arrange Contest(ICPC Contest)');
+		$('#sub_title').html('Should be at least 5 problems, last for 5 hours. You only need to set the start time.');
+	} else {
+		$('#all_title').html('Arrange Contest(Classical Contest)');
+		$('#sub_title').html('Should be at least 5 problems, last for 5 hours. You only need to set the start time.');
+	}
+
+
+	// time-picker
+	$('.form_datetime').datetimepicker({
+		format: 'YYYY/MM/DD hh:mm A'
+	});
 	$('#datetimepicker2').datetimepicker();
 	var today = new Date();
 	today.setDate(today.getDate()-1);
@@ -49,8 +64,8 @@ function validate() {
 	if (_type == 0) { //check, should at least one problem
 		var pid = $('#pid1001').val();
 		if (!pid) return false;
-	} else { //check, should at least 9 problems
-		for (var i = 1001;i <= 1009; ++i) {
+	} else { //check, should at least 5 problems
+		for (var i = 1001;i <= 1005; ++i) {
 			var tmp = $('#pid'+i).val();
 			if (!tmp) {
 				return false;
@@ -63,6 +78,9 @@ function validate() {
 function fill(cont, probs) {
 	$('#ctitle').val(cont.title);
 	$('#cdesc').val(cont.desc);
+	probs.sort(function(a, b) {
+		return a.vid > b.vid;
+	});
 	for (var i = 0;i < probs.length; ++i) {
 		$('#oj'+(1001+i)).val(probs[i].oj);
 		$('#pid'+(1001+i)).val(probs[i].vid);
