@@ -16,22 +16,53 @@ var Contest_User = require('../proxy').Contest_User;
 exports.getByPage = function(req, res, next) {
 	var _type = req.query.type ? parseInt(req.query.type) : 0;
 	var _page = req.query.page ? parseInt(req.query.page) : 1;
-	var events = ['conts'];
-	var ep = EventProxy.create(events, function(conts) {
+	var events = ['counts', 'conts'];
+	var ep = EventProxy.create(events, function(counts, conts) {
+		var total_page = counts / config.contest_per_page;
+		if (total_page == 0) total_page = 1;
 		res.render('Contest/Contests', {
 			title: 'Contests',
 			fconts: conts,
 			ftm: new Date(),
+			ftype: _type,
+			fpage: _page,
+			ftotal_page: total_page,
+		});
+	});
+
+	ep.fail(next);
+
+
+	var query = { type: _type , visible: true };
+	var options = { limit: config.contest_per_page, skip: (_page - 1) * config.contest_per_page, sort: {cid: -1} };
+
+	Contest.getCount(query, ep.done('counts'));
+	Contest.getMulti(query, {}, options, ep.done('conts'));
+
+};
+
+exports.search = function(req, res, next) {
+	var _type = req.body['type'] ? parseInt(req.body['type']) : 0;
+	var _info = req.body['info'];
+
+	if (!_info) return res.redirect('/Contest/Contests?type=' + _type);
+
+	var events = ['conts'];
+	var ep = EventProxy.create(events, function(conts) {
+		res.render('Contest/Contest_Search', {
+			title: 'Search result',
+			fconts: conts,
+			ftm: new Date(),
+			ftype: _type,
 		});
 	});
 
 	ep.fail(next);
 
 	var query = { type: _type , visible: true };
-	var options = { limit: config.contest_per_page, skip: (_page - 1) * config.contest_per_page, sort: {cid: -1} };
+	var options = { limit: 500, sort: {cid: -1} };
 
-	Contest.getMulti(query, {}, options, ep.done('conts'));
-
+	Contest.search(_info, query, {}, options, ep.done('conts'));
 };
 
 exports.get_arrange = function(req, res, next) {

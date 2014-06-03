@@ -13,6 +13,7 @@
 			<input id = "title_source" type="text" class="form-control" placeholder="Title, Source, Author" onkeydown="if(event.keyCode==13 && (document.getElementById('title_source').value)) document.getElementById('searchbtn').click()">
 		</div>
 		<button id = "searchbtn" type="submit" class="btn btn-primary" onclick="SearchContest(<%- ftype %>)">Search</button>
+		<span><%= fconts.length %> results match.</span>
 		<button id = "arrange" type="submit" class="btn btn-success" onclick="window.location.replace('/Contest/ArrangeContest'+location.search);">Arrange</button>
 		<% if (user && user.username === 'admin') {%>
 		<button id = "admin_arrange" type="submit" class="btn btn-success" onclick="window.location.replace('/Contest/ArrangeContest'+location.search);">Arrange</button>
@@ -73,23 +74,5 @@
 
 			</tbody>
 		</table>
-		<div class="form-group">
-			<center>
-				<ul class="pager"> 
-					<li><a href=/Contest/Contests?type=<%= ftype %>&page=1>First Page</a></li>
-					<% if(fpage == 1) { %>
-					<li><a href=#>Prev Page</a></li>
-					<% } else {%>
-					<li><a href=/Contest/Contests?type=<%= ftype %>&page=<%= fpage-1%>>Prev Page</a></li>
-					<% } %>
-					<% if(fpage == ftotal_page) { %>
-					<li><a href=#>Next Page</a></li>
-					<% } else {%>
-					<li><a href=/Contest/Contests?type=<%= ftype %>&page=<%= fpage+1%>>Next Page</a></li>
-					<% } %>
-					<li><a href=/Contest/Contests?type=<%= ftype %>&page=<%= ftotal_page %>>Last Page</a></li>
-				</ul>
-			</center>
-		</div>
 	</div>
 </div>

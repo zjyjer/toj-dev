@@ -37,16 +37,17 @@
 					<button type="button" class="btn btn-default" onclick="window.location.href='#'">Discuss</button>
 				 </div>
 			 </div>
-			<h3> Description </h3>
+			<% if(fprob.desc) { %>
+				<h3> Description </h3>
 				<div class="content-wrapper well">
 					<% if (fprob.oj == 'UVALive') { %>
-					
 					<% var pos = fprob.desc.indexOf("</p><head><META HTTP"); if (pos > -1) { %>
 						 <%- fprob.desc.substring(0, pos) %>
 					<% } else { %>
 						 <%- fprob.desc %>
 					<% } %><% } else {%><%- fprob.desc %><% } %>
 				 </div>
+			<% } %>
 			<% if(fprob.input) { %>
 			 <h3> Input </h3>
 			 <div class="content-wrapper well">

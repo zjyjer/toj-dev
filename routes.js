@@ -75,6 +75,8 @@ module.exports = function (app) {
 	app.get('/Statistics', status.getStatistics);
 	// status 刷新
 	app.post('/refresh/Status', status.getUndone);
+	// rejudge
+	app.post('/rejudge/Status', status.rejudge);
 
 
 	app.get('/ShowCode', code.getByRunid);
@@ -118,6 +120,8 @@ module.exports = function (app) {
 	app.get('/Contest/Standing', auth.accessRequired, contest.get_standing);
 	app.post('/Contest/post_Standing', contest.post_standing);
 
+	app.post('/ContestSearch', contest.search);
+
 
 	//Discuss
 	app.get('/Discuss', topic.index);
@@ -125,6 +129,7 @@ module.exports = function (app) {
 	app.get('/Discuss/topic/:tid/top/:is_top?', topic.top);
 	app.get('/Discuss/create', auth.loginRequired, topic.get_create);
 	app.post('/Discuss/create', auth.loginRequired, topic.post_create);
+	app.post('/Discuss/delete/:tid', auth.loginRequired, topic.delete);
 	app.post('/Discuss/reply/:tid', auth.loginRequired, reply.add);
 	app.post('/Discuss/reply2/:rid', auth.loginRequired, reply.add2);
 };
