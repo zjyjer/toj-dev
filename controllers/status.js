@@ -1,3 +1,4 @@
+var net = require('net');
 var querystring = require('querystring');
 
 var config = require('../config').config;
@@ -160,16 +161,16 @@ exports.get_ce = function(req, res, next) {
 	var events = ['stat'];
 	var ep = EventProxy.create(events, function(stat) {
 		res.render('ShowCEError', {
-			title: 'Compile Information',
+			title: 'Compilation Information',
 			fce_info: stat.ce_info,
 		});
 	});
 
 	ep.fail(next);
 
-	var _cid = req.query.cid ? parseInt(req.query.cid) : -1;
+	//var _cid = req.query.cid ? parseInt(req.query.cid) : -1;
 	var _runid = req.query.runid ? parseInt(req.query.runid) : -1;
-	Status.getOne({ contest_belong: _cid, run_ID: _runid }, ep.done('stat'));
+	Status.getOne({ run_ID: _runid }, ep.done('stat'));
 };
 
 
@@ -181,8 +182,8 @@ exports.get_ce = function(req, res, next) {
 exports.contest_getByPage = function(req, res, next) {
 	var _url = '/Contest/Status?';
 	var _cid = req.query.cid ? parseInt(req.query.cid) : 0;
-	var _nid = req.query.pid ? parseInt(req.query.pid) : 0;
-	var _lang = req.query.lang ? parseInt(req.query.lang) : 0;
+	var _nid = parseInt(req.query.pid);
+	var _lang = req.query.lang ? parseInt(req.query.lang) : '';
 	var _username = req.query.username ? req.query.username : '';
 	var _result = req.query.result ? req.query.result : '';
 	var _page = req.query.page ? parseInt(req.query.page) : 1;
@@ -197,16 +198,20 @@ exports.contest_getByPage = function(req, res, next) {
 	query.contest_belong = _cid;
 	_url += 'cid=' + _cid;
 
-	if (_nid) {
-		_url += 'pid=' + _nid;
-	} else  _url += 'pid=';
+	if (_nid - 1001 >= 0 && _nid - 1001 < config.contest_max_probs) {
+		_nid -= 1001;
+	} else _nid = -1;
 
-	if (_username) {
+	if (_nid != -1) {
+		_url += '&pid=' + (_nid+1001);
+	} else  _url += '&pid=';
+
+	if (_username !== '') {
 		query.username = _username;
 		_url += '&username=' + _username;
 	} else  _url += '&username=';
 
-	if (_lang) {
+	if (_lang !== '') {
 		query.lang = _lang;
 		_url += '&lang=' + _lang;
 	} else  _url += '&lang=';
@@ -235,7 +240,7 @@ exports.contest_getByPage = function(req, res, next) {
 				'lang': _lang,
 				'result': config.digit2result[_result],
 				'username': _username,
-				'pid': _nid,
+				'pid': _nid+1001,
 			},
 			furl: _url,
 			ftotal_page: _total_page,
@@ -247,10 +252,14 @@ exports.contest_getByPage = function(req, res, next) {
 	Contest.getOne({ cid: _cid}, ep.done(function(cont) {
 		ep.emit('cont', cont);
 		var options = { limit: config.status_per_page, skip: (_page - 1) * config.status_per_page, sort: {run_ID: -1} };
-		if (_nid) {
+		if (_nid != -1) {
 			Contest_Problem.getOne({ cid: _cid, nid: _nid }, function(err, cp) {
-				query.pid = cp.pid;
-				Status.getMulti(query, {}, options, ep.done('stats'));
+				if (!cp) {
+					ep.emit('stats', []);
+				} else {
+					query.pid = cp.pid;
+					Status.getMulti(query, {}, options, ep.done('stats'));
+				}
 			});
 		} else {
 			Status.getMulti(query, {}, options, ep.done('stats'));
@@ -293,14 +302,19 @@ exports.contest_getStatistics = function(req, res, next) {
 		req.flash('Invalid Contest!');
 		return res.redirect('/Contest/Contests?type=0');
 	}
+
+	if (_nid - 1001 >= 0 && _nid - 1001 < config.contest_max_probs) {
+		_nid -= 1001;
+	} else _nid = -1;
+
 	if (_nid == -1) {
-		req.flash('Invalid Problem!');
+		req.flash('error', 'Invalid Problem!');
 		return res.redirect('/Contest/Contests?type=0');
 	}
 
 	var query = { contest_belong: _cid, speed: 51 };
 
-	_url += 'cid=' + _cid + '&pid=' + _nid;
+	_url += 'cid=' + _cid + '&pid=' + (_nid+1001);
 	//query.pid = _pid;
 
 	if (_lang) {
@@ -321,6 +335,8 @@ exports.contest_getStatistics = function(req, res, next) {
 			fprob: prob,
 			fstatistics: statistics,
 			fcorrlang: config.corrlang,
+			fcid: _cid,
+			fnid: _nid,
 			fpageID: _page,
 			flang: _lang,
 			furl: _url,
@@ -333,8 +349,15 @@ exports.contest_getStatistics = function(req, res, next) {
 
 	Contest_Problem.getOne({ cid: _cid, nid: _nid}, ep.done(function(prob) {
 
-		query.pid = prob.pid;
-		ep.emit('prob', prob);
+		if (!prob) {
+			ep.emit('prob', null);
+			ep.emit('counts', 0);
+			ep.emit('statistics', []);
+			return;
+		} else {
+			query.pid = prob.pid;
+			ep.emit('prob', prob);
+		}
 
 		Status.getCount(query, ep.done(function(counts) {
 			_total_page = Math.ceil(counts / config.statistics_per_page);
@@ -344,7 +367,7 @@ exports.contest_getStatistics = function(req, res, next) {
 			ep.emit('counts', counts);
 		}));
 
-		var options = { limit: config.statistics_per_page , skip: (_page - 1) * config.statistics_per_page };
+		var options = { limit: config.statistics_per_page , skip: (_page - 1) * config.statistics_per_page, sort: {time_used: 1, mem_used: 1} };
 		Status.getMulti(query, {}, options, ep.done('statistics'));
 	}));
 
@@ -369,4 +392,49 @@ exports.getUndone = function(req, res, next) {
 			});
 		})(i);
 	}
+};
+
+
+exports.rejudge = function(req, res, next) {
+	var runid = parseInt(req.body['runid']);
+	var events = ['update', 'stat', 'prob'];
+
+	var ep = EventProxy.create(events, function(tt, stat, prob) {
+		var data = config.error_string + "\n" + runid + "\n" + prob.oj;
+		var client = new net.Socket();
+		client.connect(config.judge_port, config.judge_host, function() {
+			client.write(data);
+		});
+		client.on('error',function(error){
+			//req.flash('error', 'The judge is temporary unavailable.Sorry.');
+			Status.update({ run_ID: runid }, { result: 'Judge Error', time_used: 0, mem_used: 0 }, function(err, na, raw) {
+				return res.send({ error: 1 });
+			});
+		});
+		client.on('close', function() {
+			res.send({ success: 1 });
+		});
+
+	});
+
+	ep.fail(next);
+
+
+	Status.update({ run_ID: runid },{ result: 'Judging' }, ep.done('update'));
+
+	Status.getOne({ run_ID: runid }, function(err, stat) {
+		if (err || !stat) {
+			ep.unbind();
+			return res.send({ error: 1 });
+		}
+		ep.emit('stat', stat);
+
+		Problem.getOne({ pid: stat.pid }, function(err, prob) {
+			if (err || !prob) {
+				proxy.unbind();
+				return res.send({ error: 1 });
+			}
+			ep.emit('prob', prob);
+		});
+	});
 };

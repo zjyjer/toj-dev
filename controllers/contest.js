@@ -16,29 +16,66 @@ var Contest_User = require('../proxy').Contest_User;
 exports.getByPage = function(req, res, next) {
 	var _type = req.query.type ? parseInt(req.query.type) : 0;
 	var _page = req.query.page ? parseInt(req.query.page) : 1;
-	var events = ['conts'];
-	var ep = EventProxy.create(events, function(conts) {
+	var events = ['counts', 'conts'];
+	var ep = EventProxy.create(events, function(counts, conts) {
+		var total_page = counts / config.contest_per_page;
+		if (total_page == 0) total_page = 1;
 		res.render('Contest/Contests', {
 			title: 'Contests',
 			fconts: conts,
 			ftm: new Date(),
+			ftype: _type,
+			fpage: _page,
+			ftotal_page: total_page,
 		});
 	});
 
 	ep.fail(next);
 
-	var query = { type: _type };
+
+	var query = { type: _type , visible: true };
 	var options = { limit: config.contest_per_page, skip: (_page - 1) * config.contest_per_page, sort: {cid: -1} };
 
-	Contest.getMulti({ type: _type }, {}, options, ep.done('conts'));
+	Contest.getCount(query, ep.done('counts'));
+	Contest.getMulti(query, {}, options, ep.done('conts'));
 
 };
 
+exports.search = function(req, res, next) {
+	var _type = req.body['type'] ? parseInt(req.body['type']) : 0;
+	var _info = req.body['info'];
+
+	if (!_info) return res.redirect('/Contest/Contests?type=' + _type);
+
+	var events = ['conts'];
+	var ep = EventProxy.create(events, function(conts) {
+		res.render('Contest/Contest_Search', {
+			title: 'Search result',
+			fconts: conts,
+			ftm: new Date(),
+			ftype: _type,
+		});
+	});
+
+	ep.fail(next);
+
+	var query = { type: _type , visible: true };
+	var options = { limit: 500, sort: {cid: -1} };
+
+	Contest.search(_info, query, {}, options, ep.done('conts'));
+};
+
 exports.get_arrange = function(req, res, next) {
+	var _type = parseInt(req.query.type);
+
 	return res.render('Contest/Arrange', {
 		title: 'Arrange a Contest',
+	       	iscopy: 0,
 	       	fuser: req.session.user,
-		ftype: req.query.type,
+	       	fcont: '',
+	       	fprobs: [],
+		ftype: _type,
+	       	fojs: config.ojs,
 	});
 };
 
@@ -51,6 +88,19 @@ exports.post_arrange = function(req, res, next) {
 	var _ed_time = req.body['cedtime'];
 	var _passwd = req.body['cpasswd'];
 	var _probs = [];
+
+	if (_type !== 0 && _type !== 1 && _type !== 2) {
+		req.flash('error', 'Invalid contest type!');
+		return res.redirect('/Contest/Contests?type=' + _type);
+	}
+	if (_currentUser.username !== 'admin' && _type === 2) {
+		req.flash('error', 'Invalid contest type!');
+		return res.redirect('/Contest/Contests?type=' + _type);
+	}
+	if (_type === 1) { 	//ICPC比赛的结束时间是开始时间+5小时
+		_ed_time = new Date(_st_time);
+		_ed_time.setHours(_ed_time.getHours() + 5);
+	}
 
 	for(var i = 1001;i <= config.contest_max_probs + 1000; ++i) {
 		if (req.body['pid'+i] == '') break;
@@ -108,12 +158,117 @@ exports.post_arrange = function(req, res, next) {
 
 };
 
+exports.get_setting = function(req, res, next) {
+	var _cid = parseInt(req.query.cid);
+
+	Contest.getOne({ cid:_cid }, function(err, doc) {
+		if (doc.author != req.session.user.username) {
+			res.render('500.html', {title: '500 Error'});
+		} else {
+			return res.render('Contest/Settings', {
+				title: 'Settings',
+				fuser: req.session.user,
+				fcont: doc,
+				fcid: _cid,
+			});
+		}
+	});
+};
+
+exports.post_setting = function(req, res, next) {
+	var _cid = parseInt(req.query.cid);
+	var _title = req.body['ctitle'];
+	var _desc = req.body['cdesc'];
+	var _st_time = req.body['csttime'];
+	var _ed_time = req.body['cedtime'];
+	var _passwd = req.body['cpasswd'];
+
+	Contest.getOne({ cid: _cid }, function(err, doc) {
+		if (err || !doc) {
+			req.flash('error', 'Invalid Contest!');
+			return res.redirect('/Contest/Contests?type=0');
+		}
+		if (_title) doc.title = _title;
+		if (_desc) doc.desc = _desc;
+		if (_st_time) doc.start_time = _st_time;
+		if (_ed_time) doc.end_time = _ed_time;
+		doc.save();
+		req.flash('success', 'The Contest has been updated!');
+		res.redirect('/Contest/ShowContests?cid='+_cid);
+	});
+};
+
+exports.post_del = function(req, res, next) {
+	var _cid = req.body['cid'] ? parseInt(req.body['cid']) : 0;
+
+	if (!_cid) return res.send(0);
+
+	Contest.getOne({ cid: _cid }, function(err, doc) {
+		if (err || !doc) {
+			return res.send({ ok: 0 });
+		}
+		if (doc.author != req.session.user.username) return res.send({ ok: 0 });
+		doc.visible = false;
+		doc.save();
+		return res.send({ ok: 1 });
+	});
+};
+
+exports.clone = function(req, res, next) {
+	var _cid = req.query.from ? parseInt(req.query.from) : 0;
+
+	if (!_cid) {
+		req.flash('Invalid Contest!');
+		return res.redirect('/Contest/Contests?type=0');
+	}
+
+	var events = ['cont', 'probs'];
+
+	var ep = EventProxy.create(events, function(cont, probs) {
+		return res.render('Contest/Arrange', {
+			title: 'Clone a Contest',
+		       	iscopy: 1,
+		       	fuser: req.session.user,
+		       	ftype: cont.type,
+		       	fojs: config.ojs,
+		       	fcont: cont,
+		       	fprobs: probs,
+		});
+	});
+
+	ep.fail(next);
+
+	Contest.getOne({ cid: _cid }, ep.done('cont'));
+
+	var query = { cid: _cid };
+	var fields = { pid: 1 };
+	var options = { sort: {nid: 1} };
+	Contest_Problem.getMulti(query, fields, options, ep.done(function(probs) {
+			var ep2 = new EventProxy();
+			ep2.after('get_oj_vid', probs.length, function (list) {
+				ep.emit('probs', list);
+			});
+			for (var i = 0; i < probs.length; i++) {
+				(function(i) {
+					Problem.getOne({ pid: probs[i].pid } , function(err, prob) {
+						ep2.emit('get_oj_vid', prob);
+					});
+				})(i);
+			}
+	}));
+};
 
 exports.check_pid = function(req, res, next) {
 	var _oj = req.body['oj'];
 	var _vid = req.body['pid'];
+	var query = {};
+	if (_oj) {
+		query.oj = _oj;
+		query.vid  = _vid;
 
-	Problem.getOne({ oj: _oj, vid: _vid }, function(err, prob) {
+	} else query.pid = parseInt(_vid);
+
+	Problem.getOne(query, function(err, prob) {
 		if(err || !prob) {
 			return res.send({ error:1, title: '' });
 		} else {
@@ -138,7 +293,7 @@ exports.post_enter = function(req, res, next) {
 	var _cid = req.query.cid ? parseInt(req.query.cid) : 0;
 	var _passwd = req.body['passwd'];
 
-	Contest.getOne( {cid: _cid}, function(err, cont) {
+	Contest.getOne( {cid: _cid, visible: true }, function(err, cont) {
 		if (err || !cont) {
 			req.flash('error', 'Contest does not exists.Maybe it has been deleted.');
 			return res.redirect('/Contest/Contests?type=0');
@@ -164,7 +319,7 @@ exports.show_info = function(req, res, next) {
 		return res.redirect('/Contest/Contests?type=0');
 	}
 
-	Contest.getOne({ cid: _cid }, function(err, cont) {
+	Contest.getOne({ cid: _cid, visible: true }, function(err, cont) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/Contest/Contests?type=0');
@@ -172,6 +327,7 @@ exports.show_info = function(req, res, next) {
 		return res.render('Contest/ShowContest', {
 			title: cont.title,
 		       	fcont: cont,
+		       	fnow: new Date(),
 		});
 	});
 };
@@ -206,6 +362,7 @@ exports.show_problem = function(req, res, next) {
 		       	fcont: cont,
 		       	fprobs: probs,
 		       	fsubmitted: submitted,
+		       	fnow: new Date(),
 		});
 	});
 
@@ -370,22 +527,24 @@ exports.post_submit = function(req, res, next) {
 				submit_time:	new Date(),
 				result:		'Waiting'
 				};
-				Status.newAndSave(_status, proxy.done('status_save'));
-
-				// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
-				// later...
-				var client = new net.Socket();
-				client.connect(config.judge_port, config.judge_host, function() {
-					client.write(data);
-				});
-				client.on('error',function(error){
-					proxy.unbind();
-					req.flash('error', 'The judge is temporary unavailable.Sorry.');
-					return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
-				});
-				client.on('close', function() {
-					proxy.emit('submit');
-				});
+				//Status.newAndSave(_status, proxy.done('status_save'));
+				Status.newAndSave(_status, proxy.done(function(stat, na) {
+					proxy.emit('status_save');
+					// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
+					// done
+					var client = new net.Socket();
+					client.connect(config.judge_port, config.judge_host, function() {
+						client.write(data);
+					});
+					client.on('error',function(error){
+						proxy.unbind();
+						req.flash('error', 'The judge is temporary unavailable.Sorry.');
+						return res.redirect('/Contest/Status?cid=' + _cid + '&page=1');
+					});
+					client.on('close', function() {
+						proxy.emit('submit');
+					});
+				}));
 			}));
 		}));
 

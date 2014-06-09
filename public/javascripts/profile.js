@@ -37,12 +37,16 @@ function draw(json) {
 		categories: json.y_axis
 	},
 	series: [{
-		name: 'Good work!',
+		name: ' ',
 		showInLegend: false,
 		data: json.data
 	}],
 	tooltip: {
-		pointFormat: 'You solved {point.marker.radius} problems.'
+		formatter: function() {
+			return '' + this.point.marker.radius/2 + ' problem(s) solved.';
+		},
+		shared: true,
+		pointFormat: '{point.marker.radius} problems solved.'
 	}
 
 	});
@@ -55,3 +59,7 @@ function deal_with(username) {
 	draw(data);
 
 }
+function cl() {
+	return $('#avatar-file').click();
+}
+

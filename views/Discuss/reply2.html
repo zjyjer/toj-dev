@@ -1,0 +1,25 @@
+<div class='cell reply2_item' reply_id='<%= reply2._id %>'>
+	<a class="anchor" id="<%- reply2._id %>"></a>
+	<div class='author_content'>
+		<a href="/profile/<%= reply2.user.username %>" class="user_avatar">
+			<img src="/avatar/<%= reply2.user.username %>.png" title="<%= reply2.user.username %>" />
+		</a>
+		<div class='user_info'>
+			<a class='dark reply_author' href="/profile/<%= reply2.user.username %>"><%= reply2.user.username %></a>
+			<a class="reply_time" href="#<%- reply2._id %>"><%= reply2.friendly_create_at %></a>
+		</div>
+		<div class="user_action">
+			<span>
+				<% if(user){ %>
+				<img class='dark reply2_btn' src="/icon/reply_btn.png" title="reply" onclick="$('#reply2reply_<%- reply._id %>').show();">
+				<% } %>
+			</span>
+		</div>
+		<div class='reply_content'>
+			<div class="markdown-text">
+				<%- reply2.content %>	
+			</div>
+		</div>
+	</div>
+</div>
+

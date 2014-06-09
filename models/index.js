@@ -18,6 +18,8 @@ require('./contest');
 require('./contest_user');
 require('./contest_prob');
 require('./oj_status');
+require('./topic');
+require('./reply');
 
 exports.User = mongoose.model('User');
 exports.Problem = mongoose.model('Problem');
@@ -28,3 +30,5 @@ exports.Contest = mongoose.model('Contest');
 exports.Contest_User = mongoose.model('Contest_User');
 exports.Contest_Problem = mongoose.model('Contest_Problem');
 exports.OJ_Status = mongoose.model('OJ_Status');
+exports.Topic = mongoose.model('Topic');
+exports.Reply = mongoose.model('Reply');

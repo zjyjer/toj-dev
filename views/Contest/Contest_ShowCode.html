@@ -9,6 +9,17 @@
 <script>
 $(function() {
 	sh_highlightDocument();
+	$('#copy-btn').click(function() {
+		$('#src-code').hide();
+
+		var text = $('#copy-code-text').val();
+		matches = text.match(/\n/g),
+		breaks = matches ? matches.length : 2;
+		$('#copy-code-text').attr('rows', breaks + 2);
+
+		$('#copy-code-text').show();
+		$('#copy-code-text').select();
+	});
 });
 </script>
 <style>
@@ -26,7 +37,7 @@ $(function() {
 	<h2 style="text-align:center"><font color="#428BCA">View Code</font></h2>
 </div>
 <div class="code-info">
-Problem:<a href=/Contest/ShowProblems?cid=<%- fstat.cid %>&pid=<%- fstat.nid %>><%- fstat.nid %></a>&nbsp;&nbsp;&nbsp;&nbsp;
+Problem: <a href=/Contest/ShowProblems?cid=<%= fstat.contest_belong %>&pid=<%= fstat.nid + 1001 %>><%= String.fromCharCode(fstat.nid + 65) %></a>&nbsp;&nbsp;&nbsp;&nbsp;
 Result:
 <% if(fstat.result == "Accepted") { %>
 <font color="red">Accepted</font>
@@ -38,10 +49,14 @@ Result:
 <font color="green"><%- fstat.result %></font>
 <% } %>
 <br>
-RunID:<%- fstat.run_ID %>&nbsp;&nbsp;&nbsp;
-Lanuage:<%- fcorrlang[fstat.lang] %>&nbsp;&nbsp;&nbsp;
-Author:<a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
+RunID: <%- fstat.run_ID %>&nbsp;&nbsp;&nbsp;
+Lanuage: <%- fcorrlang[fstat.lang] %>&nbsp;&nbsp;&nbsp;
+Author: <a href=/profile/<%- fstat.username %>><%- fstat.username %></a>
+</div>
+<div>
+<button id="copy-btn" class="btn btn-primary btn-xs">Click to Copy</button>
 </div>
 
-<pre class="sh_cpp"><%= fcode.code %></pre>
+<pre id = "src-code" class="sh_cpp"><%= fcode.code %></pre>
+<textarea id="copy-code-text" style="width:100%;display:none;"><%= fcode.code %></textarea>
 

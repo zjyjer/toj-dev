@@ -40,6 +40,14 @@ $().ready(function() {
 		}
 	});
 });
+$(function() {
+	var iscopy = <%- JSON.stringify(iscopy) %>;
+	if (iscopy == 1) {
+		var cont = <%- JSON.stringify(fcont) %>;
+		var probs = <%- JSON.stringify(fprobs) %>;
+		fill(cont, probs);
+	}
+});
 </script>
 <style type="text/css">
 #carrange label.error {
@@ -70,22 +78,24 @@ $().ready(function() {
 				<div class="form-group">
 					<label for="csttime" class="col-sm-3 control-label">Start Time:</label>
 					<div class='input-group date' id='datetimepicker1' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
-						<input type='text' name="csttime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<input type='text' name="csttime" id="csttime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
+					<label class="error" for="csttime" style="margin-left:140px;"></label>
 				</div>
 
 
 				<div class="form-group">
 					<label for="cedtime" class="col-sm-3 control-label">End Time:</label>
 					<div class='input-group date' id='datetimepicker2' data-date-format="YYYY/MM/DD hh:mm A" style="width: 255px;">
-						<input type='text' name="cedtime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
+						<input type='text' name="cedtime" id="cedtime" class="form-control" style="margin-left: 14px;  width: 220px;"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
+					<label class="error" for="cedtime" style="margin-left:140px;"></label>
 				</div>
 
 				<div class="form-group">
@@ -98,22 +108,51 @@ $().ready(function() {
 			<div class="form-horizontal">
 				<%for(var i=1001;i<=1011;++i){%>
 				<div class="form-group">
-					<label for="Prob1" class="col-sm-2 control-label"><%= i %>:</label>
+					<label for="Prob1" class="col-sm-2 control-label">Prob <%= String.fromCharCode(65+i-1001) %>:</label>
 					<div class="col-sm-3"><select name="oj<%- i %>" id="oj<%- i %>" class="form-control">
-							<option value="HDU">HDU</option>
-							<option value="POJ">POJ</option>
+							<% for(var j = 0;j < fojs.length; ++j) {%>
+							<option value="<%= fojs[j] %>"><%= fojs[j] %></option>
+							<% } %>
 					</select></div>
 					<div class="col-sm-3"><input class="form-control" type="text" name="pid<%- i %>" id="pid<%- i %>" placeholder="Prob ID" onchange="CheckPID('<%- i %>')"></div>
 					<span id="title<%- i %>"></span>
+
+					<% if((ftype === 0 && i<=1001) || (ftype===1 && i<=1009)) {%>
+					<div class="col-sm-1" style="color:red;padding-left:3px;padding-top:7px;">
+						<span>*</span>
+					</div>
+					<%}%>
+
+					<% if(ftype===0 && i==1011) { %>
+					<label style="padding-top:7px;" id="addmorelabel"><a href=# onclick="Addmore()">Add More</a></label>
+					<%}%>
 				</div>
 				<%}%>
+
+				<div id="moreprob" style="display:none">
+					<%for(var i=1012;i<=1015;++i){%>
+					<div class="form-group">
+						<label for="Prob1" class="col-sm-2 control-label" style="width:16.767%;">Prob <%= String.fromCharCode(65+i-1001) %>:</label>
+						<div class="col-sm-3"><select name="oj<%- i %>" id="oj<%- i %>" class="form-control">
+								<% for(var j = 0;j < fojs.length; ++j) {%>
+								<option value="<%= fojs[j] %>"><%= fojs[j] %></option>
+								<% } %>
+						</select></div>
+						<div class="col-sm-3"><input class="form-control" type="text" name="pid<%- i %>" id="pid<%- i %>" placeholder="Prob ID" onchange="CheckPID('<%- i %>')"></div>
+						<span id="title<%- i %>"></span>
+					</div>
+					<%}%>
+				</div>
+
 			</div>
 		</div>
 	</form>
 </div>
-<div ><center>
+<div >
+	<center>
 		<button type="button" id="submit" name="submit" class="btn btn-primary" onclick="Submit()">Submit</button>
-</center></div>
-
-
+	</center>
+</div>
+<div class="alert alert-danger" id="errmsg" style="width:30%;margin-top:25px;margin-left:120px;display:none">
+</div>
 

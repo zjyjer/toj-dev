@@ -5,8 +5,11 @@
 .main-content-inner {
 	/* background:url('/icon/brillant11.png'); */
 	/* background-color: #FFFFFF; */
+	float: left;
+	width: 450px;
 	background-color:  transparant;
-	margin: 0px 478px 0px 0px;
+	padding-top: 18px;
+	/* margin: 20px 478px 0px 0px; */
 }
 .profile-header {
 	border: 1px solid #DDD;
@@ -29,7 +32,7 @@
 	min-height: 22px;
 }
 .ellipsis {
-	margin-left: 20px;
+	margin-left: 0px;
 	word-wrap: normal;
 	white-space: nowrap;
 	overflow: hidden;
@@ -40,6 +43,21 @@
 	height: 100px;
 	border: 1px;
 	border-radius: 4px;
+	position: relative;
+}
+.avatar-edit {
+	display: none;
+	background: none repeat scroll 0% 0% #323232;
+	text-align: center;
+	position: absolute;
+	text-indent: 0px;
+	height: 25px;
+	left: 0px;
+	padding: 0px;
+	bottom: 0px;
+	width: 100%;
+	line-height: 25px;
+	border-radius: 0px 0px 2px 2px;
 }
 .clearfix:after {
 	clear: both;
@@ -107,10 +125,17 @@
 	padding-top: 8px;
 }
 .main-sidebar {
-	float: left;
+	float: right;
 	width: 510px;
-	margin: -210px 0px 0px 510px;
+	/* margin: -317px 0px 0px 510px; */
 }
 .item .num {
 	color: rgb(96, 136, 204);
+}
+
+#prob_solved {
+	border: 1px solid #DDD;
+	border-radius: 4px;
+	box-shadow: 0px 1px 0px #F2F4F5;
+	color: #666;
 }

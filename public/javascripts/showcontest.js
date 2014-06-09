@@ -14,5 +14,4 @@ function DisplayTime(){
 	setTimeout("DisplayTime()",1000);
 }
 
-
 //window.onload=DisplayTime;

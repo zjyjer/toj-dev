@@ -12,8 +12,8 @@
 		<ul class="pagination">
 			<li class="disabled"><a href="#">&laquo;</a></li>
 			<% for(var i = 0;i < fcounts; ++i) { %>
-				<% if(i == findex ) { %><li class="active"><a href="#"><%= i+1001 %></a></li><% } else {%>
-				<li><a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= i+1001 %></a></li>
+				<% if(i == findex ) { %><li class="active"><a href="#"><%= String.fromCharCode(i+65) %></a></li><% } else {%>
+				<li><a href="/Contest/ShowProblems?cid=<%= fcid %>&pid=<%= i+1001 %>"><%= String.fromCharCode(i+65) %></a></li>
 				<% } %>
 			<% } %>
 			<li class="disabled"><a href="#">&raquo;</a></li>
@@ -27,16 +27,27 @@
 			<div class="row">
 				<div class="col-md-3"><b>Time Limit:</b><%= fprob.time_limit %>MS</div>
 				<div class="col-md-4"><b>Memory Limit:</b><%= fprob.mem_limit %>K</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3"><b>Total Runs:</b><%= fprob.vtotal_submit+fprob.total_submit %></div>
-				<div class="col-md-4"><b>Accepted Runs:</b><%= fprob.vtotal_ac+fprob.total_ac %></div>
 				<div class="col-md-3"><b>64bit IO:</b><% if(fprob.oj=="HDU"){%>I64d%<%}else{%>lld%<%}%></div>
 			</div>
-			<h3> Description </h3>
-				<div class="content-wrapper well">
-					 <%- fprob.desc %>
+			 <div style="text-align:center;margin-top:15px;">
+			 	<div class="btn-group" style="text-align:center;">
+					<button type="button" class="btn btn-primary" onclick="window.location.href='/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Submit</button>
+					<button type="button" class="btn btn-default" onclick="window.location.href='/Contest/Status?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Status</button>
+					<button type="button" class="btn btn-default" onclick="window.location.href='/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Statistics</button>
+					<button type="button" class="btn btn-default" onclick="window.location.href='#'">Discuss</button>
 				 </div>
+			 </div>
+			<% if(fprob.desc) { %>
+				<h3> Description </h3>
+				<div class="content-wrapper well">
+					<% if (fprob.oj == 'UVALive') { %>
+					<% var pos = fprob.desc.indexOf("</p><head><META HTTP"); if (pos > -1) { %>
+						 <%- fprob.desc.substring(0, pos) %>
+					<% } else { %>
+						 <%- fprob.desc %>
+					<% } %><% } else {%><%- fprob.desc %><% } %>
+				 </div>
+			<% } %>
 			<% if(fprob.input) { %>
 			 <h3> Input </h3>
 			 <div class="content-wrapper well">
@@ -61,9 +72,13 @@
 			 <% } %>
 		 </div>
 	 </div>
-	 <center>
-		 <a href="/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>"><button type="button" class="btn btn-default">Submit</button></a>
-		 <a href="/Contest/Status?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Status</button></a>
-		 <a href="/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex %>"><button type="button" class="btn btn-default">Statistics</button></a>
-	 </center>
+	 <div style="text-align:center;">
+	 	<div class="btn-group" style="text-align:center;">
+			<button type="button" class="btn btn-primary" onclick="window.location.href='/Contest/ProbSubmit?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Submit</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='/Contest/Status?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Status</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='/Contest/Statistics?cid=<%= fcid %>&pid=<%= findex+1001 %>'">Statistics</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='#'">Discuss</button>
+		 </div>
+	 </div>
+	 <br/>
  </div>

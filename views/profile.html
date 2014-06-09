@@ -13,7 +13,7 @@
 				<!-- username, nickname -->
 				<div class="top">
 					<div class="title-section ellipsis">
-							<span  title="username"><a href=#><%= fuser.username %></a></span>
+						<span  title="username"><a href=#><%= fuser.username %></a></span>
 					</div>
 				</div>
 				<!-- username end -->
@@ -22,7 +22,7 @@
 
 					<!-- avatar -->
 					<div class="profile-header-avatar-container self">
-						<img alt="avatar" src="/icon/avatar2.jpg" class="avatar">
+						<img alt="avatar" src="/avatar/<%= fuser.username %>.png" class="avatar">
 					</div>
 					<!-- avatar end -->
 
@@ -33,16 +33,10 @@
 								<div class="item editable-group" data-name="location">
 									<span class="glyphicon glyphicon-map-marker"></span>
 									<span class="info-wrap">
-											<% if(fuser.country) {%>
-											<span class="location item" title="country"><%- fuser.country %></span>
-											<% } else {%>
-											<span class="location item" title="country">Earth</span>
-											<% } %>
-										<span class="glyphicon glyphicon-user"></span>
-										<% if(fuser.gender) {%>
-										<span class="gender item" title="gender"><%= fuser.gender %></span>
+										<% if(fuser.country) {%>
+										<span class="location item" title="country"><%- fuser.country %></span>
 										<% } else {%>
-										<span class="gender item" title="gender">Male or Female?</span>
+										<span class="location item" title="country">Earth</span>
 										<% } %>
 									</span>
 								</div>
@@ -50,16 +44,24 @@
 								<div class="item editable-group empty" data-name="employment">
 									<span class="info-wrap">
 										<span class="glyphicon glyphicon-tags"></span>
-										<% if(fuser.univer) {%>
-										<span class="education item" title="university">Tianjin University</span>
+										<% if(fuser.school) {%>
+										<span class="education item" title="university"><%- fuser.school %></span>
 										<% } %>
 									</span>
 								</div>
 								<div class="item editable-group empty" data-name="employment">
 									<span class="info-wrap">
 										<span class="glyphicon glyphicon-home"></span>
-										<% if(fuser.univer) {%>
+										<% if(fuser.website) {%>
 										<span class="website item" title="website"><%= fuser.website %></span>
+										<% } %>
+									</span>
+								</div>
+								<div class="item editable-group empty" data-name="employment">
+									<span class="info-wrap">
+										<span class="glyphicon glyphicon-collapse-up"></span>
+										<% if(fuser.email) {%>
+										<span class="email item" title="email"><%= fuser.email %></span>
 										<% } %>
 									</span>
 								</div>
@@ -98,6 +100,12 @@
 				</a>
 			</div>
 
+		</div>
+		<div style="margin-top:20px;">
+			<h3 class="text-center" style="color:#428BCA">Problem Solved</h3>
+			<div id="prob_solved" style="min-height:100px;">
+				<%fpids.forEach(function(p, i) {%><a href=/ShowProblems?pid=<%=p.pid %>><%= p.pid %> </a><%});%>
+			</div>
 		</div>
 	</div>
 	<div class="main-sidebar" id="right-bar">

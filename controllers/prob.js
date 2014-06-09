@@ -9,6 +9,19 @@ var User = require('../proxy').User;
 var Code = require('../proxy').Code;
 var Status = require('../proxy').Status;
 
+
+/**
+ * PickOne, 随机一道题目，暂时用random解决吧= =
+ * Math.random() 
+ **/
+exports.getRandomOne = function(req, res, next) {
+	Problem.getCount({}, function(err, counts) {
+		var rand_pid = Math.floor(counts * Math.random()) + 1000;
+		return res.redirect('/ShowProblems?pid=' + rand_pid);
+	});
+};
+
+
 /**
  * 查看题目列表，可选择oj，页数
  * Volume page
@@ -146,7 +159,7 @@ exports.search = function(req, res, next) {
 		'total_submit': 1,
 		'total_ac': 1,
 	};
-	var options = { sort: {pid: 1} };
+	var options = { limit: 500, sort: {pid: 1} };
 	var events = ['probs', 'submitted'];
 	var ep = EventProxy.create(events, function(probs, submitted) {
 		res.render('SearchProblems', {
@@ -296,24 +309,26 @@ exports.post_submit = function(req, res, next) {
 				result:		'Waiting'
 				};
 
-				Status.newAndSave(_status, proxy.done('status_save'));
-
-
-				// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
-				// later...
-				var client = new net.Socket();
-				client.connect(config.judge_port, config.judge_host, function() {
-					client.write(data);
-				});
-				client.on('error',function(error){
-					proxy.unbind();
-					req.flash('error', 'The judge is temporary unavailable.Sorry.');
-					return res.redirect('/Status?&page=1');
-				});
-				client.on('close', function() {
-					proxy.emit('submit');
-				});
-
+				//Status.newAndSave(_status, proxy.done('status_save'));
+				Status.newAndSave(_status, proxy.done(function(stat, na) {
+					proxy.emit('status_save');
+					// 这里应该添加一个error处理函数，如果judge无法发送socket怎么办
+					// DONE...
+					var client = new net.Socket();
+					client.connect(config.judge_port, config.judge_host, function() {
+						client.write(data);
+					});
+					client.on('error',function(error){
+						proxy.unbind();
+						req.flash('error', 'The judge is temporary unavailable.Sorry.');
+						Status.update({ run_ID: _runid }, { result: 'Judge Error', time_used: 0, mem_used: 0 }, function(err, na, raw) {
+							return res.redirect('/Status?&page=1');
+						});
+					});
+					client.on('close', function() {
+						proxy.emit('submit');
+					});
+				}));
 
 			}));
 		}));

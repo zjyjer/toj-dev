@@ -1,5 +1,8 @@
 var crypto = require('crypto');
 var fs = require('fs');
+var gm = require('gm');
+var imageMagick = gm.subClass({ imageMagick : true });
+var identicon = require('identicon');
 var EventProxy = require('eventproxy');
 
 var User = require('../proxy').User;
@@ -72,7 +75,12 @@ exports.post_register = function(req, res, next) {
 		User.newAndSave(req.body['username'], password, proxy.done(function(user, na) {
 			req.session.user = user;
 			gen_session(user, res);
-			proxy.emit('add');
+			//give the user a avatar
+			identicon.generate(user.username, 150, function(err, buffer) {
+				if (err) throw err;
+				fs.writeFileSync(__dirname+'/../public/avatar/' + user.username + '.png', buffer);
+				proxy.emit('add');
+			});
 		}));
 	}));
 };
@@ -220,7 +228,13 @@ exports.get_profile = function(req, res, next) {
 	var query = { speed: 51, username: req.params.user};
 	var fields = { pid: 1 };
 
-	Status.getMulti(query, fields, {}, ep.done('pids'));
+	Status.getMulti(query, fields, { sort: { pid: 1 }}, ep.done('pids'));
+};
+
+exports.edit_profile = function(req, res, next) {
+	return res.render('edit_profile', {
+		title: 'Edit my profile',
+	});
 };
 
 exports.save_profile = function(req, res, next) {
@@ -232,16 +246,40 @@ exports.save_profile = function(req, res, next) {
 	};
 
 
-	proxy.assign('save', render);
+	proxy.assign('avatar', 'save', render);
 
 	proxy.fail(next);
+
+	if (req.files) {
+		var tmp_path = req.files.avatar.path;
+		var target_path = './public/avatar/' + _currentUser.username + '.png';
+		fs.rename(tmp_path, target_path, function(err) {
+			if (err) {
+				proxy.emit('avatar');
+				throw err;
+			} else {
+				imageMagick(target_path)
+				.resize(150, 150, '!')
+				.autoOrient()
+				.write(target_path, function (err) {
+				  	if (!err) {
+						throw err;
+					}
+				});
+				proxy.emit('avatar');
+			}
+		});
+	} else proxy.emit('avatar');
 
 	User.getByName({ username: _currentUser.username }, proxy.done(function(user) {
 		if (req.body['nickname']) user.nickname = req.body['nickname'];
 		if (req.body['email']) user.email = req.body['email'];
-		if (req.body['univer']) user.univer = req.body['univer'];
 		if (req.body['country']) user.country = req.body['country'];
-		if (req.body['decl']) user.decl = req.body['decl'];
+		if (req.body['univer']) user.school = req.body['univer'];
+		if (req.body['website']) user.website = req.body['website'];
+		if (req.body['about']) user.decl = req.body['about'];
+
+
 		user.save(function(err) {
 			if (err) {
 				console.log("This is error");
@@ -252,6 +290,11 @@ exports.save_profile = function(req, res, next) {
 	}));
 };
 
+exports.upload =  function(req, res, next) {
+	console.log(req.body);
+	console.log(req.files);
+};
+
 exports.get_rank = function(req, res, next) {
 	var _page = req.query.page ? parseInt(req.query.page) : 1;
 
@@ -259,9 +302,9 @@ exports.get_rank = function(req, res, next) {
 	var ep = EventProxy.create(events, function(counts, users) {
 		return res.render('Ranklist', {
 			title: 'Ranklist',
-		       	fusers: users,
-		       	fpage: _page,
-		       	ftotal_page: Math.ceil( counts / config.users_per_page),
+		       fusers: users,
+		       fpage: _page,
+		       ftotal_page: Math.ceil( counts / config.users_per_page),
 		});
 	});
 
@@ -278,7 +321,7 @@ exports.get_rank = function(req, res, next) {
 
 exports.getPunchCard = function(req, res, next) {
 	var _username = req.body['username'];
-	
+
 	var events = ['stats'];
 	var ep = EventProxy.create(events, function(stats) {
 		var json = Util.getPunchCard(stats);
@@ -286,7 +329,7 @@ exports.getPunchCard = function(req, res, next) {
 	});
 
 	ep.fail(next);
-	
+
 	var now = new Date();
 	now.setDate(now.getDate()-6);
 	var query = { username: _username, result: 'Accepted', submit_time: { $gt: now } };

@@ -15,14 +15,21 @@ var prob = require('./controllers/prob');
 var code = require('./controllers/code');
 var status = require('./controllers/status');
 var contest = require('./controllers/contest');
+var topic = require('./controllers/topic');
+var reply = require('./controllers/reply');
 
 
 module.exports = function (app) {
+
+	app.get('/admin/Problem', prob.get_update);
+	app.post('/admin/Problem', prob.post_update);
 
 	//主页
 	app.get('/', site.index);
 
 	app.get('/FAQ', site.faq);
+
+	app.get('/PickOne', prob.getRandomOne);
 
 	//注册相关
 	app.get('/reg', auth.logoutRequired, user.get_register);
@@ -46,6 +53,7 @@ module.exports = function (app) {
 
 	//查看用户
 	app.get('/profile/:user', user.get_profile);
+	app.get('/edit_profile/edit', auth.loginRequired, user.edit_profile);
 	app.post('/SaveProfile', user.save_profile);
 	app.post('/user/getPunchCard', user.getPunchCard);
 
@@ -67,6 +75,8 @@ module.exports = function (app) {
 	app.get('/Statistics', status.getStatistics);
 	// status 刷新
 	app.post('/refresh/Status', status.getUndone);
+	// rejudge
+	app.post('/rejudge/Status', status.rejudge);
 
 
 	app.get('/ShowCode', code.getByRunid);
@@ -79,6 +89,11 @@ module.exports = function (app) {
 	app.get('/Contest/Contests', contest.getByPage);
 	app.get('/Contest/ArrangeContest', auth.loginRequired, contest.get_arrange);
 	app.post('/Contest/ArrangeContest', auth.loginRequired, contest.post_arrange);
+
+	app.get('/Contest/Settings', auth.loginRequired, contest.get_setting);
+	app.post('/Contest/Settings', auth.loginRequired, contest.post_setting);
+	app.post('/Contest/del', auth.loginRequired, contest.post_del);
+	app.get('/Contest/Clone', auth.loginRequired, contest.clone);
 
 	app.post('/Contest/CheckPid', contest.check_pid);
 
@@ -105,4 +120,16 @@ module.exports = function (app) {
 	app.get('/Contest/Standing', auth.accessRequired, contest.get_standing);
 	app.post('/Contest/post_Standing', contest.post_standing);
 
+	app.post('/ContestSearch', contest.search);
+
+
+	//Discuss
+	app.get('/Discuss', topic.index);
+	app.get('/Discuss/topic/:tid', topic.get_topic);
+	app.get('/Discuss/topic/:tid/top/:is_top?', topic.top);
+	app.get('/Discuss/create', auth.loginRequired, topic.get_create);
+	app.post('/Discuss/create', auth.loginRequired, topic.post_create);
+	app.post('/Discuss/delete/:tid', auth.loginRequired, topic.delete);
+	app.post('/Discuss/reply/:tid', auth.loginRequired, reply.add);
+	app.post('/Discuss/reply2/:rid', auth.loginRequired, reply.add2);
 };

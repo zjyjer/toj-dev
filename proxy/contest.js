@@ -51,3 +51,37 @@ exports.getMulti = function(query, fields, opt, callback) {
 	});
 };
 
+exports.search = function(info, query, fields, opt, callback) {
+	var proxy = new EventProxy();
+	events = ['by_author', 'by_title'];
+	var conts = [];
+
+	proxy.assign(events, function(by_author, by_title) {
+		return callback(null, conts);
+	}).fail(callback);
+
+	Contest.find({ author: info }, fields, opt, function(err, docs) {
+		if (err) {
+			proxy.emit('by_author');
+			//proxy.emit('by_info');
+			//return ;
+		} else {
+			for(var i = 0;i < docs.length; ++i) {
+				conts.push(docs[i]);
+			}
+			proxy.emit('by_author');
+		}
+	});
+
+	var data = info;
+	Contest.find({ $and: [ query, { title: new RegExp(data, "i") }] }, fields, opt, function(err, docs) {
+		if (err) {
+			proxy.emit('by_title');
+			return ;
+		}
+		for(var i = 0;i < docs.length; ++i) {
+			conts.push(docs[i]);
+		}
+		proxy.emit('by_title');
+	});
+}

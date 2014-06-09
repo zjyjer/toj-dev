@@ -3,6 +3,7 @@ var config = require('../config').config;
 
 var Code = require('../proxy').Code;
 var Status = require('../proxy').Status;
+var Contest_Problem = require('../proxy').Contest_Problem;
 
 /**
  * 查看Code
@@ -41,11 +42,18 @@ exports.getByRunid = function(req, res, next) {
 				fcorrlang: config.corrlang,
 			});
 		} else {
-			res.render('Contest/Contest_ShowCode', {
-				title:'View Code',
-				fstat: status,
-				fcode: code,
-				fcorrlang: config.corrlang,
+			Contest_Problem.getOne({cid: _cid, pid: status.pid}, function(err, cp) {
+				if (err) {
+					ep.unbind();
+					return res.render('404');
+				}
+				status.nid = cp.nid;
+				res.render('Contest/Contest_ShowCode', {
+					title:'View Code',
+					fstat: status,
+					fcode: code,
+					fcorrlang: config.corrlang,
+				});
 			});
 		}
 	});

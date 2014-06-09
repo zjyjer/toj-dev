@@ -7,150 +7,157 @@
 	<li class="active"><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li><a href="/Contest/Standing?cid=<%= fcont.cid %>">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<li><a href="#">Settings</a></li>
+	<% if (!user || (user.username != fcont.author || (new Date() > fcont.start_time))) {%>
+	<li class="disabled"><a href="#">Settings</a></li>
+	<% }else{%>
+	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>
+	<%}%>
 </ul>
 
 <div id="ccontent" style="float:right; width:80%;">
-<div class="form-horizontal" style="padding-top: 30px;" role="form">
-	<div class="form-group" style="margin-left:-40px;">
-		<label class="col-sm-1 control-label">PID:</label>
-		<div class="col-xs-1">
-			<input id = "pid" type="text" class="form-control" <%if(fselected.pid){%>value="<%-fselected.pid%>"<%}else{%>placeholder="PID"<%}%>>
+	<div class="form-horizontal" style="margin-right:-22px;padding-top: 30px;" role="form">
+		<div class="form-group">
+			<label class="col-sm-1 control-label">PID:</label>
+			<div class="col-xs-1">
+				<input id = "pid" type="text" class="form-control" <%if(fselected.pid!=1000){%>value="<%-fselected.pid%>"<%}else{%>placeholder="PID"<%}%>>
+			</div>
+			<label class="col-sm-1 control-label">User:</label>
+			<div class="col-xs-3">
+				<input id = "user" type="text" class="form-control" <%if(fselected.username){%>value="<%-fselected.username%>"<%}else{%>placeholder="username"<%}%>>
+			</div>
+			<label class="col-sm-1 control-label">Result:</label>
+			<div class="col-xs-2">
+				<select id = "result" class="form-control">
+					<option value="" <%if(!fselected.result){%>selected<%}%>>All</option>
+					<option value="0"<%if(fselected.result=="Accepted"){%>selected<%}%>>Accepted</option>
+					<option value="1"<%if(fselected.result=="Wrong Answer"){%>selected<%}%>>Wrong Answer</option>
+					<option value="2"<%if(fselected.result=="Presentation Error"){%>selected<%}%>>Presentation Error</option>
+					<option value="3"<%if(fselected.result=="Compilation Error"){%>selected<%}%>>Compilation Error</option>
+					<option value="4"<%if(fselected.result=="Runtime Error"){%>selected<%}%>>Runtime Error</option>
+					<option value="5"<%if(fselected.result=="TimeLimit Exceeded"){%>selected<%}%>>TimeLimit Exceeded</option>
+					<option value="6"<%if(fselected.result=="MemoryLimit Exceeded"){%>selected<%}%>>MemoryLimit Exceeded</option>
+					<option value="7"<%if(fselected.result=="OutputLimit Exceeded"){%>selected<%}%>>OutputLimit Exceeded</option>
+					<option value="8"<%if(fselected.result=="Judge Error"){%>selected<%}%>>Judge Error</option>
+				</select>
+			</div>
+			<label class="col-sm-1 control-label">Lang:</label>
+			<div class="col-xs-2">
+				<select id = "lang" class="form-control">
+					<option value=""<%if(!fselected.lang){%>selected<%}%>>All</option>
+					<option value="12"<%if(fselected.lang=='12'){%>selected<%}%>>C++</option>
+					<option value="1"<%if(fselected.lang=='1'){%>selected<%}%>>G++</option>
+					<option value="3"<%if(fselected.lang=='3'){%>selected<%}%>>Java</option>
+					<option value="2"<%if(fselected.lang=='2'){%>selected<%}%>>GCC</option>
+					<option value="13"<%if(fselected.lang=='13'){%>selected<%}%>>C</option>
+					<option value="4"<%if(fselected.lang=='4'){%>selected<%}%>>Pascal</option>
+					<option value="15"<%if(fselected.lang=='15'){%>selected<%}%>>Perl</option>
+					<option value="16"<%if(fselected.lang=='16'){%>selected<%}%>>Python</option>
+				</select>
+			</div>
+			<button type="button" class="btn btn-primary" onclick="Search(<%= fcont.cid %>)">Search</button>
+
 		</div>
-		<label class="col-sm-1 control-label">User:</label>
-		<div class="col-xs-2">
-			<input id = "user" type="text" class="form-control" <%if(fselected.username){%>value="<%-fselected.username%>"<%}else{%>placeholder="username"<%}%>>
+		<div class="form-group">
+			<table id="Status" class="table table-condensed table-bordered table-striped table-centered">
+				<thead>
+					<tr>
+						<th class="header-runid">
+							<div id="searchTitleBtn" class="" order='asc'><a href="#">Run ID</a></div>
+						</th>
+						<th class="header-sub_time">
+							<div id="searchTitleBtn" class="" order='asc'><a href="#">Submit Time</a></div>
+						</th>
+						<th class="header-result">
+							<div id="titleBtn" class="" order='asc'><a href="#">Result</a></div>
+						</th>
+						<th class="header-pid">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">PID</a></div>
+						</th>
+						<th class="header-time">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">Time</a></div>
+						</th>
+						<th class="header-memory">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">Memory</a></div>
+						</th>
+						<th class="header-codelen">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">Code Len</a></div>
+						</th>
+						<th class="header-lang">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">Language</a></div>
+						</th>
+						<th class="header-user">
+							<div id="searchAcrateBtn" class="" order='asc'><a href="#">User</a></div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% fstats.forEach(function(stat, index) { %>
+					<tr>
+						<td><%- stat.run_ID %></td>
+
+						<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
+						<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
+
+						<td>
+							<% if(stat.result == "Accepted") {%>
+							<font color="red"><%- stat.result %></font>
+							<% } else if(stat.result == "Compilation Error") {%>
+							<font color="#6633FF"><a href="/Contest/ShowCEError?cid=<%- fcont.cid %>&runid=<%- stat.run_ID %>"><%- stat.result %></a></font>
+							<% } else if(stat.result == "Presentation Error") {%>
+							<font color="orange"><%- stat.result %></font>
+							<% } else { %>
+							<font color="green"><%- stat.result %></font>
+							<% } %>
+							<% if (stat.result == "Waiting" || stat.result == "Judging") {%>
+							<img src="/icon/status_loader2.gif">
+							<% } %>
+							<% if(stat.result == "Judge Error") { %>
+							<button id = "<%= stat.run_ID %>" class="btn btn-default btn-sm rejudge" style="padding:0px 0px;"><img style="height:12px;width:12px;border-radius:4px;" src = "/icon/status_rejudge.png">rejudge</button>
+							<% } %>
+						</td>
+
+
+						<td><a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= fmap[stat.pid]+1001 %>"><%= String.fromCharCode(fmap[stat.pid] + 65) %></a></td>
+
+
+						<td><%- stat.time_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>MS<% } %>
+						</td>
+
+						<td><%- stat.mem_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>K<% } %>
+						</td>
+
+						<td>
+							<% if(floginUser == stat.username) { %>
+							<a href="/Contest/ShowCode?cid=<%- stat.contest_belong %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a>
+							<% } else {%>
+							<%- stat.code_len %>B
+							<% } %>
+						</td>
+
+						<td><%- fcorrlang[stat.lang]%></td>
+						<td><a href="/profile/<%- stat.username %>"><%- stat.username %></a></td>
+					</tr>
+					<% }) %>
+				</tbody>
+			</table>
 		</div>
-		<label class="col-sm-1 control-label">Result:</label>
-		<div class="col-xs-2">
-			<select id = "result" class="form-control">
-				<option value="" <%if(!fselected.result){%>selected<%}%>>All</option>
-				<option value="0"<%if(fselected.result=="Accepted"){%>selected<%}%>>Accepted</option>
-				<option value="1"<%if(fselected.result=="Wrong Answer"){%>selected<%}%>>Wrong Answer</option>
-				<option value="2"<%if(fselected.result=="Presentation Error"){%>selected<%}%>>Presentation Error</option>
-				<option value="3"<%if(fselected.result=="Compilation Error"){%>selected<%}%>>Compilation Error</option>
-				<option value="4"<%if(fselected.result=="Runtime Error"){%>selected<%}%>>Runtime Error</option>
-				<option value="5"<%if(fselected.result=="TimeLimit Exceeded"){%>selected<%}%>>TimeLimit Exceeded</option>
-				<option value="6"<%if(fselected.result=="MemoryLimit Exceeded"){%>selected<%}%>>MemoryLimit Exceeded</option>
-				<option value="7"<%if(fselected.result=="OutputLimit Exceeded"){%>selected<%}%>>OutputLimit Exceeded</option>
-				<option value="8"<%if(fselected.result=="Judge Error"){%>selected<%}%>>Judge Error</option>
-			</select>
-		</div>
-		<label class="col-sm-1 control-label">Lang:</label>
-		<div class="col-xs-2">
-			<select id = "lang" class="form-control">
-				<option value=""<%if(!fselected.lang){%>selected<%}%>>All</option>
-				<option value="12"<%if(fselected.lang=='12'){%>selected<%}%>>C++</option>
-				<option value="1"<%if(fselected.lang=='1'){%>selected<%}%>>G++</option>
-				<option value="3"<%if(fselected.lang=='3'){%>selected<%}%>>Java</option>
-				<option value="2"<%if(fselected.lang=='2'){%>selected<%}%>>GCC</option>
-				<option value="13"<%if(fselected.lang=='13'){%>selected<%}%>>C</option>
-				<option value="4"<%if(fselected.lang=='4'){%>selected<%}%>>Pascal</option>
-				<option value="15"<%if(fselected.lang=='15'){%>selected<%}%>>Perl</option>
-				<option value="16"<%if(fselected.lang=='16'){%>selected<%}%>>Python</option>
-			</select>
-		</div>
-		<button type="button" class="btn btn-primary" onclick="Search(<%= fcont.cid %>)">Search</button>
-
-	</div>
-	<div class="form-group">
-		<table id="Status" class="table table-condensed table-bordered table-striped table-centered">
-			<thead>
-				<tr>
-					<th class="header-runid">
-						<div id="searchTitleBtn" class="" order='asc'><a href="#">Run ID</a></div>
-					</th>
-					<th class="header-sub_time">
-						<div id="searchTitleBtn" class="" order='asc'><a href="#">Submit Time</a></div>
-					</th>
-					<th class="header-result">
-						<div id="titleBtn" class="" order='asc'><a href="#">Result</a></div>
-					</th>
-					<th class="header-pid">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">PID</a></div>
-					</th>
-					<th class="header-time">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Time</a></div>
-					</th>
-					<th class="header-memory">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Memory</a></div>
-					</th>
-					<th class="header-codelen">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Code Len</a></div>
-					</th>
-					<th class="header-lang">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Language</a></div>
-					</th>
-					<th class="header-user">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">User</a></div>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% fstats.forEach(function(stat, index) { %>
-				<tr>
-					<td><%- stat.run_ID %></td>
-					
-					<%var tm = stat.submit_time; tm.setHours(tm.getHours()+8); %>
-					<td><%- tm.toISOString().replace(/T/,' ').replace(/\..+/,'') %></td>
-
-					<td>
-					<% if(stat.result == "Accepted") {%>
-					<font color="red"><%- stat.result %></font>
-					<% } else if(stat.result == "Compilation Error") {%>
-					<font color="#6633FF"><a href="/Contest/ShowCEError?cid=<%- fcont.cid %>&runid=<%- stat.run_ID %>"><%- stat.result %></a></font>
-					<% } else if(stat.result == "Presentation Error") {%>
-					<font color="orange"><%- stat.result %></font>
-					<% } else { %>
-					<font color="green"><%- stat.result %></font>
-					<% } %>
-					<% if (stat.result == "Waiting" || stat.result == "Judging") {%>
-					<img src="/icon/status_loader.gif">
-					<% } %>
-					</td>
-
-
-					<td><a href="/Contest/ShowProblems?cid=<%= fcont.cid %>&pid=<%= fmap[stat.pid]+1001 %>"><%= fmap[stat.pid] + 1001 %></a></td>
-
-
-					<td><%- stat.time_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>MS<% } %>
-					</td>
-
-					<td><%- stat.mem_used %><% if (stat.result != "Waiting" && stat.result != "Judging") {%>K<% } %>
-					</td>
-
-					<td>
-					<% if(floginUser == stat.username) { %>
-					<a href="/Contest/ShowCode?cid=<%- stat.contest_belong %>&runid=<%- stat.run_ID %>"><%- stat.code_len %>B</a>
+		<div class="form-group">
+			<center>
+				<ul class="pager"> 
+					<li><a href=<%= furl %>&page=1>First Page</a></li>
+					<% if(fpageID == 1) { %>
+					<li><a href=#>Prev Page</a></li>
 					<% } else {%>
-					<%- stat.code_len %>B
+					<li><a href=<%= furl%>&page=<%= fpageID-1%>>Prev Page</a></li>
 					<% } %>
-					</td>
-
-					<td><%- fcorrlang[stat.lang]%></td>
-					<td><a href="/profile/<%- stat.username %>"><%- stat.username %></a></td>
-				</tr>
-				<% }) %>
-			</tbody>
-		</table>
+					<% if(fpageID == ftotal_page) { %>
+					<li><a href=#>Next Page</a></li>
+					<% } else {%>
+					<li><a href=<%= furl%>&page=<%= fpageID+1%>>Next Page</a></li>
+					<% } %>
+					<li><a href=<%= furl %>&page=<%= ftotal_page %>>Last Page</a></li>
+				</ul>
+			</center>
+		</div>
 	</div>
-	<div class="form-group">
-		<center>
-		<ul class="pager"> 
-			<li><a href=<%= furl %>&page=1>First Page</a></li>
-			<% if(fpageID == 1) { %>
-			<li><a href=#>Prev Page</a></li>
-			<% } else {%>
-			<li><a href=<%= furl%>&page=<%= fpageID-1%>>Prev Page</a></li>
-			<% } %>
-			<% if(fpageID == ftotal_page) { %>
-			<li><a href=#>Next Page</a></li>
-			<% } else {%>
-			<li><a href=<%= furl%>&page=<%= fpageID+1%>>Next Page</a></li>
-			<% } %>
-			<li><a href=<%= furl %>&page=<%= ftotal_page %>>Last Page</a></li>
-		</ul>
-		</center>
-	</div>
-</div>
 </div>

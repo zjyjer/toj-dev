@@ -1,0 +1,32 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/wmd.css" />
+<script type="text/javascript" src="/javascripts/wmd/showdown.js"></script>
+<script type="text/javascript" src="/javascripts/wmd/Markdown.Converter.js"></script>
+<script type="text/javascript" src="/javascripts/wmd/Markdown.Sanitizer.js"></script>
+
+
+<link href="/stylesheets/Discuss/index.css" rel="stylesheet">
+<script type="text/javascript" src="/javascripts/Topic/create.js"></script>
+
+<div id="main">
+	<div id="sidebar">
+		<%- partial('Discuss/notice')%>
+	</div>
+	<div id="content">
+		<div id="err_msg_div" class="alert alert-danger alert-dismissable" style="display:none;">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<span id="err_msg"></span>
+		</div>
+		<div class="panel" style="height:453px;">
+			<div class="header">
+				<span>Post A Question</span>
+			</div>
+			<div class="inner no-padding">
+				<%- partial('Discuss/edit_header') %>
+				<%- partial('Discuss/edit_body') %>
+			</div>
+		</div>
+		<div id="submit" style="margin-bottom:20px;">
+			<button class="btn btn-primary" onclick="Create()">Submit</button>
+		</div>
+	</div>
+</div>

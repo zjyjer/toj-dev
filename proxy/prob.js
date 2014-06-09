@@ -48,16 +48,17 @@ exports.search = function(info, query, fields, opt, callback) {
 	Problem.find({ $or: [ {pid: parseInt(info)}, {vid: info} ] }, fields, opt, function(err, docs) {
 		if (err) {
 			proxy.emit('by_id');
-			proxy.emit('by_info');
-			return ;
+			//proxy.emit('by_info');
+			//return ;
+		} else {
+			for(var i = 0;i < docs.length; ++i) {
+				probs.push(docs[i]);
+			}
+			proxy.emit('by_id');
 		}
-		for(var i = 0;i < docs.length; ++i) {
-			probs.push(docs[i]);
-		}
-		proxy.emit('by_id');
 	});
 
-	var data = '^' + info + '$';
+	var data = info;
 	Problem.find({ $and: [ query, { $or: [ {title: new RegExp(data, "i")}, {source: new RegExp(data, "i")} ] } ] }, fields, opt, function(err, docs) {
 		if (err) {
 			proxy.emit('by_info');

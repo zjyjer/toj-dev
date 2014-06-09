@@ -7,33 +7,44 @@
 	<li><a href="/Contest/Status?cid=<%= fcont.cid %>">Status</a></li>
 	<li class="active"><a href="#">Standing</a></li>
 	<li><a href="#">Clarification</a></li>
-	<li><a href="#">Settings</a></li>
+	<% if (!user || (user.username != fcont.author || (new Date() > fcont.start_time))) {%>
+	<li class="disabled"><a href="#">Settings</a></li>
+	<% }else{%>
+	<li><a href="/Contest/Settings?cid=<%= fcont.cid %>">Settings</a></li>
+	<%}%>
 </ul>
 
 <div id="ccontent" style="float:right; width:80%;">
 	<!-- Title -->
 	<h2 class="text-center" style="color:#428BCA; margin-top: 20px;"><%- fcont.title %></h2>
 	<!-- Standing -->
-	<div id="contest_standing" style="margin-right: -22px;margin-left:-25px;">
+	<div id="contest_standing" style="margin-right: -22px;padding-bottom:30px;">
 		<table id="standing" class="table table-bordered table-hover table-condensed table-striped table-centered">
 			<thead id="ranking_head">
 				<tr>
 					<th class="header-rank anim:position">
-						<div id="searchTitleBtn" class="" order='asc'><a href="#">#</a></div>
+						<div id="rank" class="" order='asc'><a href="#">#</a></div>
 					</th>
 					<th class="header-username anim:id">
-						<div id="searchTitleBtn" class="" order='asc'><a href="#">User</a></div>
+						<div id="username" class="" order='asc'><a href="#">User</a></div>
 					</th>
 					<th class="header-AC anim:update">
-						<div id="titleBtn" class="" order='asc'><a href="#">AC</a></div>
+						<div id="acnum"><a href="#">AC</a></div>
 					</th>
 					<% for(var i = 0;i < fcont_probs.length; ++i) {%>
 					<th class="header-<%= 1001+i %> anim:update" style="width:<%= 70.0/fcont_probs.length %>%;">
-						<div id="titleBtn" class="" order='asc'><a href=/Contest/ShowProblems?cid=<%- fcont.cid %>&pid=<%= i+1001 %>><%= i+1001 %></a></div>
+						<div id="prob<%=1001+i%>" class="" order='asc'><a href=/Contest/ShowProblems?cid=<%- fcont.cid %>&pid=<%= i+1001 %>><%= String.fromCharCode(i+65) %></a></div>
+						<% var p = fcont_probs[i]; var total = p.total_ac+p.total_wa+p.total_ce+p.total_re+p.total_pe+p.total_tle+p.total_mle+p.total_ole+p.total_other;  %>
+						<div><%= fcont_probs[i].total_ac%>/<%= fcont_probs[i].total_submit %></div>
+						<% if(fcont_probs[i].total_submit === 0) {%>
+						<div>0&#37;</div>
+						<% } else { %>
+						<div><%= Math.round(p.total_ac/total*10000)/100 %>&#37;</div>
+						<% } %>
 					</th>
 					<% } %>
 					<th class="header-Penalty anim:update">
-						<div id="searchAcrateBtn" class="" order='asc'><a href="#">Penalty</a></div>
+						<div id="penalty" class="" order='asc'><a href="#">Penalty</a></div>
 					</th>
 				</tr>
 			</thead>
@@ -41,11 +52,12 @@
 		</table>
 	</div>
 </div>
-<div id="loading" style="margin-top:30px;margin-left:50%;left:-width/2;">
+<div id="loading" style="margin-top:30px;margin-left:55%;left:-width/2;">
 	<img src="/icon/ajax-loader.gif">
 </div>
 <script>
-	$(document).ready(function() {
+	//$(document).ready(function() {
+	$(function() {
 		var cid = <%- JSON.stringify(fcont.cid) %>;
 		$.ajax ({
 			url: '/Contest/post_Standing',
@@ -66,22 +78,22 @@
 							if (sa[i].probs[j] > 0) {
 								if (fb[j] == sa[i].user) {
 									html += '<td class="prob-fb">';
-										} else {
+								} else {
 										html += '<td class="prob-ac">';
-										}
-										html += sa[i].probs[j] + '/' + solve[sa[i].user][j] + '</td>';
-									} else if (sa[i].probs[j] < 0) {
-									html += '<td class="prob-wa">' + sa[i].probs[j] + '</td>';
-									} else {
-									html += '<td></td>';
 								}
+								html += sa[i].probs[j] + '/' + solve[sa[i].user][j] + '</td>';
+							} else if (sa[i].probs[j] < 0) {
+								html += '<td class="prob-wa">' + sa[i].probs[j] + '</td>';
+							} else {
+								html += '<td></td>';
 							}
-							html += '<td>' + sa[i].penalty + '</td>';
-							html += '</tr>';
-					}
-					$("#loading").css("display","none");
-					$("#ranking_body").html(html);
+						}
+						html += '<td>' + sa[i].penalty + '</td>';
+						html += '</tr>';
 				}
-			});
+				$("#loading").css("display","none");
+				$("#ranking_body").html(html);
+			}
 		});
-	</script>
+	});
+</script>

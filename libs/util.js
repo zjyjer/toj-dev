@@ -5,7 +5,9 @@ exports.get_Pagelist = function(volume, counts) {
 
 	var page = [];
 	if(total_volume <= 10) {
+		page.push(-1);
 		for(var i = 1;i <= total_volume; ++i) page.push(i);
+		page.push(-1);
 		return page;
 	}
 
@@ -129,11 +131,9 @@ function formate_date(d) {
 	var month = d.getMonth() + 1;
 	var day = d.getDate();
 	var mm, dd;
-	if (month < 10) mm = '0' + month;
-	else mm = '' + month;
 
-	if (day < 10) dd = '0' + day;
-	else dd = '' + day;
+	mm = month < 10 ? '0' + month : '' + month;
+	dd = day < 10 ? '0' + day : '' + day;
 	return mm + '-' + dd;
 };;
 
@@ -155,18 +155,54 @@ exports.getPunchCard = function(stats) {
 	}
 	
 	for (var i = 0;i < stats.length; ++i) {
-		var t_day = stats[i].submit_time.getDate();
+		var t_day = parseInt((now - stats[i].submit_time) / (1000 * 60 * 60 * 24));
 		var t_hour = stats[i].submit_time.getHours();
-		list[6-(now_day-t_day)][t_hour] += 1;
+		list[6-t_day][t_hour] += 1;
 	}
 	for (var i = 0;i < 7; ++i) {
 		for (var j = 0;j < 24; ++j) {
 			var tmp = {};
 			tmp.y = i;
 			tmp.x = j;
-			tmp.marker = { radius: list[i][j] };
+			tmp.marker = { radius: list[i][j] * 2}; //radius为题目数的两倍
 			ret.push(tmp);
 		}
 	}
 	return { y_axis: y_axis, data: ret };
+};
+
+exports.format_date2 = function (date, friendly) {
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var day = date.getDate();
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+
+	if (friendly) {
+		var now = new Date();
+		var mseconds = -(date.getTime() - now.getTime());
+		var time_std = [ 1000, 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 ];
+		if (mseconds < time_std[3]) {
+			if (mseconds > 0 && mseconds < time_std[1]) {
+				return Math.floor(mseconds / time_std[0]).toString() + ' seconds ago';
+			}
+			if (mseconds > time_std[1] && mseconds < time_std[2]) {
+				return Math.floor(mseconds / time_std[1]).toString() + ' minutes ago';
+			}
+			if (mseconds > time_std[2]) {
+				return Math.floor(mseconds / time_std[2]).toString() + ' hours ago';
+			}
+		}
+	}
+
+	//month = ((month < 10) ? '0' : '') + month;
+	//day = ((day < 10) ? '0' : '') + day;
+	hour = ((hour < 10) ? '0' : '') + hour;
+	minute = ((minute < 10) ? '0' : '') + minute;
+	second = ((second < 10) ? '0': '') + second;
+
+	var thisYear = new Date().getFullYear();
+	year = (thisYear === year) ? '' : (year + '-');
+	return year + month + '-' + day + ' ' + hour + ':' + minute;
 };
