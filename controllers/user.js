@@ -250,7 +250,7 @@ exports.save_profile = function(req, res, next) {
 
 	proxy.fail(next);
 
-	if (req.files) {
+	if (req.files.avatar.size > 0) {
 		var tmp_path = req.files.avatar.path;
 		var target_path = './public/avatar/' + _currentUser.username + '.png';
 		fs.rename(tmp_path, target_path, function(err) {
